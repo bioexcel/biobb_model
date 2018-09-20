@@ -1,1 +1,1 @@
-name = "biobb_io"
+name = "biobb_model"

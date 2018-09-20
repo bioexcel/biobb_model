@@ -1,7 +1,7 @@
 [![Documentation Status](https://readthedocs.org/projects/biobb-io/badge/?version=latest)](https://biobb-io.readthedocs.io/en/latest/?badge=latest)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/f98ed1286f244616bf39352e1877d310)](https://www.codacy.com/app/andriopau/biobb_io?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=bioexcel/biobb_io&amp;utm_campaign=Badge_Grade)
 
-# biobb_io
+# biobb_model
 
 ### Introduction
 Biobb_io is the Biobb module collection to fetch data to be consumed by the
