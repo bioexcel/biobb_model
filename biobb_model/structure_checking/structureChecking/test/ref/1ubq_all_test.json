@@ -1,0 +1,120 @@
+{
+ "altloc": {
+  "opts": [
+   "--select_altloc",
+   "occupancy"
+  ]
+ },
+ "amide": {
+  "detected": [
+   {
+    "at1": "ARG A42.NE",
+    "at2": "GLN A49.NE2",
+    "dist": 2.7497353553771973
+   }
+  ],
+  "n_amides": 8,
+  "opts": [
+   "--fix",
+   "All"
+  ]
+ },
+ "backbone": {},
+ "chains": {
+  "ids": {
+   "A": 1
+  }
+ },
+ "chiral": {
+  "n_chirals": 14,
+  "opts": [
+   "--fix",
+   "All"
+  ]
+ },
+ "chiral_bck": {
+  "n_chirals": 70
+ },
+ "cistransbck": {},
+ "clashes": {
+  "detected": {
+   "apolar": [],
+   "negative": [],
+   "polar_acceptor": [
+    {
+     "at1": "MET A1.O",
+     "at2": "VAL A17.O",
+     "dist": 3.0353565216064453
+    }
+   ],
+   "polar_donor": [],
+   "positive": [],
+   "severe": []
+  }
+ },
+ "final_stats": {
+  "ca_only": false,
+  "chain_ids": {
+   "A": 1
+  },
+  "nchains": 1,
+  "nmodels": 1,
+  "num_ats": 602,
+  "num_res": 76,
+  "num_wat": 0,
+  "res_hetats": 0,
+  "res_insc": 0,
+  "res_ligands": 0
+ },
+ "fixside": {
+  "opts": [
+   "--fix",
+   "All"
+  ]
+ },
+ "getss": {},
+ "inscodes": {},
+ "ligands": {
+  "opts": [
+   "--remove",
+   "SO4"
+  ]
+ },
+ "metals": {
+  "opts": [
+   "--remove",
+   "ZN"
+  ]
+ },
+ "models": {
+  "nmodels": 1
+ },
+ "remh": {
+  "opts": [
+   "--remove",
+   "Yes"
+  ]
+ },
+ "remwat": {
+  "n_detected": 58,
+  "n_removed": 58,
+  "opts": [
+   "--remove",
+   "Yes"
+  ]
+ },
+ "stats": {
+  "ca_only": false,
+  "chain_ids": {
+   "A": 1
+  },
+  "nchains": 1,
+  "nmodels": 1,
+  "num_ats": 660,
+  "num_res": 134,
+  "num_wat": 58,
+  "res_hetats": 58,
+  "res_insc": 0,
+  "res_ligands": 0
+ }
+}

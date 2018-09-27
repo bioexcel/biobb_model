@@ -1,0 +1,29 @@
+===============================================================================
+=                     MDWeb structure checking utility                        =
+=                      A. Hospital, J.L. Gelpi 2018                           =
+===============================================================================
+
+Running getss.
+Structure exists: 'tmpPDB/ku/4ku1.cif' 
+Structure pdb:4ku1 loaded
+ PDB id: 4KU1
+ Title: Role of the hinge and C-gamma-2/C-gamma-3 interface in immunoglobin G1 Fc domain motions: implications for Fc engineering
+ Experimental method: X-RAY DIFFRACTION
+ Keywords: IMMUNE SYSTEM
+ Resolution: 1.90 A
+
+ Num. models: 1
+ Num. chains: 2 (A: Protein, B: Protein)
+ Num. residues:  583
+ Num. residues with ins. codes:  0
+ Num. HETATM residues:  168
+ Num. ligands or modified residues:  20
+ Num. water mol.:  148
+ Num. atoms:  3714
+
+4 Possible SS Bonds detected
+ CYS A261.SG  CYS A321.SG     4.141
+ CYS A367.SG  CYS A425.SG     3.981
+ CYS B261.SG  CYS B321.SG     4.126
+ CYS B367.SG  CYS B425.SG     4.188
+Running  check_only. Nothing else to do.
