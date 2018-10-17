@@ -1088,7 +1088,8 @@ class StructureChecking():
         if not hasattr(self, 'stm'):
             if not self.args['non_interactive'] and self.args['input_structure_path'] is None:
                 self.args['input_structure_path'] = input("Enter input structure path (PDB, mmcif | pdb:pdbid): ")
-            self.stm = StructureManager(self.args['input_structure_path'], self.args['debug'])
+
+            self.stm = StructureManager(self.args['input_structure_path'])
             if verbose:
                 print ('Structure {} loaded'.format(self.args['input_structure_path']))
                 self.stm.print_headers()

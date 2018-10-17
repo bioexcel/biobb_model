@@ -1,16 +1,12 @@
 
-linux:
-  workflow_path: /tmp/linux/unitests
-
-
 workflow_path: /tmp/biobb/unitests
 
 
-mmbpdb:
+fixsidechain:
   paths:
+    input_pdb_path: file:test_data_dir/model/2ki5.pdb
     output_pdb_path: output_pdb_path.pdb
   properties:
-    pdb_code: "2VGB"
 
 mmbpdbclusterzip:
   paths:

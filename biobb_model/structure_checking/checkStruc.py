@@ -10,10 +10,10 @@ __date__ = "$13-jul-2018 15:52:55$"
 import os
 import sys
 
-from structure_checking.cmd_line import CmdLine
-from structure_checking.help_manager import HelpManager
-from structure_checking.structure_checking import StructureChecking
-from structure_checking.default_settings import DefaultSettings
+from cmd_line import CmdLine
+from help_manager import HelpManager
+from structure_checking import StructureChecking
+from default_settings import DefaultSettings
 
 def main():
 
@@ -31,7 +31,8 @@ def main():
         help_manager.print_help(args.command, header=True)
         sys.exit(0)
 
-
+    print(sets)
+    print(vars(args))
     StructureChecking(sets,vars(args)).launch()
 
 if __name__ == "__main__":

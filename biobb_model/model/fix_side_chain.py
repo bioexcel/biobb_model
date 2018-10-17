@@ -1,53 +1,61 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import argparse
+import sys
 import os
-from biobb_common.configuration import  settings
+from biobb_common.configuration import settings
 from biobb_common.tools import file_utils as fu
-import logging
-from biobb_io.mmb_api.common import download_pdb
-logging.getLogger("requests").setLevel(logging.WARNING)
-logging.getLogger("urllib3").setLevel(logging.WARNING)
+import structure_checking.structure_checking as sc
+from structure_checking.structure_checking import StructureChecking
+from structure_checking.default_settings import DefaultSettings
 
-class MmbPdb(object):
-    """Wrapper class for the MMB group PDB REST API.
-    This class is a wrapper for the PDB (http://www.rcsb.org/pdb/home/home.do)
-    mirror of the MMB group REST API (http://mmb.irbbarcelona.org/api/)
 
+class FixSideChain():
+    """Class to model the missing atoms in aminoacid side chains of a PDB.
     Args:
         output_pdb_path (str): Path to the output PDB file.
         properties (dic):
-            | - **pdb_code** (*str*) - RSCB PDB code. ie: "2VGB"
-            | - **filter** (*str*) - ("filter=/1&group=ATOM") Filter for the :meth:`biobb_io.mmb_api.MmbPdb.get_pdb_zip` method following the J(s)Mol format.
-            | - **url** (*str*) - ("http://mmb.irbbarcelona.org/api/pdb/") URL of the MMB PDB REST API.
-
+            | - **input_pdb_path** (*str*) - Input PDB file path.
+            | - **output_pdb_path** (*str*) - Output PDB file path.
     """
-    def __init__(self, output_pdb_path, properties, **kwargs):
+    def __init__(self, input_pdb_path, output_pdb_path, properties, **kwargs):
+        self.input_pdb_path = input_pdb_path,
         self.output_pdb_path = output_pdb_path
-        self.url = properties.get('url',"http://mmb.irbbarcelona.org/api/pdb/")
-        self.pdb_code = properties.get('pdb_code').strip().lower()
-        self.filt = properties.get('filter', 'filter=/1&group=ATOM')
-        self.global_log= properties.get('global_log', None)
-        self.prefix = properties.get('prefix',None)
-        self.step = properties.get('step',None)
-        self.path = properties.get('path','')
+        self.global_log = properties.get('global_log', None)
+        self.prefix = properties.get('prefix', None)
+        self.step = properties.get('step', None)
+        self.path = properties.get('path', '')
 
     def launch(self):
         """
-        Writes the PDB file content of the first pdb_code
-        to output_pdb_path.
+        Model the missing atoms in side chains.
         """
-        out_log, _ = fu.get_logs(path=self.path, prefix=self.prefix, step=self.step)
 
-        #Downloading PDB_files
-        pdb_string = download_pdb(self.pdb_code, self.url, self.filt, out_log, self.global_log)
+        options_dict = {'input_structure_path': self.input_pdb_path,
+                        'options': ['--fix', 'All'],
+                        'output_structure_path': self.output_pdb_path,
+                        'force_save': False,
+                        'res_lib_path': None,
+                        'debug': False,
+                        'command': 'fixside',
+                        'json_output_path': None,
+                        'quiet': False,
+                        'data_library_path': None,
+                        'non_interactive': False,
+                        'check_only': False,
+                        'data_dir': None}
 
-        out_log.info("\nWritting: "+self.pdb_code+"\nto: "+os.path.abspath(self.output_pdb_path))
-        if self.global_log:
-            self.global_log.info(fu.get_logs_prefix()+"Writting: "+self.pdb_code+"\nto: "+os.path.abspath(self.output_pdb_path))
+        sets = DefaultSettings(os.path.dirname(sc.__file__))
 
-        with open(self.output_pdb_path, 'w') as f:
-            f.write(pdb_string)
+        out_log_file_path = fu.create_name(path=self.path, prefix=self.prefix, step=self.step, name='log.out')
+        fu.create_dir(os.path.dirname(os.path.abspath(out_log_file_path)))
+
+        with open(out_log_file_path, 'w') as out_log:
+            old_stdout = sys.stdout
+            sys.stdout = out_log          
+            StructureChecking(sets, options_dict).launch()
+            sys.stdout = old_stdout
+
 
 def main():
     parser = argparse.ArgumentParser(description="Wrapper for the PDB (http://www.rcsb.org/pdb/home/home.do) mirror of the MMB group REST API (http://mmb.irbbarcelona.org/api/)")
@@ -55,7 +63,7 @@ def main():
     parser.add_argument('--system', required=False)
     parser.add_argument('--step', required=False)
 
-    #Specific args of each building block
+    # Specific args of each building block
     parser.add_argument('--output_pdb_path', required=True)
     ####
 
