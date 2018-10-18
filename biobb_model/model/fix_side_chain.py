@@ -13,18 +13,20 @@ from structure_checking.default_settings import DefaultSettings
 class FixSideChain():
     """Class to model the missing atoms in aminoacid side chains of a PDB.
     Args:
-        output_pdb_path (str): Path to the output PDB file.
+        input_pdb_path (str) - Input PDB file path.
+        output_pdb_path (str) - Output PDB file path.
         properties (dic):
-            | - **input_pdb_path** (*str*) - Input PDB file path.
-            | - **output_pdb_path** (*str*) - Output PDB file path.
     """
     def __init__(self, input_pdb_path, output_pdb_path, properties, **kwargs):
-        self.input_pdb_path = input_pdb_path,
+        # Input/Output files
+        self.input_pdb_path = input_pdb_path
         self.output_pdb_path = output_pdb_path
-        self.global_log = properties.get('global_log', None)
-        self.prefix = properties.get('prefix', None)
-        self.step = properties.get('step', None)
-        self.path = properties.get('path', '')
+        # Properties specific for BB
+        # Common in all BB
+        self.global_log= properties.get('global_log', None)
+        self.prefix = properties.get('prefix',None)
+        self.step = properties.get('step',None)
+        self.path = properties.get('path','')
 
     def launch(self):
         """
@@ -52,29 +54,29 @@ class FixSideChain():
 
         with open(out_log_file_path, 'w') as out_log:
             old_stdout = sys.stdout
-            sys.stdout = out_log          
+            sys.stdout = out_log
             StructureChecking(sets, options_dict).launch()
             sys.stdout = old_stdout
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Wrapper for the PDB (http://www.rcsb.org/pdb/home/home.do) mirror of the MMB group REST API (http://mmb.irbbarcelona.org/api/)")
+    parser = argparse.ArgumentParser(description="Model the missing atoms in aminoacid side chains of a PDB.")
     parser.add_argument('--config', required=True)
     parser.add_argument('--system', required=False)
     parser.add_argument('--step', required=False)
 
     # Specific args of each building block
+    parser.add_argument('--input_pdb_path', required=True)
     parser.add_argument('--output_pdb_path', required=True)
     ####
 
     args = parser.parse_args()
+    properties = settings.ConfReader(config=args.config, system=args.system).get_prop_dic()
     if args.step:
-        properties = settings.ConfReader(config=args.config, system=args.system).get_prop_dic()[args.step]
-    else:
-        properties = settings.ConfReader(config=args.config, system=args.system).get_prop_dic()
-        
+        properties = properties[args.step]
+
     #Specific call of each building block
-    MmbPdb(output_pdb_path=args.output_pdb_path, properties=properties).launch()
+    FixSideChain(input_pdb_path=args.input_pdb_path, output_pdb_path=args.output_pdb_path, properties=properties).launch()
     ####
 
 if __name__ == '__main__':

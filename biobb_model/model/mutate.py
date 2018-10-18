@@ -1,33 +1,30 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
+
 import argparse
-from biobb_common.configuration import  settings
-from biobb_common.tools import file_utils as fu
+import sys
 import os
-from biobb_io.mmb_api.common import get_cluster_pdb_codes
-from biobb_io.mmb_api.common import download_pdb
-import logging
-logging.getLogger("requests").setLevel(logging.WARNING)
-logging.getLogger("urllib3").setLevel(logging.WARNING)
+from biobb_common.configuration import settings
+from biobb_common.tools import file_utils as fu
+import structure_checking.structure_checking as sc
+from structure_checking.structure_checking import StructureChecking
+from structure_checking.default_settings import DefaultSettings
 
-class MmbPdbClusterZip(object):
-    """Wrapper class for the MMB group PDB REST API.
-    This class is a wrapper for the PDB (http://www.rcsb.org/pdb/home/home.do)
-    mirror of the MMB group REST API (http://mmb.irbbarcelona.org/api/)
 
+class Mutate():
+    """Class to mutate one aminoacid by another in a 3d structure.
     Args:
-        output_pdb_zip_path (str): Path to the ZIP or PDB file containing the output PDB files.
+        input_pdb_path (str) - Input PDB file path.
+        output_pdb_path (str) - Output PDB file path.
         properties (dic):
-            | - **pdb_code** (*str*) - RSCB PDB code. ie: "2VGB"
-            | - **filter** (*str*) - ("filter=/1&group=ATOM") Filter for the :meth:`biobb_io.mmb_api.MmbPdb.get_pdb_zip` method following the J(s)Mol format.
-            | - **cluster** (*str*) - (90) Cluster number for the :meth:`biobb_io.mmb_api.MmbPdb.get_pdb_cluster_zip` method.
-            | - **url** (*str*) - ("http://mmb.irbbarcelona.org/api/pdb/") URL of the MMB PDB REST API.
+            | - **mutation** (*str*): Mutation list in the format "Chain.WT_AA_ThreeLeterCode.Resnum.MUT_AA_ThreeLeterCode" separated by commas. If no chain is provided as chain code all the chains in the pdb file will be mutated. ie: "A.ALA15CYS"
     """
-    def __init__(self, output_pdb_zip_path, properties, **kwargs):
-        self.output_pdb_zip_path = output_pdb_zip_path
-        self.url = properties.get('url',"http://mmb.irbbarcelona.org/api/pdb/")
-        self.pdb_code = properties.get('pdb_code').strip().lower()
-        self.filt = properties.get('filter', 'filter=/1&group=ATOM')
-        self.cluster = str(properties.get('cluster', 90))
+    def __init__(self, input_pdb_path, output_pdb_path, properties, **kwargs):
+        # Input/Output files
+        self.input_pdb_path = input_pdb_path
+        self.output_pdb_path = output_pdb_path
+        # Properties specific for BB
+        self.mutation_list = properties.get('mutation_list', None)
+        # Common in all BB
         self.global_log= properties.get('global_log', None)
         self.prefix = properties.get('prefix',None)
         self.step = properties.get('step',None)
@@ -35,50 +32,52 @@ class MmbPdbClusterZip(object):
 
     def launch(self):
         """
-        Writes each PDB file content of each pdb_code in the cluster
-        to a pdb_file then creates a zip_file output_pdb_zip_path.
+        Model the missing atoms in side chains.
         """
-        out_log, _ = fu.get_logs(path=self.path, prefix=self.prefix, step=self.step)
-        file_list = []
-        #Downloading PDB_files
-        pdb_code_list = get_cluster_pdb_codes(self.pdb_code, self.url, self.cluster, out_log, self.global_log)
-        for pdb_code in pdb_code_list:
-            pdb_string = download_pdb(pdb_code, self.url, self.filt, out_log, self.global_log)
-            pdb_file = pdb_code+'.pdb'
+        options_dict = {'force_save': False,
+                        'command': 'mutateside',
+                        'data_dir': None,
+                        'json_output_path': None,
+                        'data_library_path': None,
+                        'res_lib_path': None,
+                        'quiet': False,
+                        'output_structure_path': self.output_pdb_path,
+                        'options': ['--mut', self.mutation_list],
+                        'non_interactive': False,
+                        'debug': False,
+                        'check_only': False,
+                        'input_structure_path': self.input_pdb_path}
 
-            out_log.info("\nWritting: "+pdb_code+" to: "+os.path.abspath(pdb_file))
-            if self.global_log:
-                self.global_log.info(fu.get_logs_prefix()+"Writting: "+pdb_code+" to: "+os.path.abspath(pdb_file))
+        sets = DefaultSettings(os.path.dirname(sc.__file__))
 
-            with open(pdb_file, 'w') as f:
-                f.write(pdb_string)
+        out_log_file_path = fu.create_name(path=self.path, prefix=self.prefix, step=self.step, name='log.out')
+        fu.create_dir(os.path.dirname(os.path.abspath(out_log_file_path)))
 
-            file_list.append(os.path.abspath(pdb_file))
+        with open(out_log_file_path, 'w') as out_log:
+            old_stdout = sys.stdout
+            sys.stdout = out_log
+            StructureChecking(sets, options_dict).launch()
+            sys.stdout = old_stdout
 
-        #Zipping files
-        out_log.info("Zipping the pdb files to: "+self.output_pdb_zip_path)
-        if self.global_log:
-            self.global_log.info("Zipping the pdb files to: "+self.output_pdb_zip_path)
-        fu.zip_list(self.output_pdb_zip_path, file_list)
 
 def main():
-    parser = argparse.ArgumentParser(description="Wrapper for the PDB Cluster (http://www.rcsb.org/pdb/home/home.do) mirror of the MMB group REST API (http://mmb.irbbarcelona.org/api/)")
-    parser.add_argument('--conf_file', required=True)
+    parser = argparse.ArgumentParser(description="Model the missing atoms in aminoacid side chains of a PDB.")
+    parser.add_argument('--config', required=True)
     parser.add_argument('--system', required=False)
     parser.add_argument('--step', required=False)
 
-    #Specific args of each building block
-    parser.add_argument('--output_pdb_zip_path', required=True)
+    # Specific args of each building block
+    parser.add_argument('--input_pdb_path', required=True)
+    parser.add_argument('--output_pdb_path', required=True)
     ####
 
     args = parser.parse_args()
+    properties = settings.ConfReader(config=args.config, system=args.system).get_prop_dic()
     if args.step:
-        properties = settings.ConfReader(config=args.config, system=args.system).get_prop_dic()[args.step]
-    else:
-        properties = settings.ConfReader(config=args.config, system=args.system).get_prop_dic()
+        properties = properties[args.step]
 
     #Specific call of each building block
-    MmbPdbClusterZip(output_pdb_zip_path=args.output_pdb_zip_path, properties=properties).launch()
+    Mutate(input_pdb_path=args.input_pdb_path, output_pdb_path=args.output_pdb_path, properties=properties).launch()
     ####
 
 if __name__ == '__main__':

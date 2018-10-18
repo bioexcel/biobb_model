@@ -1,16 +1,16 @@
-[![Documentation Status](https://readthedocs.org/projects/biobb-io/badge/?version=latest)](https://biobb-io.readthedocs.io/en/latest/?badge=latest)
+[![Documentation Status](https://readthedocs.org/projects/biobb-model/badge/?version=latest)](https://biobb-model.readthedocs.io/en/latest/?badge=latest)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/f98ed1286f244616bf39352e1877d310)](https://www.codacy.com/app/andriopau/biobb_io?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=bioexcel/biobb_io&amp;utm_campaign=Badge_Grade)
 
 # biobb_model
 
 ### Introduction
-Biobb_io is the Biobb module collection to fetch data to be consumed by the
-rest of the Biobb building blocks.
+Biobb_model is the Biobb module collection to check and model 3d structures,
+create mutations or reconstruct missing atoms.
 Biobb (BioExcel building blocks) packages are Python building blocks that
 create new layer of compatibility and interoperability over popular
 bioinformatics tools.
 The latest documentation of this package can be found in our readthedocs site:
-[latest API documentation](http://biobb_io.readthedocs.io/en/latest/).
+[latest API documentation](http://biobb_model.readthedocs.io/en/latest/).
 
 ### Version
 This software is in Alpha version.
