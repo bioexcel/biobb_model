@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+"""
+Module containing the FixSideChain class and the command line interface
+"""
+
 import argparse
 import sys
 import os
@@ -23,10 +27,10 @@ class FixSideChain():
         self.output_pdb_path = output_pdb_path
         # Properties specific for BB
         # Common in all BB
-        self.global_log= properties.get('global_log', None)
-        self.prefix = properties.get('prefix',None)
-        self.step = properties.get('step',None)
-        self.path = properties.get('path','')
+        self.global_log = properties.get('global_log', None)
+        self.prefix = properties.get('prefix', None)
+        self.step = properties.get('step', None)
+        self.path = properties.get('path', '')
 
     def launch(self):
         """

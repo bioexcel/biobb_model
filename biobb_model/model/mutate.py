@@ -1,9 +1,13 @@
 #!/usr/bin/env python3
 
+"""
+Module containing the Mutate class and the command line interface.
+"""
+
 import argparse
 import sys
 import os
-from biobb_common.configuration import settings
+from biobb_common.configuration   import settings
 from biobb_common.tools import file_utils as fu
 import structure_checking.structure_checking as sc
 from structure_checking.structure_checking import StructureChecking
@@ -25,10 +29,10 @@ class Mutate():
         # Properties specific for BB
         self.mutation_list = properties.get('mutation_list', None)
         # Common in all BB
-        self.global_log= properties.get('global_log', None)
-        self.prefix = properties.get('prefix',None)
-        self.step = properties.get('step',None)
-        self.path = properties.get('path','')
+        self.global_log = properties.get('global_log', None)
+        self.prefix = properties.get('prefix', None)
+        self.step = properties.get('step', None)
+        self.path = properties.get('path', '')
 
     def launch(self):
         """
@@ -61,6 +65,9 @@ class Mutate():
 
 
 def main():
+    """
+    Command line interface.
+    """
     parser = argparse.ArgumentParser(description="Model the missing atoms in aminoacid side chains of a PDB.")
     parser.add_argument('--config', required=True)
     parser.add_argument('--system', required=False)
