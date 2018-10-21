@@ -1,6 +1,4 @@
-
 workflow_path: /tmp/biobb/unitests
-
 
 fix_side_chain:
   paths:

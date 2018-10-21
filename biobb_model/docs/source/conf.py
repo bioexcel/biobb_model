@@ -65,8 +65,8 @@ source_suffix = ['.rst', '.md']
 master_doc = 'index'
 
 # General information about the project.
-project = u'biobb_io'
-copyright = u'2017, Bioexcel Project'
+project = u'biobb_model'
+copyright = u'2018, Bioexcel Project'
 author = u'Bioexcel Project'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -222,7 +222,7 @@ html_static_path = ['_static']
 #html_search_scorer = 'scorer.js'
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'biobb_io_doc'
+htmlhelp_basename = 'biobb_model_doc'
 
 # -- Options for LaTeX output ---------------------------------------------
 
@@ -244,7 +244,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'biobb_io.tex', u'biobb_io Documentation',
+    (master_doc, 'biobb_model.tex', u'biobb_model Documentation',
      u'Bioexcel Project', 'manual'),
 ]
 
@@ -274,7 +274,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'biobb_io', u'biobb_io Documentation',
+    (master_doc, 'biobb_model', u'biobb_model Documentation',
      [author], 1)
 ]
 
@@ -288,8 +288,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'biobb_io', u'biobb_io Documentation',
-     author, 'biobb_io', 'Core objects of biobb',
+    (master_doc, 'biobb_model', u'biobb_model Documentation',
+     author, 'biobb_model', 'Core objects of biobb',
      'Miscellaneous'),
 ]
 
