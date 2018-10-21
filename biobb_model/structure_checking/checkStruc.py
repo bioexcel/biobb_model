@@ -10,10 +10,10 @@ __date__ = "$13-jul-2018 15:52:55$"
 import os
 import sys
 
-from cmd_line import CmdLine
-from help_manager import HelpManager
-from structure_checking import StructureChecking
-from default_settings import DefaultSettings
+from biobb_model.structure_checking.cmd_line import CmdLine
+from biobb_model.structure_checking.help_manager import HelpManager
+from biobb_model.structure_checking.structure_checking import StructureChecking
+from biobb_model.structure_checking.default_settings import DefaultSettings
 
 def main():
 

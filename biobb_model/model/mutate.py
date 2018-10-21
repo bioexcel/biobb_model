@@ -9,9 +9,9 @@ import sys
 import os
 from biobb_common.configuration   import settings
 from biobb_common.tools import file_utils as fu
-import structure_checking.structure_checking as sc
-from structure_checking.structure_checking import StructureChecking
-from structure_checking.default_settings import DefaultSettings
+import biobb_model.structure_checking.structure_checking as sc
+from biobb_model.structure_checking.structure_checking import StructureChecking
+from biobb_model.structure_checking.default_settings import DefaultSettings
 
 
 class Mutate():
