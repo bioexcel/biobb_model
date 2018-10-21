@@ -4,7 +4,7 @@ from model.fix_side_chain import FixSideChain
 
 class TestFixSideChain(object):
     def setUp(self):
-        fx.test_setup(self, 'fixsidechain')
+        fx.test_setup(self, 'fix_side_chain')
 
     def tearDown(self):
         fx.test_teardown(self)

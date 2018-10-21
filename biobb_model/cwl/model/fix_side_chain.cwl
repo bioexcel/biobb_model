@@ -2,32 +2,38 @@
 cwlVersion: v1.0
 class: CommandLineTool
 baseCommand:
-  - pdb_variants.py
+  - fix_side_chain.py
 inputs:
   system:
     type: string
     inputBinding:
       position: 1
       prefix: --system
-    default: "linux"
+    default: ""
   step:
     type: string
     inputBinding:
       position: 2
       prefix: --step
-    default: "mmbpdbvariants"
+    default: "fix_side_chain"
   conf_file:
     type: File
     inputBinding:
       position: 3
-      prefix: --conf_file
-  output_mutations_list_txt:
-    type: string
+      prefix: --config
+#BB specific
+  input_pdb_path:
+    type: File
     inputBinding:
       position: 4
-      prefix: --output_mutations_list_txt
+      prefix: --input_pdb_path
+  output_pdb_path:
+    type: string
+    inputBinding:
+      position: 5
+      prefix: --output_pdb_path
 outputs:
-  output_mutations_list_file:
+  output_pdb_file:
     type: File
     outputBinding:
-      glob: $(inputs.output_mutations_list_txt)
+      glob: $(inputs.output_pdb_path)

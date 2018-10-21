@@ -1,0 +1,7 @@
+conf_file:
+    class: File
+    location: ../../../test/conf.yml
+input_pdb_path:
+    class: File
+    location: ../../../test/data/model/2ki5.pdb
+output_pdb_path: mutated_pdb_path.pdb

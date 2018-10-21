@@ -2,32 +2,38 @@
 cwlVersion: v1.0
 class: CommandLineTool
 baseCommand:
-  - pdb_cluster_zip.py
+  - mutate.py
 inputs:
   system:
     type: string
     inputBinding:
       position: 1
       prefix: --system
-    default: "linux"
+    default: ""
   step:
     type: string
     inputBinding:
       position: 2
       prefix: --step
-    default: "mmbpdbclusterzip"
+    default: "mutate"
   conf_file:
     type: File
     inputBinding:
       position: 3
-      prefix: --conf_file
-  output_pdb_zip_path:
-    type: string
+      prefix: --config
+#BB specific
+  input_pdb_path:
+    type: File
     inputBinding:
       position: 4
-      prefix: --output_pdb_zip_path
+      prefix: --input_pdb_path
+  output_pdb_path:
+    type: string
+    inputBinding:
+      position: 5
+      prefix: --output_pdb_path
 outputs:
-  output_pdb_zip_file:
+  output_pdb_file:
     type: File
     outputBinding:
-      glob: $(inputs.output_pdb_zip_path)
+      glob: $(inputs.output_pdb_path)
