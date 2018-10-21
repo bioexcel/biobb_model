@@ -8,15 +8,15 @@ __date__ = "$26-jul-2018 14:34:51$"
 
 import sys
 
-from structure_checking.help_manager import HelpManager
-from structure_checking.json_writer import JSONWriter
-from structure_checking.param_input import Dialog
-from structure_checking.param_input import ParamInput
+from biobb_model.structure_checking.help_manager import HelpManager
+from biobb_model.structure_checking.json_writer import JSONWriter
+from biobb_model.structure_checking.param_input import Dialog
+from biobb_model.structure_checking.param_input import ParamInput
 
-from structure_manager.data_lib_manager import DataLibManager
-from structure_manager.structure_manager import StructureManager
-from structure_manager.mutation_manager import MutationManager
-from structure_manager.residue_lib_manager import ResidueLib
+from biobb_model.structure_manager.data_lib_manager import DataLibManager
+from biobb_model.structure_manager.structure_manager import StructureManager
+from biobb_model.structure_manager.mutation_manager import MutationManager
+from biobb_model.structure_manager.residue_lib_manager import ResidueLib
 
 import structure_manager.model_utils as mu
 
