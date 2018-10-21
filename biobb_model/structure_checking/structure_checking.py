@@ -18,7 +18,7 @@ from biobb_model.structure_manager.structure_manager import StructureManager
 from biobb_model.structure_manager.mutation_manager import MutationManager
 from biobb_model.structure_manager.residue_lib_manager import ResidueLib
 
-import structure_manager.model_utils as mu
+import biobb_model.structure_manager.model_utils as mu
 
 # Interactive dialogs to complete command_line missing paramters
 dialogs = Dialog()
