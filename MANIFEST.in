@@ -1,0 +1,2 @@
+include biobb_model/structure_manager/dat/*
+include biobb_model/structure_checking/dat/*

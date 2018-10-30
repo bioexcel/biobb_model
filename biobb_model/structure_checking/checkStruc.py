@@ -1,4 +1,4 @@
-#! /usr/bin/python3
+#!/usr/bin/env python3
 
 """
  structureCheck: Command line replacement for MDWeb structure check
