@@ -831,7 +831,7 @@ class StructureChecking():
         input_line.add_option('resnum', self.chiral_bck_rnums, case='sensitive', multiple=True)
         [input_option, chiral_fix] = input_line.run()
         if input_option == 'error':
-            print ('Warning: unknown option {}'.format(amide_fix))
+            print ('Warning: unknown option {}'.format(chiral_fix))
             self.summary['chiral']['error'] = 'Unknown option'
             return 1
 
@@ -848,7 +848,7 @@ class StructureChecking():
                         to_fix.append(r)
             n = 0
             for r in to_fix:
-                mu.stm.invert_chiral_CA(r) # TODO
+                mu.invert_chiral_ca(r)
                 n += 1
             print ('Quiral residues fixed {} ({})'.format(chiral_fix, n))
             if check_clashes:
