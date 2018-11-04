@@ -5,10 +5,10 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="biobb_model",
-    version="0.0.10",
+    version="0.1.0",
     author="Biobb developers",
     author_email="pau.andrio@bsc.es",
-    description="biobb_model is the Biobb module collection to fetch data to be consumed by the rest of the Biobb building blocks.",
+    description="Biobb_model is the Biobb module collection to check and model 3d structures, create mutations or reconstruct missing atoms.",
     long_description=long_description,
     long_description_content_type="text/markdown",
     keywords="Bioinformatics Workflows BioExcel Compatibility",
@@ -20,11 +20,11 @@ setuptools.setup(
     packages=setuptools.find_packages(exclude=['docs', 'test', 'cwl', 'notebooks',]),
     include_package_data=True,
     zip_safe=False,
-    install_requires=['mistune==0.7.4', 'jsonschema==2.6.0', 'biobb_common', 'biopython' ],
-    python_requires='>=3.5',
+    install_requires=['biobb_common', 'biopython'],
+    python_requires='>=3',
     classifiers=(
         "Development Status :: 3 - Alpha",
-        "Programming Language :: Python :: 3.5",
+        "Programming Language :: Python :: 3",
         "License :: OSI Approved :: Apache Software License",
         "Operating System :: MacOS :: MacOS X",
         "Operating System :: POSIX",
