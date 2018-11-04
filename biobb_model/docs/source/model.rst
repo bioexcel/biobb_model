@@ -15,7 +15,7 @@ model.mutate module
 model.fix_side_chain module
 -----------------------------
 
-.. automodule:: mmb_api.pdb_variants
+.. automodule:: model.fix_side_chain
     :members:
     :undoc-members:
     :show-inheritance:
