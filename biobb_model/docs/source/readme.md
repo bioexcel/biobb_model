@@ -1,4 +1,4 @@
-![Documentation Status](https://readthedocs.org/projects/biobb-model/badge/?version=latest)](https://biobb-model.readthedocs.io/en/latest/?badge=latest)
+[![Documentation Status](https://readthedocs.org/projects/biobb-model/badge/?version=latest)](https://biobb-model.readthedocs.io/en/latest/?badge=latest)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/f98ed1286f244616bf39352e1877d310)](https://www.codacy.com/app/andriopau/biobb_model?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=bioexcel/biobb_model&amp;utm_campaign=Badge_Grade)
 
 # biobb_model

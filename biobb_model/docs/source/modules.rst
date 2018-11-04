@@ -1,5 +1,5 @@
-biobb_io
-========
+biobb_model
+============
 
 .. toctree::
    :maxdepth: 4
