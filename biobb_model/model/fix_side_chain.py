@@ -16,12 +16,13 @@ from biobb_model.structure_checking.default_settings import DefaultSettings
 
 class FixSideChain():
     """Class to model the missing atoms in aminoacid side chains of a PDB.
+
     Args:
-        input_pdb_path (str) - Input PDB file path.
-        output_pdb_path (str) - Output PDB file path.
-        properties (dic):
+        input_pdb_path (str): Input PDB file path.
+        output_pdb_path (str): Output PDB file path.
+        properties (dic): (dict()) Empty dictionary by default.
     """
-    def __init__(self, input_pdb_path, output_pdb_path, properties, **kwargs):
+    def __init__(self, input_pdb_path, output_pdb_path, properties={}, **kwargs):
         # Input/Output files
         self.input_pdb_path = input_pdb_path
         self.output_pdb_path = output_pdb_path

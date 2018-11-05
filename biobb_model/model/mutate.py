@@ -16,9 +16,10 @@ from biobb_model.structure_checking.default_settings import DefaultSettings
 
 class Mutate():
     """Class to mutate one aminoacid by another in a 3d structure.
+
     Args:
-        input_pdb_path (str) - Input PDB file path.
-        output_pdb_path (str) - Output PDB file path.
+        input_pdb_path (str): Input PDB file path.
+        output_pdb_path (str): Output PDB file path.
         properties (dic):
             | - **mutation** (*str*): Mutation list in the format "Chain.WT_AA_ThreeLeterCode.Resnum.MUT_AA_ThreeLeterCode" separated by commas. If no chain is provided as chain code all the chains in the pdb file will be mutated. ie: "A.ALA15CYS"
     """
