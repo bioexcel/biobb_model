@@ -17,7 +17,7 @@ setuptools.setup(
         "Documentation": "http://biobb_model.readthedocs.io/en/latest/",
         "Bioexcel": "https://bioexcel.eu/"
     },
-    packages=setuptools.find_packages(exclude=['docs', 'test', 'cwl', 'notebooks',]),
+    packages=setuptools.find_packages(exclude=['docs', 'test',]),
     include_package_data=True,
     zip_safe=False,
     install_requires=['biobb_common', 'biopython'],
