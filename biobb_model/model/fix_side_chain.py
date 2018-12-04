@@ -41,7 +41,7 @@ class FixSideChain():
         options_dict = {'input_structure_path': self.input_pdb_path,
                         'options': ['--fix', 'All'],
                         'output_structure_path': self.output_pdb_path,
-                        'force_save': False,
+                        'force_save': True,
                         'res_lib_path': None,
                         'debug': False,
                         'command': 'fixside',
