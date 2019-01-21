@@ -1,14 +1,16 @@
-workflow_path: /tmp/biobb/unitests
+working_dir_path: /tmp/biobb/unitests
 
 fix_side_chain:
   paths:
     input_pdb_path: file:test_data_dir/model/2ki5.pdb
     output_pdb_path: output_pdb_path.pdb
+    reference_output_pdb_path: file:test_reference_dir/model/output_pdb_path.pdb
   properties:
 
 mutate:
   paths:
     input_pdb_path: file:test_data_dir/model/2ki5.pdb
     output_pdb_path: output_mutated_pdb_path.pdb
+    reference_output_pdb_path: file:test_reference_dir/model/output_mutated_pdb_path.pdb
   properties:
     mutation_list: Leu49Ile, B:arg51Lys

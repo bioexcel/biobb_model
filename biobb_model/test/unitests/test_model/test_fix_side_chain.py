@@ -12,3 +12,4 @@ class TestFixSideChain(object):
     def test_launch(self):
         FixSideChain(properties=self.properties, **self.paths).launch()
         assert fx.not_empty(self.paths['output_pdb_path'])
+        assert fx.equal(self.paths['output_pdb_path'], self.paths['reference_output_pdb_path'])

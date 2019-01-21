@@ -1,9 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Module containing the FixSideChain class and the command line interface
-"""
-
+"""Module containing the FixSideChain class and the command line interface."""
 import argparse
 import sys
 import os
@@ -13,31 +10,33 @@ import biobb_model.structure_checking.structure_checking as sc
 from biobb_model.structure_checking.structure_checking import StructureChecking
 from biobb_model.structure_checking.default_settings import DefaultSettings
 
-
 class FixSideChain():
     """Class to model the missing atoms in aminoacid side chains of a PDB.
 
     Args:
         input_pdb_path (str): Input PDB file path.
         output_pdb_path (str): Output PDB file path.
-        properties (dic): (dict()) Empty dictionary by default.
+        properties (dic): (None) Empty dictionary by default.
     """
-    def __init__(self, input_pdb_path, output_pdb_path, properties={}, **kwargs):
+    def __init__(self, input_pdb_path, output_pdb_path, properties=None, **kwargs):
+        properties = properties or {}
+
         # Input/Output files
         self.input_pdb_path = input_pdb_path
         self.output_pdb_path = output_pdb_path
+
         # Properties specific for BB
+        # Right now this step has not specific properties
+
         # Common in all BB
+        self.can_write_console_log = properties.get('can_write_console_log', True)
         self.global_log = properties.get('global_log', None)
         self.prefix = properties.get('prefix', None)
         self.step = properties.get('step', None)
         self.path = properties.get('path', '')
 
     def launch(self):
-        """
-        Model the missing atoms in side chains.
-        """
-
+        """Model the missing atoms in side chains."""
         options_dict = {'input_structure_path': self.input_pdb_path,
                         'options': ['--fix', 'All'],
                         'output_structure_path': self.output_pdb_path,
@@ -76,6 +75,7 @@ def main():
     ####
 
     args = parser.parse_args()
+    args.config = args.config or "{}"
     properties = settings.ConfReader(config=args.config, system=args.system).get_prop_dic()
     if args.step:
         properties = properties[args.step]
