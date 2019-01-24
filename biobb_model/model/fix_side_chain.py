@@ -57,6 +57,8 @@ class FixSideChain():
         fu.create_dir(os.path.dirname(os.path.abspath(out_log_file_path)))
 
         with open(out_log_file_path, 'w') as out_log:
+            out_log.write("options_dict: ")
+            out_log.write(str(options_dict))
             old_stdout = sys.stdout
             sys.stdout = out_log
             StructureChecking(sets, options_dict).launch()

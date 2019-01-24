@@ -54,7 +54,7 @@ class Mutate():
 
         sets = DefaultSettings(os.path.dirname(sc.__file__))
 
-        out_log_file_path = fu.create_name(path=self.path, prefix=self.prefix, step=self.step, name='log.out')
+        out_log_file_path = fu.create_name(path=self.path, step=self.step, name='log.out')
         fu.create_dir(os.path.dirname(os.path.abspath(out_log_file_path)))
 
         with open(out_log_file_path, 'w') as out_log:
