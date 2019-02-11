@@ -26,9 +26,9 @@ class MutationManager():
 
         else:
             self.id_list = id_list.replace(' ', '').split(',')
-
         #convert to list ids to Mutation instances and make the list
         self.mutation_list = list(map (Mutation, self.id_list))
+
     # Check mutation_list and unroll chains/models
     def prepare_mutations (self, st, debug=False, stop_on_error=True):
         for mut in self.mutation_list:
@@ -55,9 +55,7 @@ class Mutation():
         self.id = mut_id.upper()
 
         [self.chain, mut] = mut_id.split(':')
-
         mut_comps = re.match('([A-z]*)([0-9]*)([A-z]*)', mut)
-
         self.old_id = mu.protein_residue_check(mut_comps.group(1))
         self.new_id = mu.protein_residue_check(mut_comps.group(3))
         self.res_num = mut_comps.group(2)

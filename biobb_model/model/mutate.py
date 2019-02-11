@@ -17,7 +17,7 @@ class Mutate():
         input_pdb_path (str): Input PDB file path.
         output_pdb_path (str): Output PDB file path.
         properties (dic):
-            | - **mutation** (*str*): Mutation list in the format "Chain.WT_AA_ThreeLeterCode.Resnum.MUT_AA_ThreeLeterCode" separated by commas. If no chain is provided as chain code all the chains in the pdb file will be mutated. ie: "A.ALA15CYS"
+            | - **mutation** (*str*): Mutation list in the format "Chain:WT_AA_ThreeLeterCode Resnum MUT_AA_ThreeLeterCode" (no spaces between the elements) separated by commas. If no chain is provided as chain code all the chains in the pdb file will be mutated. ie: "A:ALA15CYS"
     """
     def __init__(self, input_pdb_path, output_pdb_path, properties=None, **kwargs):
         properties = properties or {}
@@ -53,7 +53,6 @@ class Mutate():
                         'input_structure_path': self.input_pdb_path}
 
         sets = DefaultSettings(os.path.dirname(sc.__file__))
-
         out_log_file_path = fu.create_name(path=self.path, step=self.step, name='log.out')
         fu.create_dir(os.path.dirname(os.path.abspath(out_log_file_path)))
 

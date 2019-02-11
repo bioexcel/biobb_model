@@ -978,7 +978,6 @@ class StructureChecking():
         input_line = ParamInput ('Mutation list', mut_list, self.args['non_interactive'])
         mut_list = input_line.run()
         self.mutations = MutationManager(mut_list)
-
         self.mutations.prepare_mutations(self.stm.st)
         print ('Mutations to perform')
         for m in self.mutations.mutation_list:
