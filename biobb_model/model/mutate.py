@@ -17,7 +17,7 @@ class Mutate():
         input_pdb_path (str): Input PDB file path.
         output_pdb_path (str): Output PDB file path.
         properties (dic):
-            | - **mutation** (*str*): Mutation list in the format "Chain:WT_AA_ThreeLeterCode Resnum MUT_AA_ThreeLeterCode" (no spaces between the elements) separated by commas. If no chain is provided as chain code all the chains in the pdb file will be mutated. ie: "A:ALA15CYS"
+            | - **mutation_list** (*str*): ("A:Val2Ala") Mutation list in the format "Chain:WT_AA_ThreeLeterCode Resnum MUT_AA_ThreeLeterCode" (no spaces between the elements) separated by commas. If no chain is provided as chain code all the chains in the pdb file will be mutated. ie: "A:ALA15CYS"
     """
     def __init__(self, input_pdb_path, output_pdb_path, properties=None, **kwargs):
         properties = properties or {}
@@ -27,7 +27,7 @@ class Mutate():
         self.output_pdb_path = output_pdb_path
 
         # Properties specific for BB
-        self.mutation_list = properties.get('mutation_list', None)
+        self.mutation_list = properties.get('mutation_list', 'A:Val2Ala')
 
         # Common in all BB
         self.can_write_console_log = properties.get('can_write_console_log', True)
@@ -62,6 +62,11 @@ class Mutate():
             StructureChecking(sets, options_dict).launch()
             sys.stdout = old_stdout
 
+        if self.can_write_console_log:
+            with open(out_log_file_path, 'r') as out_log:
+                print(out_log.read())
+
+
 
 def main():
     """Command line interface."""
@@ -79,7 +84,6 @@ def main():
     properties = settings.ConfReader(config=config, system=args.system).get_prop_dic()
     if args.step:
         properties = properties[args.step]
-
     #Specific call of each building block
     Mutate(input_pdb_path=args.input_pdb_path, output_pdb_path=args.output_pdb_path, properties=properties).launch()
 

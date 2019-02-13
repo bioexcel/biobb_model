@@ -103,7 +103,6 @@ class StructureChecking():
             self.summary[command] = {}
 
         msg = 'Running {}.'.format(command)
-
         if opts:
             self.summary[command]['opts'] = opts
             msg += ' Options: {} '.format(' '.join(opts))
