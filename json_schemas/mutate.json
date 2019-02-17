@@ -1,24 +1,29 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema#",
     "$id": "http://bioexcel.eu/biobb_model/json_schemas/0.1/fix_side_chains",
-    "title": "Module containing the FixSideChain class and the command line interface.",
+    "title": "Module containing the Mutate class and the command line interface",
     "type": "object",
     "required": ["input_pdb_path", "output_pdb_path"],
-    "properties":
-            {
-                "input_pdb_path": {
-                    "type": "string",
-                    "description": "Path to the input PDB file"
-                },
-                "output_pdb_path": {
-                    "type": "string",
-                    "description": "Path to the output PDB file"
-                },
-                "properties": {
-                    "type": "object",
-                    "additionalProperties": false,
-                    "description": "empty field to maintain compatibility"
+    "properties": {
+        "input_pdb_path": {
+            "type": "string",
+            "description": "Path to the input PDB file" 
+        },
+        "output_pdb_path": {
+            "type": "string",
+            "description": "Path to the output PDB file" 
+        },
+        "properties": {
+            "type": "object",
+            "required": ["mutation_list"],
+            "properties": {
+                "mutation_list": {
+                    "type": "string", 
+                    "description": "Mutation list in the format “Chain:WT_AA_ThreeLeterCode Resnum MUT_AA_ThreeLeterCode” (no spaces between the elements) separated by commas. If no chain is provided as chain code all the chains in the pdb file will be mutated. ie: A:ALA15CYS"
                 }
-            },
+            }
+        }
+    },
     "additionalProperties": false
 }
+ 
