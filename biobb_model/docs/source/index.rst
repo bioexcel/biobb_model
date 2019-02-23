@@ -26,4 +26,7 @@ Indices and tables
 * :ref:`search`
 
 `Github repository <https://github.com/bioexcel/biobb_model>`_.
-=================================================================
+===================================================================
+
+.. raw:: html
+    :file: schema.html
