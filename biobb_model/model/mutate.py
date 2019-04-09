@@ -6,6 +6,7 @@ import sys
 import os
 from biobb_common.configuration   import settings
 from biobb_common.tools import file_utils as fu
+from biobb_common.command_wrapper import cmd_wrapper
 import biobb_model.structure_checking.structure_checking as sc
 from biobb_model.structure_checking.structure_checking import StructureChecking
 from biobb_model.structure_checking.default_settings import DefaultSettings
@@ -27,7 +28,8 @@ class Mutate():
         self.output_pdb_path = output_pdb_path
 
         # Properties specific for BB
-        self.mutation_list = properties.get('mutation_list', 'A:Val2Ala')
+        self.check_structure_path = properties.get('check_structure_path', 'check_structure')
+        self.mutation_list = properties.get('mutation_list', 'A:Val2Ala').replace(" ","")
 
         # Common in all BB
         self.can_write_console_log = properties.get('can_write_console_log', True)
@@ -37,53 +39,35 @@ class Mutate():
         self.path = properties.get('path', '')
 
     def launch(self):
-        """Model the missing atoms in the side chains."""
-        options_dict = {'force_save': False,
-                        'command': 'mutateside',
-                        'data_dir': None,
-                        'json_output_path': None,
-                        'data_library_path': None,
-                        'res_lib_path': None,
-                        'quiet': False,
-                        'output_structure_path': self.output_pdb_path,
-                        'options': ['--mut', self.mutation_list],
-                        'non_interactive': False,
-                        'debug': False,
-                        'check_only': False,
-                        'input_structure_path': self.input_pdb_path}
+        """Mutate one or more aminoacids."""
+        out_log, err_log = fu.get_logs(path=self.path, prefix=self.prefix, step=self.step, can_write_console=self.can_write_console_log)
+        cmd = [self.check_structure_path,
+               '-i', self.input_pdb_path,
+               '-o', self.output_pdb_path,
+               'mutateside', '--mut', self.mutation_list]
 
-        sets = DefaultSettings(os.path.dirname(sc.__file__))
-        out_log_file_path = fu.create_name(path=self.path, step=self.step, name='log.out')
-        fu.create_dir(os.path.dirname(os.path.abspath(out_log_file_path)))
-
-        with open(out_log_file_path, 'w') as out_log:
-            old_stdout = sys.stdout
-            sys.stdout = out_log
-            StructureChecking(sets, options_dict).launch()
-            sys.stdout = old_stdout
-
-        if self.can_write_console_log:
-            with open(out_log_file_path, 'r') as out_log:
-                print(out_log.read())
-
-
+        command = cmd_wrapper.CmdWrapper(cmd, out_log, err_log, self.global_log)
+        return command.launch()
 
 def main():
     """Command line interface."""
-    parser = argparse.ArgumentParser(description="Model the missing atoms in aminoacid side chains of a PDB.")
-    parser.add_argument('--config', required=False)
-    parser.add_argument('--system', required=False)
-    parser.add_argument('--step', required=False)
+    parser = argparse.ArgumentParser(description="Model the missing atoms in aminoacid side chains of a PDB.", formatter_class=lambda prog: argparse.RawTextHelpFormatter(prog, width=99999))
+    parser.add_argument('-c', '--config', required=False, help="This file can be a YAML file, JSON file or JSON string")
+    parser.add_argument('--system', required=False, help="Check 'https://biobb-common.readthedocs.io/en/latest/system_step.html' for help")
+    parser.add_argument('--step', required=False, help="Check 'https://biobb-common.readthedocs.io/en/latest/system_step.html' for help")
 
-    # Specific args of each building block
-    parser.add_argument('--input_pdb_path', required=True)
-    parser.add_argument('--output_pdb_path', required=True)
+    #Specific args of each building block
+    required_args = parser.add_argument_group('required arguments')
+    required_args.add_argument('-i', '--input_pdb_path', required=True, help="Input PDB file name")
+    required_args.add_argument('-o', '--output_pdb_path', required=True, help="Output PDB file name")
+    ####
 
     args = parser.parse_args()
     config = args.config if args.config else None
     properties = settings.ConfReader(config=config, system=args.system).get_prop_dic()
     if args.step:
         properties = properties[args.step]
+
     #Specific call of each building block
     Mutate(input_pdb_path=args.input_pdb_path, output_pdb_path=args.output_pdb_path, properties=properties).launch()
 
