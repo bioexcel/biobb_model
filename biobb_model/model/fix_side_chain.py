@@ -2,14 +2,9 @@
 
 """Module containing the FixSideChain class and the command line interface."""
 import argparse
-import sys
-import os
 from biobb_common.configuration import settings
 from biobb_common.tools import file_utils as fu
 from biobb_common.command_wrapper import cmd_wrapper
-import biobb_model.structure_checking.structure_checking as sc
-from biobb_model.structure_checking.structure_checking import StructureChecking
-from biobb_model.structure_checking.default_settings import DefaultSettings
 
 class FixSideChain():
     """Class to model the missing atoms in aminoacid side chains of a PDB.
@@ -43,6 +38,7 @@ class FixSideChain():
         cmd = [self.check_structure_path,
                '-i', self.input_pdb_path,
                '-o', self.output_pdb_path,
+               '--force_save',
                'fixside', '--fix', 'ALL']
 
         command = cmd_wrapper.CmdWrapper(cmd, out_log, err_log, self.global_log)

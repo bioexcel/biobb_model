@@ -2,14 +2,9 @@
 
 """Module containing the Mutate class and the command line interface."""
 import argparse
-import sys
-import os
 from biobb_common.configuration   import settings
 from biobb_common.tools import file_utils as fu
 from biobb_common.command_wrapper import cmd_wrapper
-import biobb_model.structure_checking.structure_checking as sc
-from biobb_model.structure_checking.structure_checking import StructureChecking
-from biobb_model.structure_checking.default_settings import DefaultSettings
 
 class Mutate():
     """Class to mutate one aminoacid by another in a 3d structure.
