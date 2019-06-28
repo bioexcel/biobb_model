@@ -14,7 +14,7 @@
             "desc" : "Reconstructs the missing side chains and heavy atoms of the given PDB file."
         }, 
         {
-            "block" : "mutate", 
+            "block" : "Mutate", 
             "tool" : "in house using biopythonl", 
             "desc" : "Creates a new PDB file performing the mutations given in a list of amino acid mutations to the input PDB file."
         }
