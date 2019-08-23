@@ -12,8 +12,11 @@ class FixSideChain():
     Args:
         input_pdb_path (str): Input PDB file path.
         output_pdb_path (str): Output PDB file path.
-        properties (dic): (None) Empty dictionary by default.
+        properties (dic):
+            | - **remove_tmp** (*bool*) - (True) [WF property] Remove temporal files.
+            | - **restart** (*bool*) - (False) [WF property] Do not execute if output files exist.
     """
+
     def __init__(self, input_pdb_path, output_pdb_path, properties=None, **kwargs):
         properties = properties or {}
 
@@ -30,13 +33,25 @@ class FixSideChain():
         self.prefix = properties.get('prefix', None)
         self.step = properties.get('step', None)
         self.path = properties.get('path', '')
+        self.remove_tmp = properties.get('remove_tmp', True)
+        self.restart = properties.get('restart', False)
 
         # Check the properties
         fu.check_properties(self, properties)
 
     def launch(self):
         """Model the missing atoms in side chains."""
+        tmp_files = []
+
+        #Create local logs
         out_log, err_log = fu.get_logs(path=self.path, prefix=self.prefix, step=self.step, can_write_console=self.can_write_console_log)
+
+        #Restart if needed
+        if self.restart:
+            output_file_list = [self.output_gro_path]
+            if fu.check_complete_files(output_file_list):
+                fu.log('Restart is enabled, this step: %s will the skipped' % self.step, out_log, self.global_log)
+                return 0
 
         cmd = [self.check_structure_path,
                '-i', self.input_pdb_path,
@@ -44,8 +59,12 @@ class FixSideChain():
                '--force_save',
                'fixside', '--fix', 'ALL']
 
-        command = cmd_wrapper.CmdWrapper(cmd, out_log, err_log, self.global_log)
-        return command.launch()
+        returncode = cmd_wrapper.CmdWrapper(cmd, out_log, err_log, self.global_log).launch()
+
+        if self.remove_tmp:
+            fu.rm_file_list(tmp_files)
+
+        return returncode
 
 def main():
     """Command line interface."""
@@ -58,7 +77,6 @@ def main():
     required_args = parser.add_argument_group('required arguments')
     required_args.add_argument('-i', '--input_pdb_path', required=True, help="Input PDB file name")
     required_args.add_argument('-o', '--output_pdb_path', required=True, help="Output PDB file name")
-    ####
 
     args = parser.parse_args()
     config = args.config if args.config else None
@@ -68,7 +86,6 @@ def main():
 
     #Specific call of each building block
     FixSideChain(input_pdb_path=args.input_pdb_path, output_pdb_path=args.output_pdb_path, properties=properties).launch()
-    ####
 
 if __name__ == '__main__':
     main()
