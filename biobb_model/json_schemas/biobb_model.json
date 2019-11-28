@@ -1,6 +1,6 @@
 {
     "_id": "biobb_model",
-    "desc": "Biobb_model is the Biobb module collection to check and model 3d structures, create mutations or reconstruct missing atoms. Biobb (BioExcel building blocks) packages are Python building blocks that create new layer of compatibility and interoperability over popular bioinformatics tools.",
+    "desc": "Biobb_model is the Biobb module collection to check and model 3d structures, create mutations or reconstruct missing atoms.",
     "github": "https://github.com/bioexcel/biobb_model",
     "readthedocs": "https://biobb-model.readthedocs.io/en/latest/",
     "conda": "https://anaconda.org/bioconda/biobb_model",
