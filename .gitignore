@@ -112,3 +112,5 @@ traj_comp.xtc
 
 # vs code
 .vscode
+# Pycharm
+.idea
