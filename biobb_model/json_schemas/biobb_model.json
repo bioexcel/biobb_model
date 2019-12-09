@@ -11,12 +11,14 @@
         {
             "block" : "FixSideChain",
             "tool" : "in house using biopython",
-            "desc" : "Reconstructs the missing side chains and heavy atoms of the given PDB file."
+            "desc" : "Reconstructs the missing side chains and heavy atoms of the given PDB file.",
+            "exec" : "fix_side_chain"
         },
         {
             "block" : "Mutate",
             "tool" : "in house using biopythonl",
-            "desc" : "Creates a new PDB file performing the mutations given in a list of amino acid mutations to the input PDB file."
+            "desc" : "Creates a new PDB file performing the mutations given in a list of amino acid mutations to the input PDB file.",
+            "exec" : "mutate"
         }
     ],
     "dep_pypi" : [
