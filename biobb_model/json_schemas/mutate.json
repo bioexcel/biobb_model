@@ -10,11 +10,21 @@
     "properties": {
         "input_pdb_path": {
             "type": "string",
-            "description": "Input PDB file path."
+            "description": "Input PDB file path",
+            "filetype": "input",
+            "sample": "https://github.com/bioexcel/biobb_model/raw/master/biobb_model/test/data/model/2ki5.pdb",
+            "enum": [
+                ".*\\.pdb$"
+            ]
         },
         "output_pdb_path": {
             "type": "string",
-            "description": "Output PDB file path."
+            "description": "Output PDB file path",
+            "filetype": "output",
+            "sample": "https://github.com/bioexcel/biobb_model/raw/master/biobb_model/test/reference/model/output_mutated_pdb_path.pdb",
+            "enum": [
+                ".*\\.pdb$"
+            ]
         },
         "properties": {
             "type": "object",
@@ -22,7 +32,7 @@
                 "mutation_list": {
                     "type": "string",
                     "default": "A:Val2Ala",
-                    "description": "separated by commas. If no chain is provided as chain code all the chains in the pdb file will be mutated. ie: \"A:ALA15CYS\""
+                    "description": "separated by commas. If no chain is provided as chain code all the chains in the pdb file will be mutated. ie: \"A:ALA15CYS\"."
                 },
                 "remove_tmp": {
                     "type": "boolean",

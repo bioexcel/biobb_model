@@ -12,8 +12,8 @@ class FixSideChain:
     """Class to model the missing atoms in aminoacid side chains of a PDB.
 
     Args:
-        input_pdb_path (str): Input PDB file path.
-        output_pdb_path (str): Output PDB file path.
+        input_pdb_path (str): Input PDB file path. File type: input. `Sample file <https://github.com/bioexcel/biobb_model/raw/master/biobb_model/test/data/model/2ki5.pdb>`_. Accepted formats: pdb.
+        output_pdb_path (str): Output PDB file path. File type: output. `Sample file <https://github.com/bioexcel/biobb_model/raw/master/biobb_model/test/reference/model/output_pdb_path.pdb>`_. Accepted formats: pdb.
         properties (dic):
             * **remove_tmp** (*bool*) - (True) [WF property] Remove temporal files.
             * **restart** (*bool*) - (False) [WF property] Do not execute if output files exist.    """
