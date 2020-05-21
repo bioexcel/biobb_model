@@ -1,32 +1,34 @@
 {
     "_id": "biobb_model",
-    "desc": "Biobb_model is the Biobb module collection to check and model 3d structures, create mutations or reconstruct missing atoms. Biobb (BioExcel building blocks) packages are Python building blocks that create new layer of compatibility and interoperability over popular bioinformatics tools.",
+    "desc": "Biobb_model is the Biobb module collection to check and model 3d structures, create mutations or reconstruct missing atoms.",
     "github": "https://github.com/bioexcel/biobb_model",
     "readthedocs": "https://biobb-model.readthedocs.io/en/latest/",
     "conda": "https://anaconda.org/bioconda/biobb_model",
     "docker": "https://quay.io/repository/biocontainers/biobb_model",
     "singularity": "https://www.singularity-hub.org/collections/2732/usage",
-    "version": "2.0.1",
+    "version": "3.0.0",
     "tools" : [
         {
             "block" : "FixSideChain",
-            "tool" : "in house using biopython",
-            "desc" : "Reconstructs the missing side chains and heavy atoms of the given PDB file."
+            "tool" : "in house using biobb_structure_checking",
+            "desc" : "Reconstructs the missing side chains and heavy atoms of the given PDB file.",
+            "exec" : "fix_side_chain"
         },
         {
             "block" : "Mutate",
-            "tool" : "in house using biopythonl",
-            "desc" : "Creates a new PDB file performing the mutations given in a list of amino acid mutations to the input PDB file."
+            "tool" : "in house using biobb_structure_checking",
+            "desc" : "Creates a new PDB file performing the mutations given in a list of amino acid mutations to the input PDB file.",
+            "exec" : "mutate"
         }
     ],
     "dep_pypi" : [
-        "install_requires=['biobb_common==2.0.1', 'biobb_structure_checking==1.0.7']",
-        "python_requires='==3.6.*'"
+        "install_requires=['biobb_common==3.0.0', 'biobb_structure_checking==3.0.2']",
+        "python_requires='==3.7.*'"
     ],
     "dep_conda" : [
-        "python ==3.6.*",
-        "biobb_common ==2.0.1",
-        "biobb_structure_checking ==1.0.7"
+        "python ==3.7.*",
+        "biobb_common ==3.0.0",
+        "biobb_structure_checking ==3.0.2"
     ],
     "keywords" : [
         "model",

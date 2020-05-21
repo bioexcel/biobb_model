@@ -9,18 +9,18 @@ from biobb_common.tools.file_utils import launchlogger
 
 
 class Mutate:
-    """Class to mutate one aminoacid by another in a 3d structure.
+    """Class to mutate one amino acid by another in a 3d structure.
 
     Args:
-        input_pdb_path (str): Input PDB file path.
-        output_pdb_path (str): Output PDB file path.
+        input_pdb_path (str): Input PDB file path. `Sample file <https://github.com/bioexcel/biobb_model/blob/master/biobb_model/test/data/model/2ki5.pdb>`_. Accepted formats: pdb.
+        output_pdb_path (str): Output PDB file path.  `Sample file <https://github.com/bioexcel/biobb_model/blob/master/biobb_model/test/reference/model/output_mutated_pdb_path.pdb>`_. Accepted formats: pdb.
         properties (dic):
             * **mutation_list** (*str*): ("A:Val2Ala") Mutation list in the format "Chain:WT_AA_ThreeLeterCode Resnum MUT_AA_ThreeLeterCode" (no spaces between the elements) separated by commas. If no chain is provided as chain code all the chains in the pdb file will be mutated. ie: "A:ALA15CYS"
             * **remove_tmp** (*bool*) - (True) [WF property] Remove temporal files.
             * **restart** (*bool*) - (False) [WF property] Do not execute if output files exist.
     """
 
-    def __init__(self, input_pdb_path, output_pdb_path, properties=None, **kwargs):
+    def __init__(self, input_pdb_path: str, output_pdb_path: str, properties: dict = None, **kwargs) -> None:
         properties = properties or {}
 
         # Input/Output files
@@ -46,8 +46,8 @@ class Mutate:
         fu.check_properties(self, properties)
 
     @launchlogger
-    def launch(self):
-        """Mutate one or more aminoacids."""
+    def launch(self) -> int:
+        """Mutate one or more amino acids."""
         tmp_files = []
 
         # Get local loggers from launchlogger decorator
@@ -77,8 +77,6 @@ def main():
     parser = argparse.ArgumentParser(description="Model the missing atoms in aminoacid side chains of a PDB.",
                                      formatter_class=lambda prog: argparse.RawTextHelpFormatter(prog, width=99999))
     parser.add_argument('-c', '--config', required=False, help="This file can be a YAML file, JSON file or JSON string")
-    parser.add_argument('--system', required=False, help="Common name for workflow properties set")
-    parser.add_argument('--step', required=False, help="Check 'https://biobb-common.readthedocs.io/en/latest/configuration.html")
 
     # Specific args of each building block
     required_args = parser.add_argument_group('required arguments')
@@ -88,11 +86,11 @@ def main():
     args = parser.parse_args()
     config = args.config if args.config else None
     properties = settings.ConfReader(config=config, system=args.system).get_prop_dic()
-    if args.step:
-        properties = properties[args.step]
 
     # Specific call of each building block
-    Mutate(input_pdb_path=args.input_pdb_path, output_pdb_path=args.output_pdb_path, properties=properties).launch()
+    Mutate(input_pdb_path=args.input_pdb_path,
+           output_pdb_path=args.output_pdb_path,
+           properties=properties).launch()
 
 
 if __name__ == '__main__':
