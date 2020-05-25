@@ -13,7 +13,20 @@ Command:
 ```python
 mutate -h
 ```
-    /bin/sh: mutate: command not found
+    usage: mutate [-h] [-c CONFIG] -i INPUT_PDB_PATH -o OUTPUT_PDB_PATH
+    
+    Model the missing atoms in aminoacid side chains of a PDB.
+    
+    optional arguments:
+      -h, --help            show this help message and exit
+      -c CONFIG, --config CONFIG
+                            This file can be a YAML file, JSON file or JSON string
+    
+    required arguments:
+      -i INPUT_PDB_PATH, --input_pdb_path INPUT_PDB_PATH
+                            Input PDB file name
+      -o OUTPUT_PDB_PATH, --output_pdb_path OUTPUT_PDB_PATH
+                            Output PDB file name
 ### I / O Arguments
 Syntax: input_argument (datatype) : Definition
 
@@ -59,7 +72,20 @@ Command:
 ```python
 fix_side_chain -h
 ```
-    /bin/sh: fix_side_chain: command not found
+    usage: fix_side_chain [-h] [-c CONFIG] -i INPUT_PDB_PATH -o OUTPUT_PDB_PATH
+    
+    Model the missing atoms in amino acid side chains of a PDB.
+    
+    optional arguments:
+      -h, --help            show this help message and exit
+      -c CONFIG, --config CONFIG
+                            This file can be a YAML file, JSON file or JSON string
+    
+    required arguments:
+      -i INPUT_PDB_PATH, --input_pdb_path INPUT_PDB_PATH
+                            Input PDB file name
+      -o OUTPUT_PDB_PATH, --output_pdb_path OUTPUT_PDB_PATH
+                            Output PDB file name
 ### I / O Arguments
 Syntax: input_argument (datatype) : Definition
 
