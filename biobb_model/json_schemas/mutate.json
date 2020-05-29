@@ -11,7 +11,7 @@
         "input_pdb_path": {
             "type": "string",
             "description": "Input PDB file path",
-            "filetype": null,
+            "filetype": "input",
             "sample": "https://github.com/bioexcel/biobb_model/blob/master/biobb_model/test/data/model/2ki5.pdb",
             "enum": [
                 ".*\\.pdb$"
@@ -20,7 +20,7 @@
         "output_pdb_path": {
             "type": "string",
             "description": "Output PDB file path",
-            "filetype": null,
+            "filetype": "output",
             "sample": "https://github.com/bioexcel/biobb_model/blob/master/biobb_model/test/reference/model/output_mutated_pdb_path.pdb",
             "enum": [
                 ".*\\.pdb$"

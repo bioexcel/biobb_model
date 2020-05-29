@@ -12,8 +12,8 @@ class Mutate:
     """Class to mutate one amino acid by another in a 3d structure.
 
     Args:
-        input_pdb_path (str): Input PDB file path. `Sample file <https://github.com/bioexcel/biobb_model/blob/master/biobb_model/test/data/model/2ki5.pdb>`_. Accepted formats: pdb.
-        output_pdb_path (str): Output PDB file path.  `Sample file <https://github.com/bioexcel/biobb_model/blob/master/biobb_model/test/reference/model/output_mutated_pdb_path.pdb>`_. Accepted formats: pdb.
+        input_pdb_path (str): Input PDB file path. File type: input. `Sample file <https://github.com/bioexcel/biobb_model/blob/master/biobb_model/test/data/model/2ki5.pdb>`_. Accepted formats: pdb.
+        output_pdb_path (str): Output PDB file path. File type: output. `Sample file <https://github.com/bioexcel/biobb_model/blob/master/biobb_model/test/reference/model/output_mutated_pdb_path.pdb>`_. Accepted formats: pdb.
         properties (dic):
             * **mutation_list** (*str*): ("A:Val2Ala") Mutation list in the format "Chain:WT_AA_ThreeLeterCode Resnum MUT_AA_ThreeLeterCode" (no spaces between the elements) separated by commas. If no chain is provided as chain code all the chains in the pdb file will be mutated. ie: "A:ALA15CYS"
             * **remove_tmp** (*bool*) - (True) [WF property] Remove temporal files.
