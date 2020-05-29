@@ -23,7 +23,7 @@ Using PIP:
 * Installation:
 
 
-        pip install "biobb_analysis>=3.0.0"
+        pip install "biobb_model>=3.0.0"
 
 
 * Usage: [Python API documentation](https://biobb-model.readthedocs.io/en/latest/modules.html)
