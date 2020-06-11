@@ -83,8 +83,8 @@ def main():
     required_args.add_argument('-o', '--output_pdb_path', required=True, help="Output PDB file name")
 
     args = parser.parse_args()
-    config = args.config if args.config else None
-    properties = settings.ConfReader(config=config, system=args.system).get_prop_dic()
+    args.config = args.config or "{}"
+    properties = settings.ConfReader(config=args.config).get_prop_dic()
 
     # Specific call of each building block
     FixSideChain(input_pdb_path=args.input_pdb_path,
