@@ -84,7 +84,7 @@ def main():
 
     args = parser.parse_args()
     config = args.config if args.config else None
-    properties = settings.ConfReader(config=config, system=args.system).get_prop_dic()
+    properties = settings.ConfReader(config=config).get_prop_dic()
 
     # Specific call of each building block
     FixSideChain(input_pdb_path=args.input_pdb_path,
