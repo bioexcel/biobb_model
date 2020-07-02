@@ -12,13 +12,15 @@
             "block" : "FixSideChain",
             "tool" : "in house using biobb_structure_checking",
             "desc" : "Reconstructs the missing side chains and heavy atoms of the given PDB file.",
-            "exec" : "fix_side_chain"
+            "exec" : "fix_side_chain",
+            "docs": "https://biobb-model.readthedocs.io/en/latest/model.html#module-model.fix_side_chain"
         },
         {
             "block" : "Mutate",
             "tool" : "in house using biobb_structure_checking",
             "desc" : "Creates a new PDB file performing the mutations given in a list of amino acid mutations to the input PDB file.",
-            "exec" : "mutate"
+            "exec" : "mutate",
+            "docs": "https://biobb-model.readthedocs.io/en/latest/model.html#module-model.mutate"
         }
     ],
     "dep_pypi" : [
