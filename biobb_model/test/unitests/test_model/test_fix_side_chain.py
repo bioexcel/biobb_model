@@ -1,8 +1,7 @@
 from biobb_common.tools import test_fixtures as fx
-from model.fix_side_chain import FixSideChain
+from biobb_model.model.fix_side_chain import FixSideChain
 
-
-class TestFixSideChain():
+class TestFixSideChain:
     def setUp(self):
         fx.test_setup(self, 'fix_side_chain')
 

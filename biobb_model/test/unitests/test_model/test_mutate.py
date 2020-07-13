@@ -1,8 +1,8 @@
 from biobb_common.tools import test_fixtures as fx
-from model.mutate import Mutate
+from biobb_model.model.mutate import Mutate
 
 
-class TestFixSideChain():
+class TestFixSideChain:
     def setUp(self):
         fx.test_setup(self, 'mutate')
 

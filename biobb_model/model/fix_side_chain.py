@@ -9,7 +9,7 @@ from biobb_common.tools.file_utils import launchlogger
 
 
 class FixSideChain:
-    """Class to model the missing atoms in aminoacid side chains of a PDB.
+    """Class to model the missing atoms in amino acid side chains of a PDB.
 
     Args:
         input_pdb_path (str): Input PDB file path. File type: input. `Sample file <https://github.com/bioexcel/biobb_model/raw/master/biobb_model/test/data/model/2ki5.pdb>`_. Accepted formats: pdb.
@@ -18,7 +18,8 @@ class FixSideChain:
             * **remove_tmp** (*bool*) - (True) [WF property] Remove temporal files.
             * **restart** (*bool*) - (False) [WF property] Do not execute if output files exist.    """
 
-    def __init__(self, input_pdb_path, output_pdb_path, properties=None, **kwargs):
+    def __init__(self, input_pdb_path: str, output_pdb_path: str,
+                 properties: dict = None, **kwargs) -> None:
         properties = properties or {}
 
         # Input/Output files
@@ -43,7 +44,7 @@ class FixSideChain:
         fu.check_properties(self, properties)
 
     @launchlogger
-    def launch(self):
+    def launch(self) -> int:
         """Model the missing atoms in side chains."""
         tmp_files = []
 
@@ -72,10 +73,9 @@ class FixSideChain:
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Model the missing atoms in aminoacid side chains of a PDB.", formatter_class=lambda prog: argparse.RawTextHelpFormatter(prog, width=99999))
+    parser = argparse.ArgumentParser(description="Model the missing atoms in amino acid side chains of a PDB.",
+                                     formatter_class=lambda prog: argparse.RawTextHelpFormatter(prog, width=99999))
     parser.add_argument('-c', '--config', required=False, help="This file can be a YAML file, JSON file or JSON string")
-    parser.add_argument('--system', required=False, help="Common name for workflow properties set")
-    parser.add_argument('--step', required=False, help="Check 'https://biobb-common.readthedocs.io/en/latest/configuration.html")
 
     # Specific args of each building block
     required_args = parser.add_argument_group('required arguments')
@@ -84,12 +84,12 @@ def main():
 
     args = parser.parse_args()
     config = args.config if args.config else None
-    properties = settings.ConfReader(config=config, system=args.system).get_prop_dic()
-    if args.step:
-        properties = properties[args.step]
+    properties = settings.ConfReader(config=config).get_prop_dic()
 
     # Specific call of each building block
-    FixSideChain(input_pdb_path=args.input_pdb_path, output_pdb_path=args.output_pdb_path, properties=properties).launch()
+    FixSideChain(input_pdb_path=args.input_pdb_path,
+                 output_pdb_path=args.output_pdb_path,
+                 properties=properties).launch()
 
 
 if __name__ == '__main__':
