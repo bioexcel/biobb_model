@@ -30,6 +30,7 @@ class FixSideChain:
 
         # Properties specific for BB
         self.check_structure_path = properties.get('check_structure_path', 'check_structure')
+        self.rebuild = properties.get('rebuild', False)
 
         # Properties common in all BB
         self.can_write_console_log = properties.get('can_write_console_log', True)
@@ -63,6 +64,8 @@ class FixSideChain:
                '-o', self.io_dict["out"]["output_pdb_path"],
                '--force_save',
                'fixside', '--fix', 'ALL']
+        if self.rebuild:
+            cmd.append('--rebuild')
 
         returncode = cmd_wrapper.CmdWrapper(cmd, out_log, err_log, self.global_log).launch()
 

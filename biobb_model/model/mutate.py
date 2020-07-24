@@ -16,6 +16,7 @@ class Mutate:
         output_pdb_path (str): Output PDB file path. File type: output. `Sample file <https://github.com/bioexcel/biobb_model/raw/master/biobb_model/test/reference/model/output_mutated_pdb_path.pdb>`_. Accepted formats: pdb.
         properties (dic):
             * **mutation_list** (*str*): ("A:Val2Ala") Mutation list in the format "Chain:WT_AA_ThreeLeterCode Resnum MUT_AA_ThreeLeterCode" (no spaces between the elements) separated by commas. If no chain is provided as chain code all the chains in the pdb file will be mutated. ie: "A:ALA15CYS".
+            * **rebuild** (*bool*): Rebuild side chain completely using Modeller
             * **remove_tmp** (*bool*) - (True) [WF property] Remove temporal files.
             * **restart** (*bool*) - (False) [WF property] Do not execute if output files exist.
     """
@@ -32,6 +33,7 @@ class Mutate:
         # Properties specific for BB
         self.check_structure_path = properties.get('check_structure_path', 'check_structure')
         self.mutation_list = properties.get('mutation_list', 'A:Val2Ala').replace(" ", "")
+        self.rebuild = properties.get('rebuild', False)
 
         # Properties common in all BB
         self.can_write_console_log = properties.get('can_write_console_log', True)
@@ -64,6 +66,8 @@ class Mutate:
                '-i', self.io_dict["in"]["input_pdb_path"],
                '-o', self.io_dict["out"]["output_pdb_path"],
                'mutateside', '--mut', self.mutation_list]
+        if self.rebuild:
+            cmd.append('--rebuild')
 
         returncode = cmd_wrapper.CmdWrapper(cmd, out_log, err_log, self.global_log).launch()
 

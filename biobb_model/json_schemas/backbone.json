@@ -1,0 +1,76 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "http://bioexcel.eu/biobb_model/json_schemas/1.0/backbone",
+    "title": "Class to repair protein backbone.",
+    "type": "object",
+    "required": [
+        "input_pdb_path",
+        "output_pdb_path"
+    ],
+    "properties": {
+        "input_pdb_path": {
+            "type": "string",
+            "description": "Input PDB file path",
+            "filetype": "input",
+            "sample": "https://github.com/bioexcel/biobb_model/blob/master/biobb_model/test/data/model/2ki5.pdb",
+            "enum": [
+                ".*\\.pdb$"
+            ]
+        },
+        "output_pdb_path": {
+            "type": "string",
+            "description": "Output PDB file path",
+            "filetype": "output",
+            "sample": "https://github.com/bioexcel/biobb_model/blob/master/biobb_model/test/reference/model/output_backbone_pdb_path.pdb",
+            "enum": [
+                ".*\\.pdb$"
+            ]
+        },
+        "properties": {
+            "type": "object",
+            "properties": {
+                "fix_chain": {
+                    "type": "string",
+                    "default": "All",
+                    "description": "All | none | List - List of Backbone breaks to fix"
+                },
+                "extra_gap": {
+                    "type":"integer",
+                    "default": 0,
+                    "description": "Additional residues at eiher side of the gap to recover from modelled structure on break repair"
+                }, 
+                "fix_atoms": {
+                    "type": "string",
+                    "default": "All",
+                    "description": "All | none | List - List of Backbone residues with missing O atoms to fix"
+                },
+                "add_caps": {
+                    "type": "string",
+                    "default": "none",
+                    "description": "All | none | Terms | breaks | List - List of residues to cap with ACE or NME, Terms: True Terminal residues, Breaks: Terminals due to backbone breaks"
+                },
+                "no_recheck": {
+                    "type": "bool",
+                    "default": false,
+                    "description": "No recheck backbone after fixing"
+                },
+                "no_check_clashes": {
+                    "type": "bool",
+                    "default": false,
+                    "description" : "No check for vdw clashes"
+                },
+                "remove_tmp": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "[WF property] Remove temporal files."
+                },
+                "restart": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "[WF property] Do not execute if output files exist."
+                }
+            }
+        }
+    },
+    "additionalProperties": false
+}
