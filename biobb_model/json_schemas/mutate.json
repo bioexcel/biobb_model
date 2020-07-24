@@ -43,7 +43,13 @@
                     "type": "boolean",
                     "default": false,
                     "description": "[WF property] Do not execute if output files exist."
+                },
+                "rebuild": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Rebuilds side chain completely using Modeller"
                 }
+
             }
         }
     },
