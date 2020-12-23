@@ -9,7 +9,10 @@ from biobb_common.tools.file_utils import launchlogger
 
 
 class FixSideChain:
-    """Class to model the missing atoms in amino acid side chains of a PDB.
+    """
+    | biobb_model FixSideChain
+    | Class to model the missing atoms in amino acid side chains of a PDB.
+    |
 
     Args:
         input_pdb_path (str): Input PDB file path. File type: input. `Sample file <https://github.com/bioexcel/biobb_model/blob/master/biobb_model/test/data/model/2ki5.pdb>`_. Accepted formats: pdb.

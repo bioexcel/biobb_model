@@ -9,7 +9,10 @@ from biobb_common.tools.file_utils import launchlogger
 
 
 class Mutate:
-    """Class to mutate one amino acid by another in a 3d structure.
+    """
+    | biobb_model
+    | Class to mutate one amino acid by another in a 3d structure.
+    |
 
     Args:
         input_pdb_path (str): Input PDB file path. File type: input. `Sample file <https://github.com/bioexcel/biobb_model/blob/master/biobb_model/test/data/model/2ki5.pdb>`_. Accepted formats: pdb.
