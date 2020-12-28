@@ -19,3 +19,11 @@ model.fix_side_chain module
     :members:
     :undoc-members:
     :show-inheritance:
+
+model.fix_backbone module
+-----------------------------
+
+.. automodule:: model.fix_backbone
+    :members:
+    :undoc-members:
+    :show-inheritance:

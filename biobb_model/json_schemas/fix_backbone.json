@@ -1,9 +1,9 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "$id": "http://bioexcel.eu/biobb_model/json_schemas/1.0/mutate",
-    "name": "biobb_model Mutate",
-    "title": "Class to mutate one amino acid by another in a 3d structure.",
-    "description": "Mutate side chain with minimal atom replacement. if the use_modeller property is added the Modeller suite will be used to optimize the side chains.",
+    "$id": "http://bioexcel.eu/biobb_model/json_schemas/1.0/fix_backbone",
+    "name": "biobb_model FixBackbone",
+    "title": "Class to model the missing atoms in the backbone of a PDB structure.",
+    "description": "Model the missing atoms in the backbone of a PDB structure using biobb_structure_checking and the Modeller suite.",
     "type": "object",
     "info": {
         "wrapped_software": {
@@ -17,6 +17,7 @@
     },
     "required": [
         "input_pdb_path",
+        "input_fasta_canonical_sequence_path",
         "output_pdb_path"
     ],
     "properties": {
@@ -36,11 +37,27 @@
                 }
             ]
         },
+        "input_fasta_canonical_sequence_path": {
+            "type": "string",
+            "description": "Input FASTA file path",
+            "filetype": "input",
+            "sample": "https://github.com/bioexcel/biobb_model/raw/master/biobb_model/test/data/model/2ki5.fasta",
+            "enum": [
+                ".*\\.fasta$"
+            ],
+            "file_formats": [
+                {
+                    "extension": ".*\\.fasta$",
+                    "description": "Input FASTA file path",
+                    "edam": "format_1476"
+                }
+            ]
+        },
         "output_pdb_path": {
             "type": "string",
             "description": "Output PDB file path",
             "filetype": "output",
-            "sample": "https://github.com/bioexcel/biobb_model/raw/master/biobb_model/test/reference/model/output_mutated_pdb_path.pdb",
+            "sample": "https://github.com/bioexcel/biobb_model/raw/master/biobb_model/test/reference/model/output_pdb_path.pdb",
             "enum": [
                 ".*\\.pdb$"
             ],
@@ -55,18 +72,6 @@
         "properties": {
             "type": "object",
             "properties": {
-                "mutation_list": {
-                    "type": "string",
-                    "default": "A:Val2Ala",
-                    "wf_prop": false,
-                    "description": "Mutation list in the format \"Chain:WT_AA_ThreeLeterCode Resnum MUT_AA_ThreeLeterCode\" (no spaces between the elements) separated by commas. If no chain is provided as chain code all the chains in the pdb file will be mutated. ie: \"A:ALA15CYS\""
-                },
-                "use_modeller": {
-                    "type": "boolean",
-                    "default": false,
-                    "wf_prop": false,
-                    "description": "Use Modeller suite to optimize the side chains."
-                },
                 "remove_tmp": {
                     "type": "boolean",
                     "default": true,

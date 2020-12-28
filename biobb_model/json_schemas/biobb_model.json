@@ -6,7 +6,7 @@
     "conda": "https://anaconda.org/bioconda/biobb_model",
     "docker": "https://quay.io/biocontainers/biobb_model:3.5.0--py_0",
     "singularity": "https://www.singularity-hub.org/collections/2732/usage",
-    "version": "3.0.1",
+    "version": "3.5.0",
     "tools" : [
         {
             "block" : "FixSideChain",
@@ -14,6 +14,13 @@
             "desc" : "Reconstructs the missing side chains and heavy atoms of the given PDB file.",
             "exec" : "fix_side_chain",
             "docs": "https://biobb-model.readthedocs.io/en/latest/model.html#module-model.fix_side_chain"
+        },
+        {
+            "block" : "FixBackbone",
+            "tool" : "in house using biobb_structure_checking",
+            "desc" : "Reconstructs the missing backbone atoms of the given PDB file.",
+            "exec" : "fix_backbone",
+            "docs": "https://biobb-model.readthedocs.io/en/latest/model.html#module-model.fix_backbone"
         },
         {
             "block" : "Mutate",
@@ -24,13 +31,13 @@
         }
     ],
     "dep_pypi" : [
-        "install_requires=['biobb_common==3.0.0', 'biobb_structure_checking==3.0.2']",
+        "install_requires=['biobb_common==3.5.1', 'biobb_structure_checking==3.5.3']",
         "python_requires='==3.7.*'"
     ],
     "dep_conda" : [
         "python ==3.7.*",
-        "biobb_common ==3.0.0",
-        "biobb_structure_checking ==3.0.2"
+        "biobb_common ==3.5.1",
+        "biobb_structure_checking ==3.5.3"
     ],
     "keywords" : [
         "model",

@@ -8,6 +8,15 @@ fix_side_chain:
   properties:
     restart: False
 
+fix_backbone:
+  paths:
+    input_pdb_path: file:test_data_dir/model/2ki5.pdb
+    input_fasta_canonical_sequence_path: file:test_data_dir/model/2ki5.fasta
+    output_pdb_path: output_pdb_path.pdb
+    reference_output_pdb_path: file:test_reference_dir/model/output_fixbackbone_pdb_path.pdb
+  properties:
+    restart: False
+
 mutate:
   paths:
     input_pdb_path: file:test_data_dir/model/2ki5.pdb
