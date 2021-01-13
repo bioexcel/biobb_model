@@ -107,8 +107,8 @@ class Mutate:
 def mutate(input_pdb_path: str, output_pdb_path: str, properties: dict = None, **kwargs) -> int:
     """Create :class:`Mutate <model.mutate.Mutate>` class and
     execute the :meth:`launch() <model.mutate.Mutate.launch>` method."""
-    return Mutate(input_pdb_path=args.input_pdb_path,
-                  output_pdb_path=args.output_pdb_path,
+    return Mutate(input_pdb_path=input_pdb_path,
+                  output_pdb_path=output_pdb_path,
                   properties=properties, **kwargs).launch()
 
 def main():
