@@ -16,6 +16,7 @@ fix_backbone:
     reference_output_pdb_path: file:test_reference_dir/model/output_fixbackbone_pdb_path.pdb
   properties:
     restart: False
+    add_caps: True
 
 mutate:
   paths:

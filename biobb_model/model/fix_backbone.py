@@ -19,6 +19,7 @@ class FixBackbone:
         input_fasta_canonical_sequence_path (str): Input FASTA file path. File type: input. `Sample file <https://github.com/bioexcel/biobb_model/raw/master/biobb_model/test/data/model/2ki5.fasta>`_. Accepted formats: fasta (edam:format_1476).
         output_pdb_path (str): Output PDB file path. File type: output. `Sample file <https://github.com/bioexcel/biobb_model/raw/master/biobb_model/test/reference/model/output_pdb_path.pdb>`_. Accepted formats: pdb (edam:format_1476).
         properties (dict - Python dictionary object containing the tool parameters, not input/output files):
+            * **add_caps** (*bool*) - (False) Add caps to terminal residues.
             * **remove_tmp** (*bool*) - (True) [WF property] Remove temporal files.
             * **restart** (*bool*) - (False) [WF property] Do not execute if output files exist.
 
@@ -56,6 +57,7 @@ class FixBackbone:
 
         # Properties specific for BB
         self.check_structure_path = properties.get('check_structure_path', 'check_structure')
+        self.add_caps = properties.get('add_caps', False)
 
         # Properties common in all BB
         self.can_write_console_log = properties.get('can_write_console_log', True)
@@ -84,13 +86,19 @@ class FixBackbone:
                 fu.log('Restart is enabled, this step: %s will the skipped' % self.step, out_log, self.global_log)
                 return 0
 
-        # echo -e '/Users/pau/Desktop/rcsb_pdb_2KI5.fasta' | check_structure -i biobb_model/biobb_model/test/data/model/2ki5.pdb -o out.pdb backbone --fix_atoms All --add_caps All --fix_chain All
+        # echo -e '/Users/pau/Desktop/rcsb_pdb_2KI5.fasta' | check_structure -i biobb_model/biobb_model/test/data/model/2ki5.pdb -o out.pdb backbone --fix_atoms All --add_caps None --fix_chain All
         cmd = ['echo', '-e', '\'' + self.io_dict["in"]["input_fasta_canonical_sequence_path"] + '\'', '|',
                self.check_structure_path,
                '-i', self.io_dict["in"]["input_pdb_path"],
                '-o', self.io_dict["out"]["output_pdb_path"],
                '--force_save',
-               'backbone', '--fix_atoms', 'All', '--add_caps', 'All', '--fix_chain', 'All']
+               'backbone', '--fix_atoms', 'All', '--fix_chain', 'All']
+
+        cmd.append('--add_caps')
+        if self.add_caps:
+            cmd.append('All')
+        else:
+            cmd.append('None')
 
 
         if not modeller_installed(out_log, self.global_log):
