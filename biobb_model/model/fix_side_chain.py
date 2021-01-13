@@ -8,6 +8,7 @@ from biobb_common.command_wrapper import cmd_wrapper
 from biobb_common.tools.file_utils import launchlogger
 from biobb_model.model.common import modeller_installed
 
+
 class FixSideChain:
     """
     | biobb_model FixSideChain
