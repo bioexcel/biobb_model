@@ -1,9 +1,9 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "$id": "http://bioexcel.eu/biobb_model/json_schemas/1.0/fix_backbone",
-    "name": "biobb_model FixBackbone",
-    "title": "Class to model the missing atoms in the backbone of a PDB structure.",
-    "description": "Model the missing atoms in the backbone of a PDB structure using biobb_structure_checking and the Modeller suite.",
+    "$id": "http://bioexcel.eu/biobb_model/json_schemas/1.0/fix_chirality",
+    "name": "biobb_model FixChirality",
+    "title": "Fix chirality errors of residues.",
+    "description": "Fix stereochemical errors in residue side-chains changing It's chirality.",
     "type": "object",
     "info": {
         "wrapped_software": {
@@ -17,7 +17,6 @@
     },
     "required": [
         "input_pdb_path",
-        "input_fasta_canonical_sequence_path",
         "output_pdb_path"
     ],
     "properties": {
@@ -25,7 +24,7 @@
             "type": "string",
             "description": "Input PDB file path",
             "filetype": "input",
-            "sample": "https://github.com/bioexcel/biobb_model/raw/master/biobb_model/test/data/model/2ki5.pdb",
+            "sample": "https://github.com/bioexcel/biobb_model/raw/master/biobb_model/test/data/model/5s2z.pdb",
             "enum": [
                 ".*\\.pdb$"
             ],
@@ -37,27 +36,11 @@
                 }
             ]
         },
-        "input_fasta_canonical_sequence_path": {
-            "type": "string",
-            "description": "Input FASTA file path",
-            "filetype": "input",
-            "sample": "https://github.com/bioexcel/biobb_model/raw/master/biobb_model/test/data/model/2ki5.fasta",
-            "enum": [
-                ".*\\.fasta$"
-            ],
-            "file_formats": [
-                {
-                    "extension": ".*\\.fasta$",
-                    "description": "Input FASTA file path",
-                    "edam": "format_1476"
-                }
-            ]
-        },
         "output_pdb_path": {
             "type": "string",
             "description": "Output PDB file path",
             "filetype": "output",
-            "sample": "https://github.com/bioexcel/biobb_model/raw/master/biobb_model/test/reference/model/output_pdb_path.pdb",
+            "sample": "https://github.com/bioexcel/biobb_model/raw/master/biobb_model/test/reference/model/output_pdb_amide_path.pdb",
             "enum": [
                 ".*\\.pdb$"
             ],
@@ -72,12 +55,6 @@
         "properties": {
             "type": "object",
             "properties": {
-                "add_caps": {
-                    "type": "boolean",
-                    "default": false,
-                    "wf_prop": false,
-                    "description": "Add caps to terminal residues."
-                },
                 "remove_tmp": {
                     "type": "boolean",
                     "default": true,

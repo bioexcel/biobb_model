@@ -27,3 +27,27 @@ model.fix_backbone module
     :members:
     :undoc-members:
     :show-inheritance:
+
+model.fix_amides module
+-----------------------------
+
+.. automodule:: model.fix_amides
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+model.fix_chirality module
+-----------------------------
+
+.. automodule:: model.fix_chirality
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+model.checking_log module
+-----------------------------
+
+.. automodule:: model.checking_log
+    :members:
+    :undoc-members:
+    :show-inheritance:

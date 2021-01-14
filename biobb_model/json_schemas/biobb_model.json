@@ -4,9 +4,9 @@
     "github": "https://github.com/bioexcel/biobb_model",
     "readthedocs": "https://biobb-model.readthedocs.io/en/latest/",
     "conda": "https://anaconda.org/bioconda/biobb_model",
-    "docker": "https://quay.io/biocontainers/biobb_model:3.5.0--py_0",
+    "docker": "https://quay.io/biocontainers/biobb_model:3.5.1--py_0",
     "singularity": "https://www.singularity-hub.org/collections/2732/usage",
-    "version": "3.5.0",
+    "version": "3.5.1",
     "tools" : [
         {
             "block" : "FixSideChain",
@@ -28,20 +28,43 @@
             "desc" : "Creates a new PDB file performing the mutations given in a list of amino acid mutations to the input PDB file.",
             "exec" : "mutate",
             "docs": "https://biobb-model.readthedocs.io/en/latest/model.html#module-model.mutate"
+        },
+        {
+            "block" : "FixAmides",
+            "tool" : "in house using biobb_structure_checking",
+            "desc" : "Creates a new PDB file flipping the clashing amide groups.",
+            "exec" : "fix_amides",
+            "docs": "https://biobb-model.readthedocs.io/en/latest/model.html#module-model.fix_amides"
+        },
+        {
+            "block" : "FixChirality",
+            "tool" : "in house using biobb_structure_checking",
+            "desc" : "Creates a new PDB file fixing stereochemical errors in residue side-chains changing It's chirality.",
+            "exec" : "fix_chirality",
+            "docs": "https://biobb-model.readthedocs.io/en/latest/model.html#module-model.fix_chirality"
+        },
+        {
+            "block" : "CheckingLog",
+            "tool" : "in house using biobb_structure_checking",
+            "desc" : "Creates a log report o stereochemical errors in the input structure",
+            "exec" : "checking_log",
+            "docs": "https://biobb-model.readthedocs.io/en/latest/model.html#module-model.checking_log"
         }
     ],
     "dep_pypi" : [
-        "install_requires=['biobb_common==3.5.1', 'biobb_structure_checking==3.5.3']",
+        "install_requires=['biobb_common==3.5.1', 'biobb_structure_checking==3.7.3']",
         "python_requires='==3.7.*'"
     ],
     "dep_conda" : [
         "python ==3.7.*",
         "biobb_common ==3.5.1",
-        "biobb_structure_checking ==3.5.3"
+        "biobb_structure_checking ==3.7.3"
     ],
     "keywords" : [
         "model",
         "mutate",
-        "side chain"
+        "side chain",
+        "amide",
+        "chirality"
     ]
 }

@@ -1,5 +1,6 @@
 {
   "properties": {
-    "restart": false
+    "restart": false,
+    "add_caps": true
   }
 }

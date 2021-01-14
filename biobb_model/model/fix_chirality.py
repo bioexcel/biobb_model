@@ -12,7 +12,7 @@ class FixChirality:
     """
     | biobb_model FixChirality
     | Fix chirality errors of residues.
-    | Fix stereochemical errors in residues changing It's chirality.
+    | Fix stereochemical errors in residue side-chains changing It's chirality.
 
     Args:
         input_pdb_path (str): Input PDB file path. File type: input. `Sample file <https://github.com/bioexcel/biobb_model/raw/master/biobb_model/test/data/model/5s2z.pdb>`_. Accepted formats: pdb (edam:format_1476).
