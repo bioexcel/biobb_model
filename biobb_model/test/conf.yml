@@ -25,3 +25,11 @@ mutate:
     reference_output_pdb_path: file:test_reference_dir/model/output_mutated_pdb_path.pdb
   properties:
     mutation_list: Leu49Ile, B:arg51Lys
+
+checking_log:
+  paths:
+    input_pdb_path: file:test_data_dir/model/2ki5.pdb
+    output_log_path: output_log_path.log
+    reference_output_log_path: file:test_reference_dir/model/checking.log
+  properties:
+    restart: False
