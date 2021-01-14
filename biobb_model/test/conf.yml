@@ -33,3 +33,11 @@ checking_log:
     reference_output_log_path: file:test_reference_dir/model/checking.log
   properties:
     restart: False
+
+fix_amides:
+  paths:
+    input_pdb_path: file:test_data_dir/model/5s2z.pdb
+    output_pdb_path: output_pdb_path.pdb
+    reference_output_pdb_path: file:test_reference_dir/model/output_amide_pdb_path.pdb
+  properties:
+    restart: False
