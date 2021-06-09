@@ -40,7 +40,7 @@
             "type": "string",
             "description": "Output PDB file path",
             "filetype": "output",
-            "sample": "https://github.com/bioexcel/biobb_model/raw/master/biobb_model/test/reference/model/output_pdb_amide_path.pdb",
+            "sample": "https://github.com/bioexcel/biobb_model/raw/master/biobb_model/test/reference/model/output_amide_pdb_path.pdb",
             "enum": [
                 ".*\\.pdb$"
             ],
