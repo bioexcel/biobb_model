@@ -8,7 +8,7 @@ class TestCheckingLog:
 
     def tearDown(self):
         fx.test_teardown(self)
-        # pass
+        #pass
 
     def test_launch(self):
         checking_log(properties=self.properties, **self.paths)
