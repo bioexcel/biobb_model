@@ -19,7 +19,7 @@ Syntax: input_argument (datatype) : Definition
 
 Config input / output arguments for this building block:
 * **input_pdb_path** (*string*): Input PDB file path. File type: input. [Sample file](https://github.com/bioexcel/biobb_model/raw/master/biobb_model/test/data/model/5s2z.pdb). Accepted formats: PDB
-* **output_pdb_path** (*string*): Output PDB file path. File type: output. [Sample file](https://github.com/bioexcel/biobb_model/raw/master/biobb_model/test/reference/model/output_pdb_amide_path.pdb). Accepted formats: PDB
+* **output_pdb_path** (*string*): Output PDB file path. File type: output. [Sample file](https://raw.githubusercontent.com/bioexcel/biobb_model/master/biobb_model/test/reference/model/output_amide_pdb_path.pdb). Accepted formats: PDB
 ### Config
 Syntax: input_parameter (datatype) - (default_value) Definition
 
@@ -35,7 +35,7 @@ properties:
 ```
 #### Command line
 ```python
-fix_amides --config config_fix_amides.yml --input_pdb_path 5s2z.pdb --output_pdb_path output_pdb_amide_path.pdb
+fix_amides --config config_fix_amides.yml --input_pdb_path 5s2z.pdb --output_pdb_path output_amide_pdb_path.pdb
 ```
 ### JSON
 #### [Common config file](https://github.com/bioexcel/biobb_model/blob/master/biobb_model/test/data/config/config_fix_amides.json)
@@ -48,7 +48,7 @@ fix_amides --config config_fix_amides.yml --input_pdb_path 5s2z.pdb --output_pdb
 ```
 #### Command line
 ```python
-fix_amides --config config_fix_amides.json --input_pdb_path 5s2z.pdb --output_pdb_path output_pdb_amide_path.pdb
+fix_amides --config config_fix_amides.json --input_pdb_path 5s2z.pdb --output_pdb_path output_amide_pdb_path.pdb
 ```
 
 ## Fix_chirality
@@ -64,7 +64,7 @@ Syntax: input_argument (datatype) : Definition
 
 Config input / output arguments for this building block:
 * **input_pdb_path** (*string*): Input PDB file path. File type: input. [Sample file](https://github.com/bioexcel/biobb_model/raw/master/biobb_model/test/data/model/5s2z.pdb). Accepted formats: PDB
-* **output_pdb_path** (*string*): Output PDB file path. File type: output. [Sample file](https://github.com/bioexcel/biobb_model/raw/master/biobb_model/test/reference/model/output_pdb_amide_path.pdb). Accepted formats: PDB
+* **output_pdb_path** (*string*): Output PDB file path. File type: output. [Sample file](https://github.com/bioexcel/biobb_model/raw/master/biobb_model/test/reference/model/output_amide_pdb_path.pdb). Accepted formats: PDB
 ### Config
 Syntax: input_parameter (datatype) - (default_value) Definition
 
@@ -80,7 +80,7 @@ properties:
 ```
 #### Command line
 ```python
-fix_chirality --config config_fix_chirality.yml --input_pdb_path 5s2z.pdb --output_pdb_path output_pdb_amide_path.pdb
+fix_chirality --config config_fix_chirality.yml --input_pdb_path 5s2z.pdb --output_pdb_path output_amide_pdb_path.pdb
 ```
 ### JSON
 #### [Common config file](https://github.com/bioexcel/biobb_model/blob/master/biobb_model/test/data/config/config_fix_chirality.json)
@@ -93,7 +93,7 @@ fix_chirality --config config_fix_chirality.yml --input_pdb_path 5s2z.pdb --outp
 ```
 #### Command line
 ```python
-fix_chirality --config config_fix_chirality.json --input_pdb_path 5s2z.pdb --output_pdb_path output_pdb_amide_path.pdb
+fix_chirality --config config_fix_chirality.json --input_pdb_path 5s2z.pdb --output_pdb_path output_amide_pdb_path.pdb
 ```
 
 ## Checking_log
@@ -197,20 +197,7 @@ Command:
 ```python
 mutate -h
 ```
-    usage: mutate [-h] [-c CONFIG] -i INPUT_PDB_PATH -o OUTPUT_PDB_PATH
-    
-    Model the missing atoms in aminoacid side chains of a PDB.
-    
-    optional arguments:
-      -h, --help            show this help message and exit
-      -c CONFIG, --config CONFIG
-                            This file can be a YAML file, JSON file or JSON string
-    
-    required arguments:
-      -i INPUT_PDB_PATH, --input_pdb_path INPUT_PDB_PATH
-                            Input PDB file name
-      -o OUTPUT_PDB_PATH, --output_pdb_path OUTPUT_PDB_PATH
-                            Output PDB file name
+    /bin/sh: mutate: command not found
 ### I / O Arguments
 Syntax: input_argument (datatype) : Definition
 
@@ -257,20 +244,7 @@ Command:
 ```python
 fix_side_chain -h
 ```
-    usage: fix_side_chain [-h] [-c CONFIG] -i INPUT_PDB_PATH -o OUTPUT_PDB_PATH
-    
-    Model the missing atoms in amino acid side chains of a PDB.
-    
-    optional arguments:
-      -h, --help            show this help message and exit
-      -c CONFIG, --config CONFIG
-                            This file can be a YAML file, JSON file or JSON string
-    
-    required arguments:
-      -i INPUT_PDB_PATH, --input_pdb_path INPUT_PDB_PATH
-                            Input PDB file name
-      -o OUTPUT_PDB_PATH, --output_pdb_path OUTPUT_PDB_PATH
-                            Output PDB file name
+    /bin/sh: fix_side_chain: command not found
 ### I / O Arguments
 Syntax: input_argument (datatype) : Definition
 
