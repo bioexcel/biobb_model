@@ -2,13 +2,14 @@
 
 """Module containing the FixChirality class and the command line interface."""
 import argparse
+from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.configuration import settings
 from biobb_common.tools import file_utils as fu
 from biobb_common.command_wrapper import cmd_wrapper
 from biobb_common.tools.file_utils import launchlogger
 
 
-class FixChirality:
+class FixChirality(BiobbObject):
     """
     | biobb_model FixChirality
     | Fix chirality errors of residues.
@@ -42,6 +43,9 @@ class FixChirality:
     def __init__(self, input_pdb_path: str, output_pdb_path: str, properties: dict = None, **kwargs) -> None:
         properties = properties or {}
 
+        # Call parent class constructor
+        super().__init__(properties)
+
         # Input/Output files
         self.io_dict = {
             "in": {"input_pdb_path": input_pdb_path},
@@ -51,46 +55,34 @@ class FixChirality:
         # Properties specific for BB
         self.check_structure_path = properties.get('check_structure_path', 'check_structure')
 
-        # Properties common in all BB
-        self.can_write_console_log = properties.get('can_write_console_log', True)
-        self.global_log = properties.get('global_log', None)
-        self.prefix = properties.get('prefix', None)
-        self.step = properties.get('step', None)
-        self.path = properties.get('path', '')
-        self.remove_tmp = properties.get('remove_tmp', True)
-        self.restart = properties.get('restart', False)
-
         # Check the properties
-        fu.check_properties(self, properties)
+        self.check_properties(properties)
 
     @launchlogger
     def launch(self) -> int:
         """Execute the :class:`FixChirality <model.fix_amides.FixChirality>` object."""
-        tmp_files = []
 
-        # Get local loggers from launchlogger decorator
-        out_log = getattr(self, 'out_log', None)
-        err_log = getattr(self, 'err_log', None)
+        # Setup Biobb
+        if self.check_restart(): return 0
+        self.stage_files()
 
-        # Restart if needed
-        if self.restart:
-            if fu.check_complete_files(self.io_dict["out"].values()):
-                fu.log('Restart is enabled, this step: %s will the skipped' % self.step, out_log, self.global_log)
-                return 0
+        # Create command line
+        self.cmd = [self.check_structure_path,
+                    '-i', self.stage_io_dict["in"]["input_pdb_path"],
+                    '-o', self.stage_io_dict["out"]["output_pdb_path"],
+                    '--force_save', 'chiral',
+                    '--fix', 'All']
 
-        # check_structure -i biobb_model/test/data/model/3e2y.pdb -o out.pdb --force_save chiral --fix All
-        cmd = [self.check_structure_path,
-               '-i', self.io_dict["in"]["input_pdb_path"],
-               '-o', self.io_dict["out"]["output_pdb_path"],
-               '--force_save',
-               'chiral', '--fix', 'All']
+        # Run Biobb block
+        self.run_biobb()
 
-        returncode = cmd_wrapper.CmdWrapper(cmd, out_log, err_log, self.global_log).launch()
+        # Copy files to host
+        self.copy_to_host()
 
-        if self.remove_tmp:
-            fu.rm_file_list(tmp_files, out_log=out_log)
+        # Remove temporal files
+        self.remove_tmp_files()
 
-        return returncode
+        return self.return_code
 
 
 def fix_chirality(input_pdb_path: str, output_pdb_path: str, properties: dict = None, **kwargs) -> int:

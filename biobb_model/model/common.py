@@ -3,6 +3,7 @@ from biobb_common.tools import file_utils as fu
 from typing import List, Dict, Tuple, Mapping, Union, Set, Sequence
 import logging
 
+
 def modeller_installed(out_log: logging.Logger = None, global_log: logging.Logger = None) -> bool:
     try:
         import modeller

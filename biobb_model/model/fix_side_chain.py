@@ -2,14 +2,14 @@
 
 """Module containing the FixSideChain class and the command line interface."""
 import argparse
+from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.configuration import settings
 from biobb_common.tools import file_utils as fu
-from biobb_common.command_wrapper import cmd_wrapper
 from biobb_common.tools.file_utils import launchlogger
 from biobb_model.model.common import modeller_installed
 
 
-class FixSideChain:
+class FixSideChain(BiobbObject):
     """
     | biobb_model FixSideChain
     | Class to model the missing atoms in amino acid side chains of a PDB.
@@ -41,9 +41,11 @@ class FixSideChain:
             * schema: http://edamontology.org/EDAM.owl
     """
 
-    def __init__(self, input_pdb_path: str, output_pdb_path: str,
-                 properties: dict = None, **kwargs) -> None:
+    def __init__(self, input_pdb_path: str, output_pdb_path: str, properties: dict = None, **kwargs) -> None:
         properties = properties or {}
+
+        # Call parent class constructor
+        super().__init__(properties)
 
         # Input/Output files
         self.io_dict = {
@@ -55,56 +57,43 @@ class FixSideChain:
         self.check_structure_path = properties.get('check_structure_path', 'check_structure')
         self.use_modeller = properties.get('use_modeller', False)
 
-        # Properties common in all BB
-        self.can_write_console_log = properties.get('can_write_console_log', True)
-        self.global_log = properties.get('global_log', None)
-        self.prefix = properties.get('prefix', None)
-        self.step = properties.get('step', None)
-        self.path = properties.get('path', '')
-        self.remove_tmp = properties.get('remove_tmp', True)
-        self.restart = properties.get('restart', False)
-
         # Check the properties
-        fu.check_properties(self, properties)
+        self.check_properties(properties)
 
     @launchlogger
     def launch(self) -> int:
         """Execute the :class:`FixSideChain <model.fix_side_chain.FixSideChain>` object."""
-        tmp_files = []
 
-        # Get local loggers from launchlogger decorator
-        out_log = getattr(self, 'out_log', None)
-        err_log = getattr(self, 'err_log', None)
+        # Setup Biobb
+        if self.check_restart(): return 0
+        self.stage_files()
 
-        # Restart if needed
-        if self.restart:
-            if fu.check_complete_files(self.io_dict["out"].values()):
-                fu.log('Restart is enabled, this step: %s will the skipped' % self.step, out_log, self.global_log)
-                return 0
-
-        # check_structure -i biobb_model/biobb_model/test/data/model/2ki5.pdb -o out.pdb fixside --fix All --rebuild
-        cmd = [self.check_structure_path,
-               '-i', self.io_dict["in"]["input_pdb_path"],
-               '-o', self.io_dict["out"]["output_pdb_path"],
-               '--force_save',
-               'fixside', '--fix', 'ALL']
+        # Create command line
+        self.cmd = [self.check_structure_path,
+                    '-i', self.stage_io_dict["in"]["input_pdb_path"],
+                    '-o', self.stage_io_dict["out"]["output_pdb_path"],
+                    '--force_save',
+                    'fixside', '--fix', 'ALL']
 
         if self.use_modeller:
-            if modeller_installed(out_log, self.global_log):
-                cmd.append('--rebuild')
+            if modeller_installed(self.out_log, self.global_log):
+                self.cmd.append('--rebuild')
             else:
-                fu.log(f"Modeller is not installed --rebuild option can not be used proceeding without using it", out_log, self.global_log)
+                fu.log(f"Modeller is not installed --rebuild option can not be used proceeding without using it", self.out_log, self.global_log)
 
-        returncode = cmd_wrapper.CmdWrapper(cmd, out_log, err_log, self.global_log).launch()
+        # Run Biobb block
+        self.run_biobb()
 
-        if self.remove_tmp:
-            fu.rm_file_list(tmp_files, out_log=out_log)
+        # Copy files to host
+        self.copy_to_host()
 
-        return returncode
+        # Remove temporal files
+        self.remove_tmp_files()
+
+        return self.return_code
 
 
-def fix_side_chain(input_pdb_path: str, output_pdb_path: str,
-                 properties: dict = None, **kwargs) -> int:
+def fix_side_chain(input_pdb_path: str, output_pdb_path: str, properties: dict = None, **kwargs) -> int:
     """Create :class:`FixSideChain <model.fix_side_chain.FixSideChain>` class and
     execute the :meth:`launch() <model.fix_side_chain.FixSideChain.launch>` method."""
     return FixSideChain(input_pdb_path=input_pdb_path,
