@@ -7,48 +7,55 @@
     "docker": "https://quay.io/biocontainers/biobb_model:3.7.0--pyhdfd78af_0",
     "singularity": "https://www.singularity-hub.org/collections/2732/usage",
     "version": "3.7.0",
+    "rest": true,
     "tools" : [
         {
             "block" : "FixSideChain",
             "tool" : "in house using biobb_structure_checking",
             "desc" : "Reconstructs the missing side chains and heavy atoms of the given PDB file.",
             "exec" : "fix_side_chain",
-            "docs": "https://biobb-model.readthedocs.io/en/latest/model.html#module-model.fix_side_chain"
+            "docs": "https://biobb-model.readthedocs.io/en/latest/model.html#module-model.fix_side_chain",
+            "rest": true
         },
         {
             "block" : "FixBackbone",
             "tool" : "in house using biobb_structure_checking",
             "desc" : "Reconstructs the missing backbone atoms of the given PDB file.",
             "exec" : "fix_backbone",
-            "docs": "https://biobb-model.readthedocs.io/en/latest/model.html#module-model.fix_backbone"
+            "docs": "https://biobb-model.readthedocs.io/en/latest/model.html#module-model.fix_backbone",
+            "rest": true
         },
         {
             "block" : "Mutate",
             "tool" : "in house using biobb_structure_checking",
             "desc" : "Creates a new PDB file performing the mutations given in a list of amino acid mutations to the input PDB file.",
             "exec" : "mutate",
-            "docs": "https://biobb-model.readthedocs.io/en/latest/model.html#module-model.mutate"
+            "docs": "https://biobb-model.readthedocs.io/en/latest/model.html#module-model.mutate",
+            "rest": true
         },
         {
             "block" : "FixAmides",
             "tool" : "in house using biobb_structure_checking",
             "desc" : "Creates a new PDB file flipping the clashing amide groups.",
             "exec" : "fix_amides",
-            "docs": "https://biobb-model.readthedocs.io/en/latest/model.html#module-model.fix_amides"
+            "docs": "https://biobb-model.readthedocs.io/en/latest/model.html#module-model.fix_amides",
+            "rest": true
         },
         {
             "block" : "FixChirality",
             "tool" : "in house using biobb_structure_checking",
             "desc" : "Creates a new PDB file fixing stereochemical errors in residue side-chains changing It's chirality.",
             "exec" : "fix_chirality",
-            "docs": "https://biobb-model.readthedocs.io/en/latest/model.html#module-model.fix_chirality"
+            "docs": "https://biobb-model.readthedocs.io/en/latest/model.html#module-model.fix_chirality",
+            "rest": true
         },
         {
             "block" : "CheckingLog",
             "tool" : "in house using biobb_structure_checking",
             "desc" : "Creates a log report o stereochemical errors in the input structure",
             "exec" : "checking_log",
-            "docs": "https://biobb-model.readthedocs.io/en/latest/model.html#module-model.checking_log"
+            "docs": "https://biobb-model.readthedocs.io/en/latest/model.html#module-model.checking_log",
+            "rest": true
         }
     ],
     "dep_pypi" : [
