@@ -9,7 +9,7 @@ def modeller_installed(out_log: logging.Logger = None, global_log: logging.Logge
         import modeller
         from modeller import automodel
     except ImportError:
-        fu.log(f"Modeller is not installed in your environment.\nPlease install it by typing:\n\nconda install -c salilab modeller==9.25\n", out_log, global_log)
+        fu.log(f"Modeller is not installed in your environment.\nPlease install it by typing:\n\nconda install -c salilab modeller\n", out_log, global_log)
         return False
 
     return True
