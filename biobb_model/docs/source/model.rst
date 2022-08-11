@@ -44,6 +44,22 @@ model.fix_chirality module
     :undoc-members:
     :show-inheritance:
 
+model.fix_altlocs module
+-----------------------------
+
+.. automodule:: model.fix_altlocs
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+model.fix_ssbonds module
+-----------------------------
+
+.. automodule:: model.fix_ssbonds
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 model.checking_log module
 -----------------------------
 
