@@ -49,3 +49,19 @@ fix_chirality:
     reference_output_pdb_path: file:test_reference_dir/model/output_chirality_pdb_path.pdb
   properties:
     restart: False
+
+fix_altlocs:
+  paths:
+    input_pdb_path: file:test_data_dir/model/3ebp.pdb
+    output_pdb_path: output_pdb_path.pdb
+    reference_output_pdb_path: file:test_reference_dir/model/output_altloc.pdb
+  properties:
+    altlocs : [A339:A, A171:B, A768:A]
+
+fix_ssbonds:
+  paths:
+    input_pdb_path: file:test_data_dir/model/1aki.pdb
+    output_pdb_path: output_pdb_path.pdb
+    reference_output_pdb_path: file:test_reference_dir/model/output_ssbonds.pdb
+  properties:
+    restart: False

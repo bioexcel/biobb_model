@@ -6,6 +6,72 @@ biobb_command [-h] --config CONFIG --input_file(s) <input_file(s)> --output_file
 -----------------
 
 
+## Fix_altlocs
+Fix alternate locations from residues.
+### Get help
+Command:
+```python
+fix_altlocs -h
+```
+    usage: fix_altlocs [-h] [-c CONFIG] -i INPUT_PDB_PATH -o OUTPUT_PDB_PATH
+    
+    Fix alternate locations from residues
+    
+    optional arguments:
+      -h, --help            show this help message and exit
+      -c CONFIG, --config CONFIG
+                            This file can be a YAML file, JSON file or JSON string
+    
+    required arguments:
+      -i INPUT_PDB_PATH, --input_pdb_path INPUT_PDB_PATH
+                            Input PDB file name
+      -o OUTPUT_PDB_PATH, --output_pdb_path OUTPUT_PDB_PATH
+                            Output PDB file name
+### I / O Arguments
+Syntax: input_argument (datatype) : Definition
+
+Config input / output arguments for this building block:
+* **input_pdb_path** (*string*): Input PDB file path. File type: input. [Sample file](https://github.com/bioexcel/biobb_model/raw/master/biobb_model/test/data/model/3ebp.pdb). Accepted formats: PDB
+* **output_pdb_path** (*string*): Output PDB file path. File type: output. [Sample file](https://raw.githubusercontent.com/bioexcel/biobb_model/master/biobb_model/test/reference/model/output_altloc.pdb). Accepted formats: PDB
+### Config
+Syntax: input_parameter (datatype) - (default_value) Definition
+
+Config parameters for this building block:
+* **altlocs** (*array*): (None) List of alternate locations to fix. Format: ["A339:A", "A171:B", "A768:A"]; where for each residue the format is as follows: "<chain><residue id>:<chosen alternate location>". If empty, no action will be executed..
+* **remove_tmp** (*boolean*): (True) Remove temporal files..
+* **restart** (*boolean*): (False) Do not execute if output files exist..
+### YAML
+#### [Common config file](https://github.com/bioexcel/biobb_model/blob/master/biobb_model/test/data/config/config_fix_altlocs.yml)
+```python
+properties:
+  altlocs:
+  - A339:A
+  - A171:B
+  - A768:A
+
+```
+#### Command line
+```python
+fix_altlocs --config config_fix_altlocs.yml --input_pdb_path 3ebp.pdb --output_pdb_path output_altloc.pdb
+```
+### JSON
+#### [Common config file](https://github.com/bioexcel/biobb_model/blob/master/biobb_model/test/data/config/config_fix_altlocs.json)
+```python
+{
+  "properties": {
+    "altlocs": [
+      "A339:A",
+      "A171:B",
+      "A768:A"
+    ]
+  }
+}
+```
+#### Command line
+```python
+fix_altlocs --config config_fix_altlocs.json --input_pdb_path 3ebp.pdb --output_pdb_path output_altloc.pdb
+```
+
 ## Fix_amides
 Fix amide groups from residues.
 ### Get help
@@ -13,7 +79,20 @@ Command:
 ```python
 fix_amides -h
 ```
-    /bin/sh: fix_amides: command not found
+    usage: fix_amides [-h] [-c CONFIG] -i INPUT_PDB_PATH -o OUTPUT_PDB_PATH
+    
+    Flip the clashing amide groups to avoid clashes.
+    
+    optional arguments:
+      -h, --help            show this help message and exit
+      -c CONFIG, --config CONFIG
+                            This file can be a YAML file, JSON file or JSON string
+    
+    required arguments:
+      -i INPUT_PDB_PATH, --input_pdb_path INPUT_PDB_PATH
+                            Input PDB file name
+      -o OUTPUT_PDB_PATH, --output_pdb_path OUTPUT_PDB_PATH
+                            Output PDB file name
 ### I / O Arguments
 Syntax: input_argument (datatype) : Definition
 
@@ -58,7 +137,20 @@ Command:
 ```python
 fix_chirality -h
 ```
-    /bin/sh: fix_chirality: command not found
+    usage: fix_chirality [-h] [-c CONFIG] -i INPUT_PDB_PATH -o OUTPUT_PDB_PATH
+    
+    Fix stereochemical errors in residues changing It's chirality.
+    
+    optional arguments:
+      -h, --help            show this help message and exit
+      -c CONFIG, --config CONFIG
+                            This file can be a YAML file, JSON file or JSON string
+    
+    required arguments:
+      -i INPUT_PDB_PATH, --input_pdb_path INPUT_PDB_PATH
+                            Input PDB file name
+      -o OUTPUT_PDB_PATH, --output_pdb_path OUTPUT_PDB_PATH
+                            Output PDB file name
 ### I / O Arguments
 Syntax: input_argument (datatype) : Definition
 
@@ -103,7 +195,20 @@ Command:
 ```python
 checking_log -h
 ```
-    /bin/sh: checking_log: command not found
+    usage: checking_log [-h] [-c CONFIG] -i INPUT_PDB_PATH -o OUTPUT_LOG_PATH
+    
+    Check the errors of a PDB structure and create a report log file.
+    
+    optional arguments:
+      -h, --help            show this help message and exit
+      -c CONFIG, --config CONFIG
+                            This file can be a YAML file, JSON file or JSON string
+    
+    required arguments:
+      -i INPUT_PDB_PATH, --input_pdb_path INPUT_PDB_PATH
+                            Input PDB file name
+      -o OUTPUT_LOG_PATH, --output_log_path OUTPUT_LOG_PATH
+                            Output log file name
 ### I / O Arguments
 Syntax: input_argument (datatype) : Definition
 
@@ -148,7 +253,22 @@ Command:
 ```python
 fix_backbone -h
 ```
-    /bin/sh: fix_backbone: command not found
+    usage: fix_backbone [-h] [-c CONFIG] -i INPUT_PDB_PATH -f INPUT_FASTA_CANONICAL_SEQUENCE_PATH -o OUTPUT_PDB_PATH
+    
+    Model the missing atoms in the backbone of a PDB structure.
+    
+    optional arguments:
+      -h, --help            show this help message and exit
+      -c CONFIG, --config CONFIG
+                            This file can be a YAML file, JSON file or JSON string
+    
+    required arguments:
+      -i INPUT_PDB_PATH, --input_pdb_path INPUT_PDB_PATH
+                            Input PDB file name
+      -f INPUT_FASTA_CANONICAL_SEQUENCE_PATH, --input_fasta_canonical_sequence_path INPUT_FASTA_CANONICAL_SEQUENCE_PATH
+                            Input FASTA file name
+      -o OUTPUT_PDB_PATH, --output_pdb_path OUTPUT_PDB_PATH
+                            Output PDB file name
 ### I / O Arguments
 Syntax: input_argument (datatype) : Definition
 
@@ -190,6 +310,64 @@ fix_backbone --config config_fix_backbone.yml --input_pdb_path 2ki5.pdb --input_
 fix_backbone --config config_fix_backbone.json --input_pdb_path 2ki5.pdb --input_fasta_canonical_sequence_path 2ki5.fasta --output_pdb_path output_pdb_path.pdb
 ```
 
+## Fix_ssbonds
+Fix SS bonds from residues.
+### Get help
+Command:
+```python
+fix_ssbonds -h
+```
+    usage: fix_ssbonds [-h] [-c CONFIG] -i INPUT_PDB_PATH -o OUTPUT_PDB_PATH
+    
+    Fix SS bonds from residues
+    
+    optional arguments:
+      -h, --help            show this help message and exit
+      -c CONFIG, --config CONFIG
+                            This file can be a YAML file, JSON file or JSON string
+    
+    required arguments:
+      -i INPUT_PDB_PATH, --input_pdb_path INPUT_PDB_PATH
+                            Input PDB file name
+      -o OUTPUT_PDB_PATH, --output_pdb_path OUTPUT_PDB_PATH
+                            Output PDB file name
+### I / O Arguments
+Syntax: input_argument (datatype) : Definition
+
+Config input / output arguments for this building block:
+* **input_pdb_path** (*string*): Input PDB file path. File type: input. [Sample file](https://github.com/bioexcel/biobb_model/raw/master/biobb_model/test/data/model/1aki.pdb). Accepted formats: PDB
+* **output_pdb_path** (*string*): Output PDB file path. File type: output. [Sample file](https://raw.githubusercontent.com/bioexcel/biobb_model/master/biobb_model/test/reference/model/output_ssbonds.pdb). Accepted formats: PDB
+### Config
+Syntax: input_parameter (datatype) - (default_value) Definition
+
+Config parameters for this building block:
+* **remove_tmp** (*boolean*): (True) Remove temporal files..
+* **restart** (*boolean*): (False) Do not execute if output files exist..
+### YAML
+#### [Common config file](https://github.com/bioexcel/biobb_model/blob/master/biobb_model/test/data/config/config_fix_ssbonds.yml)
+```python
+properties:
+  restart: false
+
+```
+#### Command line
+```python
+fix_ssbonds --config config_fix_ssbonds.yml --input_pdb_path 1aki.pdb --output_pdb_path output_ssbonds.pdb
+```
+### JSON
+#### [Common config file](https://github.com/bioexcel/biobb_model/blob/master/biobb_model/test/data/config/config_fix_ssbonds.json)
+```python
+{
+  "properties": {
+    "restart": false
+  }
+}
+```
+#### Command line
+```python
+fix_ssbonds --config config_fix_ssbonds.json --input_pdb_path 1aki.pdb --output_pdb_path output_ssbonds.pdb
+```
+
 ## Mutate
 Class to mutate one amino acid by another in a 3d structure.
 ### Get help
@@ -197,7 +375,20 @@ Command:
 ```python
 mutate -h
 ```
-    /bin/sh: mutate: command not found
+    usage: mutate [-h] [-c CONFIG] -i INPUT_PDB_PATH -o OUTPUT_PDB_PATH
+    
+    Model the missing atoms in aminoacid side chains of a PDB.
+    
+    optional arguments:
+      -h, --help            show this help message and exit
+      -c CONFIG, --config CONFIG
+                            This file can be a YAML file, JSON file or JSON string
+    
+    required arguments:
+      -i INPUT_PDB_PATH, --input_pdb_path INPUT_PDB_PATH
+                            Input PDB file name
+      -o OUTPUT_PDB_PATH, --output_pdb_path OUTPUT_PDB_PATH
+                            Output PDB file name
 ### I / O Arguments
 Syntax: input_argument (datatype) : Definition
 
@@ -244,7 +435,20 @@ Command:
 ```python
 fix_side_chain -h
 ```
-    /bin/sh: fix_side_chain: command not found
+    usage: fix_side_chain [-h] [-c CONFIG] -i INPUT_PDB_PATH -o OUTPUT_PDB_PATH
+    
+    Model the missing atoms in amino acid side chains of a PDB.
+    
+    optional arguments:
+      -h, --help            show this help message and exit
+      -c CONFIG, --config CONFIG
+                            This file can be a YAML file, JSON file or JSON string
+    
+    required arguments:
+      -i INPUT_PDB_PATH, --input_pdb_path INPUT_PDB_PATH
+                            Input PDB file name
+      -o OUTPUT_PDB_PATH, --output_pdb_path OUTPUT_PDB_PATH
+                            Output PDB file name
 ### I / O Arguments
 Syntax: input_argument (datatype) : Definition
 

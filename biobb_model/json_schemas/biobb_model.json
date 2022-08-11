@@ -56,6 +56,22 @@
             "exec" : "checking_log",
             "docs": "https://biobb-model.readthedocs.io/en/latest/model.html#module-model.checking_log",
             "rest": true
+        },
+        {
+            "block" : "FixAltLocs",
+            "tool" : "in house using biobb_structure_checking",
+            "desc" : "Fix alternate locations from residues.",
+            "exec" : "fix_altlocs",
+            "docs": "https://biobb-model.readthedocs.io/en/latest/model.html#module-model.fix_altlocs",
+            "rest": false
+        },
+        {
+            "block" : "FixSSBonds",
+            "tool" : "in house using biobb_structure_checking",
+            "desc" : "Fix SS bonds from residues.",
+            "exec" : "fix_ssbonds",
+            "docs": "https://biobb-model.readthedocs.io/en/latest/model.html#module-model.fix_ssbonds",
+            "rest": false
         }
     ],
     "dep_pypi" : [
