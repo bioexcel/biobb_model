@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="biobb_model",
-    version="3.7.0",
+    version="3.8.0",
     author="Biobb developers",
     author_email="pau.andrio@bsc.es",
     description="Biobb_model is the Biobb module collection to check and model 3d structures, create mutations or reconstruct missing atoms.",
@@ -18,8 +18,8 @@ setuptools.setup(
         "Bioexcel": "https://bioexcel.eu/"
     },
     packages=setuptools.find_packages(exclude=['docs', 'test']),
-    install_requires=['biobb_common==3.7.0', 'biobb_structure_checking==3.8.5'],
-    python_requires='==3.7.*',
+    install_requires=['biobb_common==3.8.1', 'biobb_structure_checking==3.10.1'],
+    python_requires='>=3.7',
     entry_points={
         "console_scripts": [
             "checking_log = biobb_model.model.checking_log:main",

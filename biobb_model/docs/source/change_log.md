@@ -1,5 +1,13 @@
 # Biobb Model changelog
 
+## What's new in version [3.8.0](https://github.com/bioexcel/biobb_model/releases/tag/v3.8.0)?
+In version 3.8.0 the dependency biobb_common has been updated to 3.8.1 version.
+
+### New features
+
+* Update to biobb_common 3.8.1 (general)
+* Update to biobb_structure_checking 3.10.1 (general)
+
 ## What's new in version [3.7.0](https://github.com/bioexcel/biobb_model/releases/tag/v3.7.0)?
 In version 3.7.0 the dependency biobb_common has been updated to 3.7.0 version.
 
