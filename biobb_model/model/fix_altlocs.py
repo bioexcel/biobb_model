@@ -17,6 +17,8 @@ class FixAltLocs(BiobbObject):
         output_pdb_path (str): Output PDB file path. File type: output. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_model/master/biobb_model/test/reference/model/output_altloc.pdb>`_. Accepted formats: pdb (edam:format_1476).
         properties (dict - Python dictionary object containing the tool parameters, not input/output files):
             * **altlocs** (*list*) - (None) List of alternate locations to fix. Format: ["A339:A", "A171:B", "A768:A"]; where for each residue the format is as follows: "<chain><residue id>:<chosen alternate location>". If empty, no action will be executed.
+            * **modeller_key** (*str*) - (None) Modeller license key.
+            * **binary_path** (*str*) - ("check_structure") Path to the check_structure executable binary.
             * **remove_tmp** (*bool*) - (True) [WF property] Remove temporal files.
             * **restart** (*bool*) - (False) [WF property] Do not execute if output files exist.
 
@@ -51,8 +53,9 @@ class FixAltLocs(BiobbObject):
         }
 
         # Properties specific for BB
-        self.check_structure_path = properties.get('check_structure_path', 'check_structure')
+        self.binary_path = properties.get('binary_path', 'check_structure')
         self.altlocs = properties.get('altlocs', None)
+        self.modeller_key = properties.get('modeller_key')
 
         # Check the properties
         self.check_properties(properties)
@@ -65,11 +68,15 @@ class FixAltLocs(BiobbObject):
         if self.check_restart(): return 0
         self.stage_files()
 
-        self.cmd = [self.check_structure_path,
+        self.cmd = [self.binary_path,
                '-i', self.stage_io_dict["in"]["input_pdb_path"],
                '-o', self.stage_io_dict["out"]["output_pdb_path"],
                '--non_interactive',
                'altloc', '--select', ','.join(self.altlocs)]
+
+        if self.modeller_key:
+            self.cmd.insert(1, self.modeller_key)
+            self.cmd.insert(1, '--modeller_key')
 
         # Run Biobb block
         self.run_biobb()

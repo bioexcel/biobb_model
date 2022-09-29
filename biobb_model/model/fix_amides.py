@@ -17,6 +17,8 @@ class FixAmides(BiobbObject):
         input_pdb_path (str): Input PDB file path. File type: input. `Sample file <https://github.com/bioexcel/biobb_model/raw/master/biobb_model/test/data/model/5s2z.pdb>`_. Accepted formats: pdb (edam:format_1476).
         output_pdb_path (str): Output PDB file path. File type: output. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_model/master/biobb_model/test/reference/model/output_amide_pdb_path.pdb>`_. Accepted formats: pdb (edam:format_1476).
         properties (dict - Python dictionary object containing the tool parameters, not input/output files):
+            * **modeller_key** (*str*) - (None) Modeller license key.
+            * **binary_path** (*str*) - ("check_structure") Path to the check_structure executable binary.
             * **remove_tmp** (*bool*) - (True) [WF property] Remove temporal files.
             * **restart** (*bool*) - (False) [WF property] Do not execute if output files exist.
 
@@ -51,7 +53,8 @@ class FixAmides(BiobbObject):
         }
 
         # Properties specific for BB
-        self.check_structure_path = properties.get('check_structure_path', 'check_structure')
+        self.binary_path = properties.get('binary_path', 'check_structure')
+        self.modeller_key = properties.get('modeller_key')
 
         # Check the properties
         self.check_properties(properties)
@@ -64,11 +67,15 @@ class FixAmides(BiobbObject):
         if self.check_restart(): return 0
         self.stage_files()
 
-        self.cmd = [self.check_structure_path,
+        self.cmd = [self.binary_path,
                '-i', self.stage_io_dict["in"]["input_pdb_path"],
                '-o', self.stage_io_dict["out"]["output_pdb_path"],
                '--force_save',
                'amide', '--fix', 'All']
+
+        if self.modeller_key:
+            self.cmd.insert(1, self.modeller_key)
+            self.cmd.insert(1, '--modeller_key')
 
         # Run Biobb block
         self.run_biobb()

@@ -17,6 +17,8 @@ class CheckingLog(BiobbObject):
         input_pdb_path (str): Input PDB file path. File type: input. `Sample file <https://github.com/bioexcel/biobb_model/raw/master/biobb_model/test/data/model/2ki5.pdb>`_. Accepted formats: pdb (edam:format_1476).
         output_log_path (str): Output report log file path. File type: output. `Sample file <https://github.com/bioexcel/biobb_model/raw/master/biobb_model/test/reference/model/checking.log>`_.  Accepted formats: log (edam:format_2330).
         properties (dict - Python dictionary object containing the tool parameters, not input/output files):
+            * **modeller_key** (*str*) - (None) Modeller license key.
+            * **binary_path** (*str*) - ("check_structure") Path to the check_structure executable binary.
             * **remove_tmp** (*bool*) - (True) [WF property] Remove temporal files.
             * **restart** (*bool*) - (False) [WF property] Do not execute if output files exist.
 
@@ -51,7 +53,8 @@ class CheckingLog(BiobbObject):
         }
 
         # Properties specific for BB
-        self.check_structure_path = properties.get('check_structure_path', 'check_structure')
+        self.binary_path = properties.get('binary_path', 'check_structure')
+        self.modeller_key = properties.get('modeller_key')
 
         # Check the properties
         self.check_properties(properties)
@@ -65,10 +68,14 @@ class CheckingLog(BiobbObject):
         self.stage_files()
 
         # Create command line
-        self.cmd = [self.check_structure_path,
+        self.cmd = [self.binary_path,
                     '-i', self.stage_io_dict["in"]["input_pdb_path"],
                     "checkall",
                     '>', self.stage_io_dict["out"]["output_log_path"]]
+
+        if self.modeller_key:
+            self.cmd.insert(1, self.modeller_key)
+            self.cmd.insert(1, '--modeller_key')
 
         # Run Biobb block
         self.run_biobb()

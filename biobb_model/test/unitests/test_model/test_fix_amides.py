@@ -3,10 +3,10 @@ from biobb_model.model.fix_amides import fix_amides
 
 
 class TestFixAmides:
-    def setUp(self):
+    def setup_class(self):
         fx.test_setup(self, 'fix_amides')
 
-    def tearDown(self):
+    def teardown_class(self):
         fx.test_teardown(self)
 
     def test_launch(self):

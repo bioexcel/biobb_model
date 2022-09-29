@@ -3,10 +3,10 @@ from biobb_model.model.fix_side_chain import fix_side_chain
 
 
 class TestFixSideChain:
-    def setUp(self):
+    def setup_class(self):
         fx.test_setup(self, 'fix_side_chain')
 
-    def tearDown(self):
+    def teardown_class(self):
         #fx.test_teardown(self)
         pass
 

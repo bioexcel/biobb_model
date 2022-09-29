@@ -3,10 +3,10 @@ from biobb_model.model.fix_altlocs import fix_altlocs
 
 
 class TestFixAltlocs:
-    def setUp(self):
+    def setup_class(self):
         fx.test_setup(self, 'fix_altlocs')
 
-    def tearDown(self):
+    def teardown_class(self):
         fx.test_teardown(self)
 
     def test_launch(self):

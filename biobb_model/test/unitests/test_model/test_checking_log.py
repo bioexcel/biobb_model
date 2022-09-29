@@ -3,10 +3,10 @@ from biobb_model.model.checking_log import checking_log
 
 
 class TestCheckingLog:
-    def setUp(self):
+    def setup_class(self):
         fx.test_setup(self, 'checking_log')
 
-    def tearDown(self):
+    def teardown_class(self):
         fx.test_teardown(self)
         #pass
 

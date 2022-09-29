@@ -2,11 +2,12 @@ from biobb_common.tools import test_fixtures as fx
 from biobb_model.model.fix_backbone import fix_backbone
 
 class TestFixBackbone:
-    def setUp(self):
+    def setup_class(self):
         fx.test_setup(self, 'fix_backbone')
 
-    def tearDown(self):
-        fx.test_teardown(self)
+    def teardown_class(self):
+        pass
+        # fx.test_teardown(self)
 
     def test_launch(self):
         fix_backbone(properties=self.properties, **self.paths)

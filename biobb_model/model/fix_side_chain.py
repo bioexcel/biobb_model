@@ -20,6 +20,8 @@ class FixSideChain(BiobbObject):
         output_pdb_path (str): Output PDB file path. File type: output. `Sample file <https://github.com/bioexcel/biobb_model/raw/master/biobb_model/test/reference/model/output_pdb_path.pdb>`_. Accepted formats: pdb (edam:format_1476).
         properties (dict - Python dictionary object containing the tool parameters, not input/output files):
             * **use_modeller** (*bool*) - (False) Use `Modeller suite <https://salilab.org/modeller/>`_ to rebuild the missing side chain atoms.
+            * **modeller_key** (*str*) - (None) Modeller license key.
+            * **binary_path** (*str*) - ("check_structure") Path to the check_structure executable binary.
             * **remove_tmp** (*bool*) - (True) [WF property] Remove temporal files.
             * **restart** (*bool*) - (False) [WF property] Do not execute if output files exist.
 
@@ -54,8 +56,9 @@ class FixSideChain(BiobbObject):
         }
 
         # Properties specific for BB
-        self.check_structure_path = properties.get('check_structure_path', 'check_structure')
+        self.binary_path = properties.get('binary_path', 'check_structure')
         self.use_modeller = properties.get('use_modeller', False)
+        self.modeller_key = properties.get('modeller_key')
 
         # Check the properties
         self.check_properties(properties)
@@ -69,11 +72,15 @@ class FixSideChain(BiobbObject):
         self.stage_files()
 
         # Create command line
-        self.cmd = [self.check_structure_path,
+        self.cmd = [self.binary_path,
                     '-i', self.stage_io_dict["in"]["input_pdb_path"],
                     '-o', self.stage_io_dict["out"]["output_pdb_path"],
                     '--force_save',
                     'fixside', '--fix', 'ALL']
+
+        if self.modeller_key:
+            self.cmd.insert(1, self.modeller_key)
+            self.cmd.insert(1, '--modeller_key')
 
         if self.use_modeller:
             if modeller_installed(self.out_log, self.global_log):

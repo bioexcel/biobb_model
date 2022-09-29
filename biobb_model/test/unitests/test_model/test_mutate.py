@@ -3,10 +3,10 @@ from biobb_model.model.mutate import mutate
 
 
 class TestFixSideChain:
-    def setUp(self):
+    def setup_class(self):
         fx.test_setup(self, 'mutate')
 
-    def tearDown(self):
+    def teardown_class(self):
         fx.test_teardown(self)
 
     def test_launch(self):
