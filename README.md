@@ -1,6 +1,7 @@
 [![](https://readthedocs.org/projects/biobb-model/badge/?version=latest)](https://biobb-model.readthedocs.io/en/latest/?badge=latest)
 [![](https://img.shields.io/badge/install%20with-bioconda-brightgreen.svg?style=flat)](https://anaconda.org/bioconda/biobb_model)
-[![](https://img.shields.io/badge/docker-Quay.io-blue)](https://quay.io/repository/biocontainers/biobb_model)
+[![](https://img.shields.io/badge/docker-Quay.io-blue)](https://quay.io/repository/biocontainers/biobb_model?tab=tags)
+[![](https://img.shields.io/badge/singularity-GalaxyProject-blue)](https://depot.galaxyproject.org/singularity/biobb_model:3.8.0--pyhdfd78af_0)
 [![](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 # biobb_model
@@ -15,7 +16,7 @@ The latest documentation of this package can be found in our readthedocs site:
 [latest API documentation](http://biobb_model.readthedocs.io/en/latest/).
 
 ### Version
-v3.8.0 2021.3
+v3.8.0 2022.3
 
 ### Installation
 Using PIP:
@@ -61,7 +62,7 @@ Using SINGULARITY:
 * Installation:
 
 
-        singularity pull --name biobb_model.sif shub://bioexcel/biobb_model
+        singularity pull --name biobb_model.sif https://depot.galaxyproject.org/singularity/biobb_model:3.8.0--pyhdfd78af_0
 
 
 * Usage:

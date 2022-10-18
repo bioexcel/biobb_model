@@ -4,8 +4,8 @@
     "github": "https://github.com/bioexcel/biobb_model",
     "readthedocs": "https://biobb-model.readthedocs.io/en/latest/",
     "conda": "https://anaconda.org/bioconda/biobb_model",
-    "docker": "https://quay.io/biocontainers/biobb_model:3.7.0--pyhdfd78af_0",
-    "singularity": "https://www.singularity-hub.org/collections/2732/usage",
+    "docker": "https://quay.io/biocontainers/biobb_model:3.8.0--pyhdfd78af_0",
+    "singularity": "https://depot.galaxyproject.org/singularity/biobb_model:3.8.0--pyhdfd78af_0",
     "version": "3.8.0",
     "rest": true,
     "tools" : [
