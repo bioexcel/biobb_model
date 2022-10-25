@@ -26,6 +26,14 @@
             "rest": true
         },
         {
+            "block" : "FixPdb",
+            "tool" : "in house using UniProt API",
+            "desc" : "Renumerates residues in a PDB structure according to a reference sequence from UniProt",
+            "exec" : "fix_pdb",
+            "docs": "https://biobb-model.readthedocs.io/en/latest/model.html#module-model.fix_pdb",
+            "rest": true
+        },
+        {
             "block" : "Mutate",
             "tool" : "in house using biobb_structure_checking",
             "desc" : "Creates a new PDB file performing the mutations given in a list of amino acid mutations to the input PDB file.",

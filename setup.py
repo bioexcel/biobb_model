@@ -18,7 +18,11 @@ setuptools.setup(
         "Bioexcel": "https://bioexcel.eu/"
     },
     packages=setuptools.find_packages(exclude=['docs', 'test']),
-    install_requires=['biobb_common==3.8.1', 'biobb_structure_checking==3.10.1'],
+    install_requires=[
+        'biobb_common==3.8.1',
+        'biobb_structure_checking==3.10.1',
+        'xmltodict==0.13.0'
+    ],
     python_requires='>=3.7',
     entry_points={
         "console_scripts": [
@@ -27,7 +31,8 @@ setuptools.setup(
             "fix_amides = biobb_model.model.fix_amides:main",
             "fix_backbone = biobb_model.model.fix_backbone:main",
             "fix_side_chain = biobb_model.model.fix_side_chain:main",
-            "mutate = biobb_model.model.mutate:main"
+            "mutate = biobb_model.model.mutate:main",
+            "fix_pdb = biobb_model.model.fix_pdb:main",
         ]
     },
     classifiers=(

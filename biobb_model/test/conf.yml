@@ -19,6 +19,15 @@ fix_backbone:
     add_caps: False
     modeller_key: MODELIRANJE
 
+fix_pdb:
+  paths:
+    input_pdb_path: file:test_data_dir/model/test_fixpdb.pdb
+    output_pdb_path: output_fixpdb.pdb
+    reference_output_pdb_path: file:test_reference_dir/model/output_fixpdb.pdb
+  properties:
+    restart: False
+    forced_uniprot_references: [P0DTC2, Q9BYF1]
+    
 mutate:
   paths:
     input_pdb_path: file:test_data_dir/model/2ki5.pdb
