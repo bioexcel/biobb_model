@@ -1,3 +1,4 @@
 properties:
-  add_caps: true
+  add_caps: false
+  modeller_key: MODELIRANJE
   restart: false

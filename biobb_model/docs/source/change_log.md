@@ -1,5 +1,12 @@
 # Biobb Model changelog
 
+## What's new in version [3.8.1](https://github.com/bioexcel/biobb_model/releases/tag/v3.8.1)?
+In version 3.8.1 new fix_pdb block.
+
+### New features
+
+* Adding new fix_pdb block (general)
+
 ## What's new in version [3.8.0](https://github.com/bioexcel/biobb_model/releases/tag/v3.8.0)?
 In version 3.8.0 the dependency biobb_common has been updated to 3.8.1 version.
 

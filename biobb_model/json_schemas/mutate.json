@@ -67,6 +67,18 @@
                     "wf_prop": false,
                     "description": "Use Modeller suite to optimize the side chains."
                 },
+                "modeller_key": {
+                    "type": "string",
+                    "default": null,
+                    "wf_prop": false,
+                    "description": "Modeller license key."
+                },
+                "binary_path": {
+                    "type": "string",
+                    "default": "check_structure",
+                    "wf_prop": false,
+                    "description": "Path to the check_structure executable binary."
+                },
                 "remove_tmp": {
                     "type": "boolean",
                     "default": true,
