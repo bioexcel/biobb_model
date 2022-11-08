@@ -1002,53 +1002,9 @@ def get_uniprot_reference (uniprot_accession : str) -> dict:
     except urllib.error.HTTPError as error:
         if error.code == 400:
             raise ValueError('Something went wrong with the Uniprot request: ' + request_url)
-    # Get the full protein name
-    protein_data = parsed_response['protein']
-    protein_name_data = protein_data.get('recommendedName', None)
-    # DANI: It is possible that the 'recommendedName' is missing if it is not a reviewed UniProt entry
-    if not protein_name_data:
-        print('WARNING: The UniProt accession ' + uniprot_accession + ' is missing the recommended name. You should consider changing the reference.')
-        protein_name_data = protein_data.get('submittedName', None)[0]
-    if not protein_name_data:
-        raise ValueError('Unexpected structure in UniProt response for accession ' + uniprot_accession)
-    protein_name = protein_name_data['fullName']['value']
-    # Get the gene names as a single string
-    gene_names = []
-    for gene in parsed_response['gene']:
-        gene_name = gene.get('name', None)
-        if not gene_name:
-            gene_name = gene.get('orfNames', [])[0]
-        if not gene_name:
-            raise ValueError('The uniprot response for ' + uniprot_accession + ' has an unexpected format')
-        gene_names.append(gene_name['value'])
-    gene_names = ', '.join(gene_names)
-    # Get the organism name
-    organism = parsed_response['organism']['names'][0]['value']
     # Get the aminoacids sequence
     sequence = parsed_response['sequence']['sequence']
-    # Get interesting regions to be highlighted in the client
-    domains = []
-    for feature in parsed_response['features']:
-        if feature['type'] != "CHAIN":
-            continue
-        name = feature['description']
-        comments = [ comment for comment in parsed_response['comments'] if name == comment.get('molecule', None) ]
-        comment_text = [ comment['text'][0]['value'] for comment in comments if comment.get('text', False) ]
-        description = '\n\n'.join(comment_text)
-        domains.append({
-            'name': name,
-            'description': description,
-            # Set the representations to be configured in the client viewer to show this domain
-            'representations':[{
-                'name': name,
-                'selection': feature['begin'] + '-' + feature['end']
-            }]
-        })
     return {
-        'name': protein_name,
-        'gene': gene_names,
-        'organism': organism,
         'uniprot': uniprot_accession,
         'sequence': sequence,
-        'domains': domains
     }
