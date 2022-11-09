@@ -49,6 +49,9 @@ class FixPdb(BiobbObject):
 
         # Properties specific for BB
         self.forced_uniprot_references = properties.get('forced_uniprot_references')
+        # If input forced uniprot references is a string and not a list then convert it
+        if type(self.forced_uniprot_references) == str:
+            self.forced_uniprot_references = self.forced_uniprot_references.split(' ')
 
         # Check the properties
         self.check_properties(properties)
@@ -71,6 +74,11 @@ class FixPdb(BiobbObject):
         # Read and parse the input pdb file
         structure = Structure.from_pdb_file(input_pdb_path)
 
+        # Add protein chains in case they are missing
+        chains = structure.chains
+        if len(chains) == 0 or (len(chains) == 1 and (chains[0].name == ' ' or chains[0].name == 'X')):
+            structure.raw_protein_chainer()
+
         # Run all the mapping function
         mapping = generate_map_online(structure, forced_uniprot_references)
 
@@ -83,6 +91,8 @@ class FixPdb(BiobbObject):
         mapped_residue_numbers = mapping['residue_reference_numbers']
         for r, residue in enumerate(structure.residues):
             mapped_residue_number = mapped_residue_numbers[r]
+            if mapped_residue_number == None:
+                continue
             residue.number = mapped_residue_number
 
         # Write the modified structure to a new pdb file

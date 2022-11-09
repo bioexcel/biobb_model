@@ -2,8 +2,9 @@ import os
 import urllib.request
 import json
 import re
+import math
 
-from typing import List, Tuple, Optional
+from typing import List, Tuple, Optional, Union
 Coords = Tuple[float, float, float]
 
 from pathlib import Path
@@ -227,9 +228,12 @@ class Residue:
             return
         # Relational indices are updated through a top-down hierarchy
         # Affected chains are the ones to update this residue internal chain index
+        # WARNING: It is critical to find both current and new chains before removing/adding residues
+        # WARNING: It may happend that we remove the last residue in the current chain and the current chain is purged
+        # WARNING: Thus the 'new_chain_index' would be obsolete since the structure.chains list would have changed
         current_chain = self.chain
-        current_chain.remove_residue(self)
         new_chain = self.structure.chains[new_chain_index]
+        current_chain.remove_residue(self)
         new_chain.add_residue(self)
     chain_index = property(get_chain_index, set_chain_index, None, "The residue chain index according to parent structure chains")
 
@@ -242,7 +246,20 @@ class Residue:
             return []
         # Get the chain in the structure according to the chain index
         return self.structure.chains[self.chain_index]
-    def set_chain (self, new_chain : 'Chain'):
+    def set_chain (self, new_chain : Union['Chain', str]):
+        # In case the chain is just a string we must find/create the corresponding chain
+        if type(new_chain) == str:
+            letter = new_chain
+            # Get the residue structure
+            structure = self.structure
+            if not structure:
+                raise ValueError('Cannot find the corresponding ' + new_chain + ' chain without the structure')
+            # Find if the letter belongs to an already existing chain
+            new_chain = structure.get_chain_by_name(letter)
+            # If the chain does not exist yet then create it
+            if not new_chain:
+                new_chain = Chain(name=letter)
+                structure.set_new_chain(new_chain)
         # Find the new chain index and set it as the residue chain index
         # Note that the chain must be set in the structure already
         new_chain_index = new_chain.index
@@ -280,7 +297,12 @@ class Chain:
     # This value is set by the structure itself
     def get_index (self):
         return self._index
-    index = property(get_index, None, None, "The residue index according to parent structure residues (read only)")
+    # When the index is set all residues are updated with the nex chain index
+    def set_index (self, index : int):
+        for residue in self.residues:
+            residue._chain_index = index
+        self._index = index
+    index = property(get_index, set_index, None, "The residue index according to parent structure residues (read only)")
 
     # The residue indices according to parent structure residues for residues in this chain
     # If residue indices are set then make changes in all the structure to make this change coherent
@@ -299,6 +321,9 @@ class Chain:
         for index in new_residue_indices:
             residue = self.structure.residues[index]
             residue._chain_index = self.index
+        # In case the new residue indices list is empty this chain must be removed from its structure
+        if len(new_residue_indices) == 0:
+            self.structure.purge_chain(self)
         # Now new indices are coherent and thus we can save them
         self._residue_indices = new_residue_indices
     residue_indices = property(get_residue_indices, set_residue_indices, None, "The residue indices according to parent structure residues for residues in this residue")
@@ -334,8 +359,12 @@ class Chain:
         residue._chain_index = self.index
 
     # Remove a residue from the chain
+    # WARNING: Note that this function does not trigger the set_residue_indices
     def remove_residue (self, residue : 'Residue'):
         self.residue_indices.remove(residue.index) # This index MUST be in the list
+        # If we removed the last index then this chain must be removed from its structure
+        if len(self.residue_indices) == 0 and self.structure:
+            self.structure.purge_chain(self)
         # Update the residue internal chain index
         residue._chain_index = None
 
@@ -406,6 +435,25 @@ class Structure:
         for residue_index in chain.residue_indices:
             residue = self.residues[residue_index]
             residue._chain_index = new_chain_index
+
+    # Purge chain from the structure
+    # This can be done only when the chain has no residues left in the structure
+    # Renumerate all chain indices which have been offsetted as a result of the purge
+    def purge_chain (self, chain : 'Chain'):
+        # Check the chain can be purged
+        if chain not in self.chains:
+            raise ValueError('Chain ' + chain.name + ' is not in the structure already')
+        if len(chain.residue_indices) > 0:
+            raise ValueError('Chain ' + chain.name + ' is still having residues and thus it cannot be purged')
+        # Get the current index of the chain to be purged
+        purged_index = chain.index
+        # Chains and their residues below this index are not to be modified
+        # Chains and their residues over this index must be renumerated
+        for affected_chain in self.chains[purged_index+1:]:
+            # Chaging the index automatically changes all chain residues '_chain_index' values.
+            affected_chain.index -= 1
+        # Finally, remove the current chain from the list of chains in the structure
+        self.chains.remove(chain)
 
     # Set the structure from a pdb file
     @classmethod
@@ -513,6 +561,42 @@ class Structure:
         for chain in self.chains:
             print('Chain ' + chain.name + ' (' + str(len(chain.residue_indices)) + ' residues)')
             print(' -> ' + chain.get_sequence())
+
+    # This is an alternative system to find protein chains (anything else is chained as 'X')
+    # This system does not depend on VMD
+    # It totally overrides previous chains since it is expected to be used only when chains are missing
+    def raw_protein_chainer (self):
+        current_chain = self.get_next_available_chain_name()
+        previous_alpha_carbon = None
+        for residue in self.residues:
+            alpha_carbon = next((atom for atom in residue.atoms if atom.name == 'CA'), None)
+            if not alpha_carbon:
+                residue.set_chain('X')
+                continue
+            # Connected aminoacids have their alpha carbons at a distance of around 3.8 Ångstroms
+            residues_are_connected = previous_alpha_carbon and calculate_distance(previous_alpha_carbon, alpha_carbon) < 4
+            if not residues_are_connected:
+                current_chain = self.get_next_available_chain_name()
+            residue.set_chain(current_chain)
+            previous_alpha_carbon = alpha_carbon
+
+    # Get the next available chain name
+    # Find alphabetically the first letter which is not yet used as a chain name
+    # If all letters in the alphabet are used already then return None
+    def get_next_available_chain_name (self) -> Optional[str]:
+        current_chain_names = [ chain.name for chain in self.chains ]
+        return next((name for name in available_caps if name not in current_chain_names), None)
+
+# Calculate the distance between two atoms
+def calculate_distance (atom_1 : Atom, atom_2 : Atom) -> float:
+    squared_distances_sum = 0
+    for i in { 'x': 0, 'y': 1, 'z': 2 }.values():
+        squared_distances_sum += (atom_1.coords[i] - atom_2.coords[i])**2
+    return math.sqrt(squared_distances_sum)
+
+# Set all available chains according to pdb standards
+available_caps = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K',
+    'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
 
 # Protein residues
 aminoacids = {
@@ -661,6 +745,9 @@ def generate_map_online (structure : 'Structure', forced_references : List[str] 
     # For each input forced reference, get the reference sequence
     reference_sequences = {}
     if forced_references:
+        # Check forced_references is not a string
+        if type(forced_references) == str:
+            raise TypeError('Forced references should be a list and not a string a this point')
         for uniprot_id in forced_references:
             reference = get_uniprot_reference(uniprot_id)
             reference_sequences[reference['uniprot']] = reference['sequence']
@@ -887,7 +974,7 @@ def align (ref_sequence : str, new_sequence : str) -> Optional[ Tuple[list, floa
 # WARNING: This always means results will correspond to curated entries only
 #   If your sequence is from an exotic organism the result may be not from it but from other more studied organism
 def blast (sequence : str) -> List[str]:
-    print('Throwing blast...')
+    print('Throwing blast... (this may take a few minutes)')
     result = NCBIWWW.qblast(
         program = "blastp",
         database = "swissprot", # UniProtKB / Swiss-Prot
@@ -915,53 +1002,9 @@ def get_uniprot_reference (uniprot_accession : str) -> dict:
     except urllib.error.HTTPError as error:
         if error.code == 400:
             raise ValueError('Something went wrong with the Uniprot request: ' + request_url)
-    # Get the full protein name
-    protein_data = parsed_response['protein']
-    protein_name_data = protein_data.get('recommendedName', None)
-    # DANI: It is possible that the 'recommendedName' is missing if it is not a reviewed UniProt entry
-    if not protein_name_data:
-        print('WARNING: The UniProt accession ' + uniprot_accession + ' is missing the recommended name. You should consider changing the reference.')
-        protein_name_data = protein_data.get('submittedName', None)[0]
-    if not protein_name_data:
-        raise ValueError('Unexpected structure in UniProt response for accession ' + uniprot_accession)
-    protein_name = protein_name_data['fullName']['value']
-    # Get the gene names as a single string
-    gene_names = []
-    for gene in parsed_response['gene']:
-        gene_name = gene.get('name', None)
-        if not gene_name:
-            gene_name = gene.get('orfNames', [])[0]
-        if not gene_name:
-            raise ValueError('The uniprot response for ' + uniprot_accession + ' has an unexpected format')
-        gene_names.append(gene_name['value'])
-    gene_names = ', '.join(gene_names)
-    # Get the organism name
-    organism = parsed_response['organism']['names'][0]['value']
     # Get the aminoacids sequence
     sequence = parsed_response['sequence']['sequence']
-    # Get interesting regions to be highlighted in the client
-    domains = []
-    for feature in parsed_response['features']:
-        if feature['type'] != "CHAIN":
-            continue
-        name = feature['description']
-        comments = [ comment for comment in parsed_response['comments'] if name == comment.get('molecule', None) ]
-        comment_text = [ comment['text'][0]['value'] for comment in comments if comment.get('text', False) ]
-        description = '\n\n'.join(comment_text)
-        domains.append({
-            'name': name,
-            'description': description,
-            # Set the representations to be configured in the client viewer to show this domain
-            'representations':[{
-                'name': name,
-                'selection': feature['begin'] + '-' + feature['end']
-            }]
-        })
     return {
-        'name': protein_name,
-        'gene': gene_names,
-        'organism': organism,
         'uniprot': uniprot_accession,
         'sequence': sequence,
-        'domains': domains
     }
