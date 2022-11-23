@@ -71,19 +71,21 @@ class FixBackbone(BiobbObject):
     def launch(self) -> int:
         """Execute the :class:`FixBackbone <model.fix_backbone.FixBackbone>` object."""
 
+        self.io_dict['in']['stdin_file_path'] = fu.create_stdin_file(f'{self.io_dict["in"]["input_fasta_canonical_sequence_path"]}')
+
         # Setup Biobb
         if self.check_restart(): return 0
         self.stage_files()
 
         # Create command line
-        self.cmd = ['echo', '-e', '\'' + self.io_dict["in"]["input_fasta_canonical_sequence_path"] + '\'', '|',
-                    self.binary_path,
+        self.cmd = [self.binary_path,
                     '-i', self.io_dict["in"]["input_pdb_path"],
                     '-o', self.io_dict["out"]["output_pdb_path"],
                     '--force_save', 'backbone',
                     '--fix_atoms', 'All',
                     '--fix_chain', 'All',
                     '--add_caps']
+
 
         if self.modeller_key:
             self.cmd.insert(5, self.modeller_key)
@@ -93,6 +95,10 @@ class FixBackbone(BiobbObject):
             self.cmd.append('All')
         else:
             self.cmd.append('None')
+
+        # Add stdin input file
+        self.cmd.append('<')
+        self.cmd.append(self.stage_io_dict["in"]["stdin_file_path"])
 
         # if not modeller_installed(self.out_log, self.global_log):
         #     fu.log(f"Modeller is not installed, the execution of this block will be interrupted", self.out_log, self.global_log)
@@ -105,6 +111,7 @@ class FixBackbone(BiobbObject):
         self.copy_to_host()
 
         # Remove temporal files
+        self.tmp_files.extend([self.io_dict['in'].get("stdin_file_path")])
         self.remove_tmp_files()
 
         return self.return_code
