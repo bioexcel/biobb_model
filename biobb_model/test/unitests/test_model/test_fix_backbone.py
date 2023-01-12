@@ -6,8 +6,8 @@ class TestFixBackbone:
         fx.test_setup(self, 'fix_backbone')
 
     def teardown_class(self):
-        pass
-        # fx.test_teardown(self)
+        # pass
+        fx.test_teardown(self)
 
     def test_launch(self):
         fix_backbone(properties=self.properties, **self.paths)

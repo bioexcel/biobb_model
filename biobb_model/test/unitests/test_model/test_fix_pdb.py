@@ -7,8 +7,8 @@ class TestFixPdb:
         fx.test_setup(self, 'fix_pdb')
 
     def teardown_class(self):
-        pass
-        # fx.test_teardown(self)
+        #pass
+        fx.test_teardown(self)
 
     def test_launch(self):
         fix_pdb(properties=self.properties, **self.paths)

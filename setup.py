@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="biobb_model",
-    version="3.8.1",
+    version="3.9.0",
     author="Biobb developers",
     author_email="pau.andrio@bsc.es",
     description="Biobb_model is the Biobb module collection to check and model 3d structures, create mutations or reconstruct missing atoms.",
@@ -19,8 +19,8 @@ setuptools.setup(
     },
     packages=setuptools.find_packages(exclude=['docs', 'test']),
     install_requires=[
-        'biobb_common==3.8.1',
-        'biobb_structure_checking==3.10.1',
+        'biobb_common==3.9.0',
+        'biobb_structure_checking==3.12.1',
         'xmltodict'
     ],
     python_requires='>=3.7',
@@ -29,6 +29,8 @@ setuptools.setup(
             "checking_log = biobb_model.model.checking_log:main",
             "fix_chirality = biobb_model.model.fix_chirality:main",
             "fix_amides = biobb_model.model.fix_amides:main",
+            "fix_altlocs = biobb_model.model.fix_altlocs:main",
+            "fix_ssbonds = biobb_model.model.fix_ssbonds:main",
             "fix_backbone = biobb_model.model.fix_backbone:main",
             "fix_side_chain = biobb_model.model.fix_side_chain:main",
             "mutate = biobb_model.model.mutate:main",

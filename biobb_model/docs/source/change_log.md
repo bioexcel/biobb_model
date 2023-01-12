@@ -1,5 +1,9 @@
 # Biobb Model changelog
 
+## What's new in version [3.9.0](https://github.com/bioexcel/biobb_model/releases/tag/v3.9.0)?
+In version 3.9.0 new biobb_common 3.9.0
+
+
 ## What's new in version [3.8.1](https://github.com/bioexcel/biobb_model/releases/tag/v3.8.1)?
 In version 3.8.1 new fix_pdb block.
 

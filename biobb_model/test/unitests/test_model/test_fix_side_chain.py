@@ -7,8 +7,8 @@ class TestFixSideChain:
         fx.test_setup(self, 'fix_side_chain')
 
     def teardown_class(self):
-        #fx.test_teardown(self)
-        pass
+        fx.test_teardown(self)
+        #pass
 
     def test_launch(self):
         fix_side_chain(properties=self.properties, **self.paths)
