@@ -1,10 +1,11 @@
-===============================================================================
-=                   BioBB structure checking utility v3.8.5                   =
-=                 A. Hospital, P. Andrio, J.L. Gelpi 2018-21                  =
-===============================================================================
+================================================================================
+=                   BioBB structure checking utility v3.12.1                   =
+=            P. Andrio, A. Hospital, G. Bayarri, J.L. Gelpi 2018-23            =
+================================================================================
 
 Warning: sequence features only available in mmCIF format or with external fasta input
-Structure /Users/pau/projects/biobb_model/biobb_model/test/data/model/2ki5.pdb loaded
+Structure /private/tmp/biobb/unitests_12/checking_log/efb30011-c245-4e84-bf90-186e01b44200/2ki5.pdb loaded
+ PDB id: 2KI5
  Title: herpes simplex type-1 thymidine kinase in complex with the drug aciclovir at 1.9a resolution
  Experimental method: x-ray diffraction
  Keywords: transferase (phosphotransferase) thymid, transferase (phosphotransferase) thymidine kinase; viridae; ds-dna enveloped viruses; herpesviridae; alphaherpesvirinae antiviral drug (aciclovir)
@@ -14,6 +15,7 @@ Structure /Users/pau/projects/biobb_model/biobb_model/test/data/model/2ki5.pdb l
  Num. chains: 2 (A: Protein, B: Protein)
  Num. residues:  908
  Num. residues with ins. codes:  0
+ Num. residues with H atoms: 0
  Num. HETATM residues:  296
  Num. ligands or modified residues:  4
  Num. water mol.:  292
@@ -23,7 +25,6 @@ SO4 A4
 AC2 A1
 SO4 B3
 AC2 B2
-
 Running models.
 1 Model(s) detected
 Single model found
@@ -103,12 +104,12 @@ Running backbone.
  SER B263   CA,C,O,OXT
  ALA B375   CA,C,O,OXT
 6 Backbone breaks found
- VAL A70    - ASP A77    
- GLY A148   - PRO A154   
- GLY A264   - PRO A280   
- GLY B73    - ASP B77    
- GLY B148   - PRO B154   
- SER B263   - ALA B278   
+ VAL A70    - ASP A77   
+ GLY A148   - PRO A154  
+ GLY A264   - PRO A280  
+ GLY B73    - ASP B77   
+ GLY B148   - PRO B154  
+ SER B263   - ALA B278  
 No unexpected backbone links
 Running cistransbck.
 No cis peptide bonds found
@@ -143,4 +144,21 @@ No severe clashes detected
  ARG A212.NH2 ARG A216.NH2    3.075 A
 No negative clashes detected
 Running sequences.
-Sequences command requires either mmCIF input or --sequence
+Canonical Sequences requires either mmCIF input or --sequence
+Structure sequence
+>pdb_sq_A Frags: 46-70,77-148,154-264,280-375
+MPTLLRVYIDGPHGMGKTTTTQLLV------DIVYVPEPMTYWRVLGASETIANIYTTQH
+RLDQGEISAGDAAVVMTSAQITMGMPYAVTDAVLAPHIGGEAG-----PPALTLIFDRHP
+IAALLCYPAARYLMGSMTPQAVLAFVALIPPTLPGTNIVLGALPEDRHIDRLAKRQRPGE
+RLDLAMLAAIRRVYGLLANTVRYLQCGGSWREDWGQLSG---------------PRPHIG
+DTLFTLFRAPELLAPNGDLYNVFAWALDVLAKRLRSMHVFILDYDQSPAGCRDALLQLTS
+GMVQTHVTTPGSIPTICDLARTFAREMGEA
+>pdb_sq_B Frags: 46-73,77-148,154-263,278-375
+MPTLLRVYIDGPHGMGKTTTTQLLVALG---DIVYVPEPMTYWRVLGASETIANIYTTQH
+RLDQGEISAGDAAVVMTSAQITMGMPYAVTDAVLAPHIGGEAG-----PPALTLIFDRHP
+IAALLCYPAARYLMGSMTPQAVLAFVALIPPTLPGTNIVLGALPEDRHIDRLAKRQRPGE
+RLDLAMLAAIRRVYGLLANTVRYLQCGGSWREDWGQLS--------------AGPRPHIG
+DTLFTLFRAPELLAPNGDLYNVFAWALDVLAKRLRSMHVFILDYDQSPAGCRDALLQLTS
+GMVQTHVTTPGSIPTICDLARTFAREMGEA
+
+Structure not modified, not saving. Override with --force_save
