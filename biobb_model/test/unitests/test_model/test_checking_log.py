@@ -8,10 +8,9 @@ class TestCheckingLog:
 
     def teardown_class(self):
         fx.test_teardown(self)
-        #pass
+        # pass
 
     def test_launch(self):
         checking_log(properties=self.properties, **self.paths)
         assert fx.not_empty(self.paths['output_log_path'])
-        # Now the log prints the abs path of the loaded file and this path is different for each run.
-        #assert fx.equal(self.paths['output_log_path'], self.paths['reference_output_log_path'])
+        assert fx.equal(self.paths['output_log_path'], self.paths['reference_output_log_path'], ignore_list=['loaded'])

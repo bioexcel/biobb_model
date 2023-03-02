@@ -13,7 +13,20 @@ Command:
 ```python
 fix_altlocs -h
 ```
-    /bin/sh: fix_altlocs: command not found
+    usage: fix_altlocs [-h] [-c CONFIG] -i INPUT_PDB_PATH -o OUTPUT_PDB_PATH
+    
+    Fix alternate locations from residues
+    
+    optional arguments:
+      -h, --help            show this help message and exit
+      -c CONFIG, --config CONFIG
+                            This file can be a YAML file, JSON file or JSON string
+    
+    required arguments:
+      -i INPUT_PDB_PATH, --input_pdb_path INPUT_PDB_PATH
+                            Input PDB file name
+      -o OUTPUT_PDB_PATH, --output_pdb_path OUTPUT_PDB_PATH
+                            Output PDB file name
 ### I / O Arguments
 Syntax: input_argument (datatype) : Definition
 
@@ -68,7 +81,20 @@ Command:
 ```python
 fix_amides -h
 ```
-    /bin/sh: fix_amides: command not found
+    usage: fix_amides [-h] [-c CONFIG] -i INPUT_PDB_PATH -o OUTPUT_PDB_PATH
+    
+    Flip the clashing amide groups to avoid clashes.
+    
+    optional arguments:
+      -h, --help            show this help message and exit
+      -c CONFIG, --config CONFIG
+                            This file can be a YAML file, JSON file or JSON string
+    
+    required arguments:
+      -i INPUT_PDB_PATH, --input_pdb_path INPUT_PDB_PATH
+                            Input PDB file name
+      -o OUTPUT_PDB_PATH, --output_pdb_path OUTPUT_PDB_PATH
+                            Output PDB file name
 ### I / O Arguments
 Syntax: input_argument (datatype) : Definition
 
@@ -115,7 +141,20 @@ Command:
 ```python
 fix_chirality -h
 ```
-    /bin/sh: fix_chirality: command not found
+    usage: fix_chirality [-h] [-c CONFIG] -i INPUT_PDB_PATH -o OUTPUT_PDB_PATH
+    
+    Fix stereochemical errors in residues changing It's chirality.
+    
+    optional arguments:
+      -h, --help            show this help message and exit
+      -c CONFIG, --config CONFIG
+                            This file can be a YAML file, JSON file or JSON string
+    
+    required arguments:
+      -i INPUT_PDB_PATH, --input_pdb_path INPUT_PDB_PATH
+                            Input PDB file name
+      -o OUTPUT_PDB_PATH, --output_pdb_path OUTPUT_PDB_PATH
+                            Output PDB file name
 ### I / O Arguments
 Syntax: input_argument (datatype) : Definition
 
@@ -162,7 +201,20 @@ Command:
 ```python
 checking_log -h
 ```
-    /bin/sh: checking_log: command not found
+    usage: checking_log [-h] [-c CONFIG] -i INPUT_PDB_PATH -o OUTPUT_LOG_PATH
+    
+    Check the errors of a PDB structure and create a report log file.
+    
+    optional arguments:
+      -h, --help            show this help message and exit
+      -c CONFIG, --config CONFIG
+                            This file can be a YAML file, JSON file or JSON string
+    
+    required arguments:
+      -i INPUT_PDB_PATH, --input_pdb_path INPUT_PDB_PATH
+                            Input PDB file name
+      -o OUTPUT_LOG_PATH, --output_log_path OUTPUT_LOG_PATH
+                            Output log file name
 ### I / O Arguments
 Syntax: input_argument (datatype) : Definition
 
@@ -209,7 +261,22 @@ Command:
 ```python
 fix_backbone -h
 ```
-    /bin/sh: fix_backbone: command not found
+    usage: fix_backbone [-h] [-c CONFIG] -i INPUT_PDB_PATH -f INPUT_FASTA_CANONICAL_SEQUENCE_PATH -o OUTPUT_PDB_PATH
+    
+    Model the missing atoms in the backbone of a PDB structure.
+    
+    optional arguments:
+      -h, --help            show this help message and exit
+      -c CONFIG, --config CONFIG
+                            This file can be a YAML file, JSON file or JSON string
+    
+    required arguments:
+      -i INPUT_PDB_PATH, --input_pdb_path INPUT_PDB_PATH
+                            Input PDB file name
+      -f INPUT_FASTA_CANONICAL_SEQUENCE_PATH, --input_fasta_canonical_sequence_path INPUT_FASTA_CANONICAL_SEQUENCE_PATH
+                            Input FASTA file name
+      -o OUTPUT_PDB_PATH, --output_pdb_path OUTPUT_PDB_PATH
+                            Output PDB file name
 ### I / O Arguments
 Syntax: input_argument (datatype) : Definition
 
@@ -262,7 +329,7 @@ Command:
 ```python
 fix_pdb -h
 ```
-    /bin/sh: fix_pdb: command not found
+    /bin/sh: /Users/pau/anaconda3/envs/dev/bin/fix_pdb: Permission denied
 ### I / O Arguments
 Syntax: input_argument (datatype) : Definition
 
@@ -315,7 +382,20 @@ Command:
 ```python
 fix_ssbonds -h
 ```
-    /bin/sh: fix_ssbonds: command not found
+    usage: fix_ssbonds [-h] [-c CONFIG] -i INPUT_PDB_PATH -o OUTPUT_PDB_PATH
+    
+    Fix SS bonds from residues
+    
+    optional arguments:
+      -h, --help            show this help message and exit
+      -c CONFIG, --config CONFIG
+                            This file can be a YAML file, JSON file or JSON string
+    
+    required arguments:
+      -i INPUT_PDB_PATH, --input_pdb_path INPUT_PDB_PATH
+                            Input PDB file name
+      -o OUTPUT_PDB_PATH, --output_pdb_path OUTPUT_PDB_PATH
+                            Output PDB file name
 ### I / O Arguments
 Syntax: input_argument (datatype) : Definition
 
@@ -362,7 +442,20 @@ Command:
 ```python
 mutate -h
 ```
-    /bin/sh: mutate: command not found
+    usage: mutate [-h] [-c CONFIG] -i INPUT_PDB_PATH -o OUTPUT_PDB_PATH
+    
+    Model the missing atoms in aminoacid side chains of a PDB.
+    
+    optional arguments:
+      -h, --help            show this help message and exit
+      -c CONFIG, --config CONFIG
+                            This file can be a YAML file, JSON file or JSON string
+    
+    required arguments:
+      -i INPUT_PDB_PATH, --input_pdb_path INPUT_PDB_PATH
+                            Input PDB file name
+      -o OUTPUT_PDB_PATH, --output_pdb_path OUTPUT_PDB_PATH
+                            Output PDB file name
 ### I / O Arguments
 Syntax: input_argument (datatype) : Definition
 
@@ -411,7 +504,20 @@ Command:
 ```python
 fix_side_chain -h
 ```
-    /bin/sh: fix_side_chain: command not found
+    usage: fix_side_chain [-h] [-c CONFIG] -i INPUT_PDB_PATH -o OUTPUT_PDB_PATH
+    
+    Model the missing atoms in amino acid side chains of a PDB.
+    
+    optional arguments:
+      -h, --help            show this help message and exit
+      -c CONFIG, --config CONFIG
+                            This file can be a YAML file, JSON file or JSON string
+    
+    required arguments:
+      -i INPUT_PDB_PATH, --input_pdb_path INPUT_PDB_PATH
+                            Input PDB file name
+      -o OUTPUT_PDB_PATH, --output_pdb_path OUTPUT_PDB_PATH
+                            Output PDB file name
 ### I / O Arguments
 Syntax: input_argument (datatype) : Definition
 
