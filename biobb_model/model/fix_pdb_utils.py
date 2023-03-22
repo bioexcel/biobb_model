@@ -1,22 +1,21 @@
 import os
 import urllib.request
 import json
-import re
 import math
-
+from bisect import bisect
+from Bio import pairwise2
+from Bio.pairwise2 import format_alignment
+from Bio.Blast import NCBIWWW
+import xmltodict
 from typing import List, Tuple, Optional, Union
 Coords = Tuple[float, float, float]
 
-from pathlib import Path
-from bisect import bisect
-
-from Bio import pairwise2
-from Bio.pairwise2 import format_alignment
-from Bio.SubsMat import MatrixInfo
-from Bio.Blast import NCBIWWW
-import xmltodict
-
-
+try:
+    from Bio.SubsMat import MatrixInfo
+    blosum62 = MatrixInfo.blosum62
+except ImportError:
+    from Bio.Align import substitution_matrices
+    blosum62 = substitution_matrices.load("BLOSUM62")
 
 # An atom
 class Atom:
@@ -916,7 +915,7 @@ def align (ref_sequence : str, new_sequence : str) -> Optional[ Tuple[list, floa
         return None
 
     # Return the new sequence as best aligned as possible with the reference sequence
-    alignments = pairwise2.align.localds(ref_sequence, new_sequence, MatrixInfo.blosum62, -10, -0.5)
+    alignments = pairwise2.align.localds(ref_sequence, new_sequence, blosum62, -10, -0.5)
     # DANI: Habría que hacerlo de esta otra forma según el deprecation warning (arriba hay más código)
     # DANI: El problema es que el output lo tiene todo menos la sequencia en formato alienada
     # DANI: i.e. formato '----VNLTT', que es justo el que necesito
