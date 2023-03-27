@@ -66,14 +66,15 @@ class FixAmides(BiobbObject):
         """Execute the :class:`FixAmides <model.fix_amides.FixAmides>` object."""
 
         # Setup Biobb
-        if self.check_restart(): return 0
+        if self.check_restart():
+            return 0
         self.stage_files()
 
         self.cmd = [self.binary_path,
-               '-i', self.stage_io_dict["in"]["input_pdb_path"],
-               '-o', self.stage_io_dict["out"]["output_pdb_path"],
-               '--force_save',
-               'amide', '--fix', 'All']
+                    '-i', self.stage_io_dict["in"]["input_pdb_path"],
+                    '-o', self.stage_io_dict["out"]["output_pdb_path"],
+                    '--force_save',
+                    'amide', '--fix', 'All']
 
         if self.modeller_key:
             self.cmd.insert(1, self.modeller_key)

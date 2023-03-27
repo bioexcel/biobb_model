@@ -19,7 +19,7 @@ class Mutate(BiobbObject):
         input_pdb_path (str): Input PDB file path. File type: input. `Sample file <https://github.com/bioexcel/biobb_model/raw/master/biobb_model/test/data/model/2ki5.pdb>`_. Accepted formats: pdb (edam:format_1476).
         output_pdb_path (str): Output PDB file path. File type: output. `Sample file <https://github.com/bioexcel/biobb_model/raw/master/biobb_model/test/reference/model/output_mutated_pdb_path.pdb>`_. Accepted formats: pdb (edam:format_1476).
         properties (dict - Python dictionary object containing the tool parameters, not input/output files):
-            * **mutation_list** (*str*) - ("A:Val2Ala") Mutation list in the format "Chain:WT_AA_ThreeLeterCode Resnum MUT_AA_ThreeLeterCode" (no spaces between the elements) separated by commas. If no chain is provided as chain code all the chains in the pdb file will be mutated. ie: "A:ALA15CYS"
+            * **mutation_list** (*str*) - (None) Mutation list in the format "Chain:WT_AA_ThreeLeterCode Resnum MUT_AA_ThreeLeterCode" (no spaces between the elements) separated by commas. If no chain is provided as chain code all the chains in the pdb file will be mutated. ie: "A:ALA15CYS"
             * **use_modeller** (*bool*) - (False) Use `Modeller suite <https://salilab.org/modeller/>`_ to optimize the side chains.
             * **modeller_key** (*str*) - (None) Modeller license key.
             * **binary_path** (*str*) - ("check_structure") Path to the check_structure executable binary.
@@ -60,7 +60,7 @@ class Mutate(BiobbObject):
 
         # Properties specific for BB
         self.binary_path = properties.get('binary_path', 'check_structure')
-        self.mutation_list = properties.get('mutation_list', 'A:Val2Ala').replace(" ", "")
+        self.mutation_list = properties.get('mutation_list', '').replace(" ", "")
         self.use_modeller = properties.get('use_modeller', False)
         self.modeller_key = properties.get('modeller_key')
 
@@ -73,14 +73,21 @@ class Mutate(BiobbObject):
         """Execute the :class:`Mutate <model.mutate.Mutate>` object."""
 
         # Setup Biobb
-        if self.check_restart(): return 0
+        if self.check_restart():
+            return 0
         self.stage_files()
 
         # Create command line
         self.cmd = [self.binary_path,
                     '-i', self.stage_io_dict["in"]["input_pdb_path"],
                     '-o', self.stage_io_dict["out"]["output_pdb_path"],
-                    'mutateside', '--mut', self.mutation_list]
+                    '--force_save',
+                    '--non_interactive',
+                    'mutateside']
+        
+        if self.mutation_list:
+            self.cmd.append('--mut')
+            self.cmd.append(self.mutation_list)
 
         if self.modeller_key:
             self.cmd.insert(1, self.modeller_key)
@@ -90,7 +97,7 @@ class Mutate(BiobbObject):
             if modeller_installed(self.out_log, self.global_log):
                 self.cmd.append('--rebuild')
             else:
-                fu.log(f"Modeller is not installed --rebuild option can not be used proceeding without using it",
+                fu.log("Modeller is not installed --rebuild option can not be used proceeding without using it",
                        self.out_log, self.global_log)
 
         # Run Biobb block

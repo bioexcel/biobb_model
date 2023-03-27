@@ -6,7 +6,6 @@ from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.configuration import settings
 from biobb_common.tools import file_utils as fu
 from biobb_common.tools.file_utils import launchlogger
-from biobb_model.model.common import modeller_installed
 
 
 class FixBackbone(BiobbObject):
@@ -76,7 +75,8 @@ class FixBackbone(BiobbObject):
         self.io_dict['in']['stdin_file_path'] = fu.create_stdin_file(f'{self.io_dict["in"]["input_fasta_canonical_sequence_path"]}')
 
         # Setup Biobb
-        if self.check_restart(): return 0
+        if self.check_restart():
+            return 0
         self.stage_files()
 
         # Create command line
@@ -87,7 +87,6 @@ class FixBackbone(BiobbObject):
                     '--fix_atoms', 'All',
                     '--fix_chain', 'All',
                     '--add_caps']
-
 
         if self.modeller_key:
             self.cmd.insert(5, self.modeller_key)

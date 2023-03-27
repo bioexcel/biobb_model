@@ -70,7 +70,8 @@ class FixSideChain(BiobbObject):
         """Execute the :class:`FixSideChain <model.fix_side_chain.FixSideChain>` object."""
 
         # Setup Biobb
-        if self.check_restart(): return 0
+        if self.check_restart():
+            return 0
         self.stage_files()
 
         # Create command line
@@ -88,7 +89,7 @@ class FixSideChain(BiobbObject):
             if modeller_installed(self.out_log, self.global_log):
                 self.cmd.append('--rebuild')
             else:
-                fu.log(f"Modeller is not installed --rebuild option can not be used proceeding without using it", self.out_log, self.global_log)
+                fu.log("Modeller is not installed --rebuild option can not be used proceeding without using it", self.out_log, self.global_log)
 
         # Run Biobb block
         self.run_biobb()

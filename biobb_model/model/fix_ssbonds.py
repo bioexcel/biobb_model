@@ -65,16 +65,16 @@ class FixSSBonds(BiobbObject):
         """Execute the :class:`FixSSBonds <model.fix_ssbonds.FixSSBonds>` object."""
 
         # Setup Biobb
-        if self.check_restart(): return 0
+        if self.check_restart():
+            return 0
         self.stage_files()
 
-        #check_structure -i 3EBP.pdb -o out.pdb --non_interactive getss --mark All
-
         self.cmd = [self.binary_path,
-               '-i', self.stage_io_dict["in"]["input_pdb_path"],
-               '-o', self.stage_io_dict["out"]["output_pdb_path"],
-               '--non_interactive',
-               'getss', '--mark', 'All']
+                    '-i', self.stage_io_dict["in"]["input_pdb_path"],
+                    '-o', self.stage_io_dict["out"]["output_pdb_path"],
+                    '--force_save',
+                    '--non_interactive',
+                    'getss', '--mark', 'All']
 
         if self.modeller_key:
             self.cmd.insert(1, self.modeller_key)
@@ -98,8 +98,8 @@ def fix_ssbonds(input_pdb_path: str, output_pdb_path: str, properties: dict = No
     """Create :class:`FixSSBonds <model.fix_ssbonds.FixSSBonds>` class and
     execute the :meth:`launch() <model.fix_ssbonds.FixSSBonds.launch>` method."""
     return FixSSBonds(input_pdb_path=input_pdb_path,
-                     output_pdb_path=output_pdb_path,
-                     properties=properties, **kwargs).launch()
+                      output_pdb_path=output_pdb_path,
+                      properties=properties, **kwargs).launch()
 
 
 def main():
@@ -118,8 +118,8 @@ def main():
 
     # Specific call of each building block
     fix_ssbonds(input_pdb_path=args.input_pdb_path,
-               output_pdb_path=args.output_pdb_path,
-               properties=properties)
+                output_pdb_path=args.output_pdb_path,
+                properties=properties)
 
 
 if __name__ == '__main__':

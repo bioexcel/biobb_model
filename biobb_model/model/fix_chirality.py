@@ -4,8 +4,6 @@
 import argparse
 from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.configuration import settings
-from biobb_common.tools import file_utils as fu
-from biobb_common.command_wrapper import cmd_wrapper
 from biobb_common.tools.file_utils import launchlogger
 
 
@@ -68,7 +66,8 @@ class FixChirality(BiobbObject):
         """Execute the :class:`FixChirality <model.fix_amides.FixChirality>` object."""
 
         # Setup Biobb
-        if self.check_restart(): return 0
+        if self.check_restart():
+            return 0
         self.stage_files()
 
         # Create command line

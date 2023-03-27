@@ -4,7 +4,6 @@
 import argparse
 from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.configuration import settings
-from biobb_common.tools import file_utils as fu
 from biobb_common.tools.file_utils import launchlogger
 
 from .fix_pdb_utils import Structure, generate_map_online
@@ -63,7 +62,8 @@ class FixPdb(BiobbObject):
         """Execute the :class:`FixPdb <model.fix_pdb.FixPdb>` object."""
 
         # Setup Biobb
-        if self.check_restart(): return 0
+        if self.check_restart():
+            return 0
 
         # Run code
         self.return_code = 0
@@ -93,7 +93,7 @@ class FixPdb(BiobbObject):
         mapped_residue_numbers = mapping['residue_reference_numbers']
         for r, residue in enumerate(structure.residues):
             mapped_residue_number = mapped_residue_numbers[r]
-            if mapped_residue_number == None:
+            if mapped_residue_number is None:
                 continue
             residue.number = mapped_residue_number
 

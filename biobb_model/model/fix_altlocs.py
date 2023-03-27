@@ -67,14 +67,21 @@ class FixAltLocs(BiobbObject):
         """Execute the :class:`FixAltLocs <model.fix_altlocs.FixAltLocs>` object."""
 
         # Setup Biobb
-        if self.check_restart(): return 0
+        if self.check_restart():
+            return 0
         self.stage_files()
 
         self.cmd = [self.binary_path,
-               '-i', self.stage_io_dict["in"]["input_pdb_path"],
-               '-o', self.stage_io_dict["out"]["output_pdb_path"],
-               '--non_interactive',
-               'altloc', '--select', ','.join(self.altlocs)]
+                    '-i', self.stage_io_dict["in"]["input_pdb_path"],
+                    '-o', self.stage_io_dict["out"]["output_pdb_path"],
+                    '--force_save',
+                    '--non_interactive',
+                    'altloc', '--select']
+
+        if self.altlocs:
+            self.cmd.append(','.join(self.altlocs))
+        else:
+            self.cmd.append('occupancy')
 
         if self.modeller_key:
             self.cmd.insert(1, self.modeller_key)
@@ -98,8 +105,8 @@ def fix_altlocs(input_pdb_path: str, output_pdb_path: str, properties: dict = No
     """Create :class:`FixAltLocs <model.fix_altlocs.FixAltLocs>` class and
     execute the :meth:`launch() <model.fix_altlocs.FixAltLocs.launch>` method."""
     return FixAltLocs(input_pdb_path=input_pdb_path,
-                     output_pdb_path=output_pdb_path,
-                     properties=properties, **kwargs).launch()
+                      output_pdb_path=output_pdb_path,
+                      properties=properties, **kwargs).launch()
 
 
 def main():
@@ -118,8 +125,8 @@ def main():
 
     # Specific call of each building block
     fix_altlocs(input_pdb_path=args.input_pdb_path,
-               output_pdb_path=args.output_pdb_path,
-               properties=properties)
+                output_pdb_path=args.output_pdb_path,
+                properties=properties)
 
 
 if __name__ == '__main__':
