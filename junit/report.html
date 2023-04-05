@@ -253,7 +253,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
 }
 </script>
     <h1>report.html</h1>
-    <p>Report generated on 05-Apr-2023 at 08:19:37 by <a href="https://pypi.python.org/pypi/pytest-html">pytest-html</a> v3.2.0</p>
+    <p>Report generated on 05-Apr-2023 at 08:20:48 by <a href="https://pypi.python.org/pypi/pytest-html">pytest-html</a> v3.2.0</p>
     <h2>Environment</h2>
     <table id="environment">
       <tr>
@@ -261,18 +261,18 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <td>true</td></tr>
       <tr>
         <td>Packages</td>
-        <td>{"pluggy": "1.0.0", "pytest": "7.2.0"}</td></tr>
+        <td>{"pluggy": "1.0.0", "pytest": "7.2.2"}</td></tr>
       <tr>
         <td>Platform</td>
-        <td>Linux-5.4.0-139-generic-x86_64-with-debian-bullseye-sid</td></tr>
+        <td>Linux-5.4.0-139-generic-x86_64-with-glibc2.31</td></tr>
       <tr>
         <td>Plugins</td>
         <td>{"cov": "4.0.0", "html": "3.2.0", "metadata": "2.0.4"}</td></tr>
       <tr>
         <td>Python</td>
-        <td>3.7.12</td></tr></table>
+        <td>3.9.16</td></tr></table>
     <h2>Summary</h2>
-    <p>8 tests ran in 29.25 seconds. </p>
+    <p>8 tests ran in 33.27 seconds. </p>
     <p class="filter" hidden="true">(Un)check the boxes to filter the results.</p><input checked="true" class="filter" data-test-result="passed" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="passed">8 passed</span>, <input checked="true" class="filter" data-test-result="skipped" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="skipped">0 skipped</span>, <input checked="true" class="filter" data-test-result="failed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="failed">0 failed</span>, <input checked="true" class="filter" data-test-result="error" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="error">0 errors</span>, <input checked="true" class="filter" data-test-result="xfailed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="xfailed">0 expected failures</span>, <input checked="true" class="filter" data-test-result="xpassed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="xpassed">0 unexpected passes</span>
     <h2>Results</h2>
     <table id="results-table">
@@ -288,48 +288,48 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">biobb_model/test/unitests/test_model/test_checking_log.py::TestCheckingLog::test_launch</td>
-          <td class="col-duration">17.38</td>
+          <td class="col-duration">18.77</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>2023-04-05 08:19:09,037 [MainThread  ] [INFO ]  Executing biobb_model.model.checking_log Version: 4.0.0
-2023-04-05 08:19:09,038 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_model/biobb_model/biobb_model/test/data/model/2ki5.pdb to /tmp/biobb/unitests_21/checking_log/f7af6017-1734-483c-b6d7-f719a0c6b0e5
-2023-04-05 08:19:09,038 [MainThread  ] [INFO ]  check_structure -i /tmp/biobb/unitests_21/checking_log/f7af6017-1734-483c-b6d7-f719a0c6b0e5/2ki5.pdb checkall &gt; /tmp/biobb/unitests_21/checking_log/f7af6017-1734-483c-b6d7-f719a0c6b0e5/output_log_path.log
+            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>2023-04-05 08:20:15,781 [MainThread  ] [INFO ]  Executing biobb_model.model.checking_log Version: 4.0.0
+2023-04-05 08:20:15,782 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_model/biobb_model/biobb_model/test/data/model/2ki5.pdb to /tmp/biobb/unitests_21/checking_log/62563302-cff6-44f2-b703-c92641690c8b
+2023-04-05 08:20:15,782 [MainThread  ] [INFO ]  check_structure -i /tmp/biobb/unitests_21/checking_log/62563302-cff6-44f2-b703-c92641690c8b/2ki5.pdb checkall &gt; /tmp/biobb/unitests_21/checking_log/62563302-cff6-44f2-b703-c92641690c8b/output_log_path.log
 
-2023-04-05 08:19:26,404 [MainThread  ] [INFO ]  Exit code 0
+2023-04-05 08:20:34,534 [MainThread  ] [INFO ]  Exit code 0
 
-2023-04-05 08:19:26,406 [MainThread  ] [INFO ]  Removed: [&#x27;/tmp/biobb/unitests_21/checking_log/f7af6017-1734-483c-b6d7-f719a0c6b0e5&#x27;]
+2023-04-05 08:20:34,535 [MainThread  ] [INFO ]  Removed: [&#x27;/tmp/biobb/unitests_21/checking_log/62563302-cff6-44f2-b703-c92641690c8b&#x27;]
 Checking if empty file: /tmp/biobb/unitests_21/checking_log/output_log_path.log
 <br/> -------------------------------Captured log call-------------------------------- <br/>INFO     /tmp/biobb/unitests_21/checking_log/checking_log_log.out:file_utils.py:346 Executing biobb_model.model.checking_log Version: 4.0.0
-INFO     /tmp/biobb/unitests_21/checking_log/checking_log_log.out:file_utils.py:346 Copy: /home/user/actions-runner/_work/biobb_model/biobb_model/biobb_model/test/data/model/2ki5.pdb to /tmp/biobb/unitests_21/checking_log/f7af6017-1734-483c-b6d7-f719a0c6b0e5
-INFO     /tmp/biobb/unitests_21/checking_log/checking_log_log.out:cmd_wrapper.py:32 check_structure -i /tmp/biobb/unitests_21/checking_log/f7af6017-1734-483c-b6d7-f719a0c6b0e5/2ki5.pdb checkall &gt; /tmp/biobb/unitests_21/checking_log/f7af6017-1734-483c-b6d7-f719a0c6b0e5/output_log_path.log
+INFO     /tmp/biobb/unitests_21/checking_log/checking_log_log.out:file_utils.py:346 Copy: /home/user/actions-runner/_work/biobb_model/biobb_model/biobb_model/test/data/model/2ki5.pdb to /tmp/biobb/unitests_21/checking_log/62563302-cff6-44f2-b703-c92641690c8b
+INFO     /tmp/biobb/unitests_21/checking_log/checking_log_log.out:cmd_wrapper.py:32 check_structure -i /tmp/biobb/unitests_21/checking_log/62563302-cff6-44f2-b703-c92641690c8b/2ki5.pdb checkall &gt; /tmp/biobb/unitests_21/checking_log/62563302-cff6-44f2-b703-c92641690c8b/output_log_path.log
 
 INFO     /tmp/biobb/unitests_21/checking_log/checking_log_log.out:cmd_wrapper.py:49 Exit code 0
 
-INFO     /tmp/biobb/unitests_21/checking_log/checking_log_log.out:file_utils.py:346 Removed: [&#x27;/tmp/biobb/unitests_21/checking_log/f7af6017-1734-483c-b6d7-f719a0c6b0e5&#x27;]<br/> ----------------------------Captured stdout teardown---------------------------- <br/>
+INFO     /tmp/biobb/unitests_21/checking_log/checking_log_log.out:file_utils.py:346 Removed: [&#x27;/tmp/biobb/unitests_21/checking_log/62563302-cff6-44f2-b703-c92641690c8b&#x27;]<br/> ----------------------------Captured stdout teardown---------------------------- <br/>
 Removing: /tmp/biobb/unitests_21
 <br/></div></td></tr></tbody>
       <tbody class="passed results-table-row">
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">biobb_model/test/unitests/test_model/test_fix_altlocs.py::TestFixAltlocs::test_launch</td>
-          <td class="col-duration">1.12</td>
+          <td class="col-duration">1.27</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>2023-04-05 08:19:26,441 [MainThread  ] [INFO ]  Executing biobb_model.model.fix_altlocs Version: 4.0.0
-2023-04-05 08:19:26,442 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_model/biobb_model/biobb_model/test/data/model/3ebp.pdb to /tmp/biobb/unitests_21/fix_altlocs/83f0d459-5772-4e11-bb6f-6a2c7a08087c
-2023-04-05 08:19:26,442 [MainThread  ] [INFO ]  check_structure -i /tmp/biobb/unitests_21/fix_altlocs/83f0d459-5772-4e11-bb6f-6a2c7a08087c/3ebp.pdb -o /tmp/biobb/unitests_21/fix_altlocs/83f0d459-5772-4e11-bb6f-6a2c7a08087c/output_pdb_path.pdb --force_save --non_interactive altloc --select A339:A,A171:B,A768:A
+            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>2023-04-05 08:20:34,579 [MainThread  ] [INFO ]  Executing biobb_model.model.fix_altlocs Version: 4.0.0
+2023-04-05 08:20:34,580 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_model/biobb_model/biobb_model/test/data/model/3ebp.pdb to /tmp/biobb/unitests_21/fix_altlocs/601f10f2-d04b-46e0-961b-fd5141d9d7f7
+2023-04-05 08:20:34,580 [MainThread  ] [INFO ]  check_structure -i /tmp/biobb/unitests_21/fix_altlocs/601f10f2-d04b-46e0-961b-fd5141d9d7f7/3ebp.pdb -o /tmp/biobb/unitests_21/fix_altlocs/601f10f2-d04b-46e0-961b-fd5141d9d7f7/output_pdb_path.pdb --force_save --non_interactive altloc --select A339:A,A171:B,A768:A
 
-2023-04-05 08:19:27,223 [MainThread  ] [INFO ]  Exit code 0
+2023-04-05 08:20:35,447 [MainThread  ] [INFO ]  Exit code 0
 
-2023-04-05 08:19:27,223 [MainThread  ] [INFO ]  ================================================================================
+2023-04-05 08:20:35,447 [MainThread  ] [INFO ]  ================================================================================
 =                   BioBB structure checking utility v3.12.1                   =
 =            P. Andrio, A. Hospital, G. Bayarri, J.L. Gelpi 2018-23            =
 ================================================================================
 
 Warning: sequence features only available in mmCIF format or with external fasta input
-Structure /tmp/biobb/unitests_21/fix_altlocs/83f0d459-5772-4e11-bb6f-6a2c7a08087c/3ebp.pdb loaded
+Structure /tmp/biobb/unitests_21/fix_altlocs/601f10f2-d04b-46e0-961b-fd5141d9d7f7/3ebp.pdb loaded
  PDB id: 3EBP
  Title: glycogen phosphorylase b/flavopiridol complex
  Experimental method: x-ray diffraction
@@ -378,9 +378,9 @@ Modified residues found
 LLP A680
 Small mol ligands found
 CPB A940
-Structure saved on /tmp/biobb/unitests_21/fix_altlocs/83f0d459-5772-4e11-bb6f-6a2c7a08087c/output_pdb_path.pdb
+Structure saved on /tmp/biobb/unitests_21/fix_altlocs/601f10f2-d04b-46e0-961b-fd5141d9d7f7/output_pdb_path.pdb
 
-2023-04-05 08:19:27,225 [MainThread  ] [INFO ]  Removed: [&#x27;/tmp/biobb/unitests_21/fix_altlocs/83f0d459-5772-4e11-bb6f-6a2c7a08087c&#x27;]
+2023-04-05 08:20:35,449 [MainThread  ] [INFO ]  Removed: [&#x27;/tmp/biobb/unitests_21/fix_altlocs/601f10f2-d04b-46e0-961b-fd5141d9d7f7&#x27;]
 Checking if empty file: /tmp/biobb/unitests_21/fix_altlocs/output_pdb_path.pdb
 Checking RMSD between:
      PDB_A: /tmp/biobb/unitests_21/fix_altlocs/output_pdb_path.pdb
@@ -392,8 +392,8 @@ Checking RMSD between:
      RMS: 1.1642947971185766e-14
      RMS_CUTOFF: 1
 <br/> -------------------------------Captured log call-------------------------------- <br/>INFO     /tmp/biobb/unitests_21/fix_altlocs/fix_altlocs_log.out:file_utils.py:346 Executing biobb_model.model.fix_altlocs Version: 4.0.0
-INFO     /tmp/biobb/unitests_21/fix_altlocs/fix_altlocs_log.out:file_utils.py:346 Copy: /home/user/actions-runner/_work/biobb_model/biobb_model/biobb_model/test/data/model/3ebp.pdb to /tmp/biobb/unitests_21/fix_altlocs/83f0d459-5772-4e11-bb6f-6a2c7a08087c
-INFO     /tmp/biobb/unitests_21/fix_altlocs/fix_altlocs_log.out:cmd_wrapper.py:32 check_structure -i /tmp/biobb/unitests_21/fix_altlocs/83f0d459-5772-4e11-bb6f-6a2c7a08087c/3ebp.pdb -o /tmp/biobb/unitests_21/fix_altlocs/83f0d459-5772-4e11-bb6f-6a2c7a08087c/output_pdb_path.pdb --force_save --non_interactive altloc --select A339:A,A171:B,A768:A
+INFO     /tmp/biobb/unitests_21/fix_altlocs/fix_altlocs_log.out:file_utils.py:346 Copy: /home/user/actions-runner/_work/biobb_model/biobb_model/biobb_model/test/data/model/3ebp.pdb to /tmp/biobb/unitests_21/fix_altlocs/601f10f2-d04b-46e0-961b-fd5141d9d7f7
+INFO     /tmp/biobb/unitests_21/fix_altlocs/fix_altlocs_log.out:cmd_wrapper.py:32 check_structure -i /tmp/biobb/unitests_21/fix_altlocs/601f10f2-d04b-46e0-961b-fd5141d9d7f7/3ebp.pdb -o /tmp/biobb/unitests_21/fix_altlocs/601f10f2-d04b-46e0-961b-fd5141d9d7f7/output_pdb_path.pdb --force_save --non_interactive altloc --select A339:A,A171:B,A768:A
 
 INFO     /tmp/biobb/unitests_21/fix_altlocs/fix_altlocs_log.out:cmd_wrapper.py:49 Exit code 0
 
@@ -403,7 +403,7 @@ INFO     /tmp/biobb/unitests_21/fix_altlocs/fix_altlocs_log.out:cmd_wrapper.py:5
 ================================================================================
 
 Warning: sequence features only available in mmCIF format or with external fasta input
-Structure /tmp/biobb/unitests_21/fix_altlocs/83f0d459-5772-4e11-bb6f-6a2c7a08087c/3ebp.pdb loaded
+Structure /tmp/biobb/unitests_21/fix_altlocs/601f10f2-d04b-46e0-961b-fd5141d9d7f7/3ebp.pdb loaded
  PDB id: 3EBP
  Title: glycogen phosphorylase b/flavopiridol complex
  Experimental method: x-ray diffraction
@@ -452,32 +452,32 @@ Modified residues found
 LLP A680
 Small mol ligands found
 CPB A940
-Structure saved on /tmp/biobb/unitests_21/fix_altlocs/83f0d459-5772-4e11-bb6f-6a2c7a08087c/output_pdb_path.pdb
+Structure saved on /tmp/biobb/unitests_21/fix_altlocs/601f10f2-d04b-46e0-961b-fd5141d9d7f7/output_pdb_path.pdb
 
-INFO     /tmp/biobb/unitests_21/fix_altlocs/fix_altlocs_log.out:file_utils.py:346 Removed: [&#x27;/tmp/biobb/unitests_21/fix_altlocs/83f0d459-5772-4e11-bb6f-6a2c7a08087c&#x27;]<br/> ----------------------------Captured stdout teardown---------------------------- <br/>
+INFO     /tmp/biobb/unitests_21/fix_altlocs/fix_altlocs_log.out:file_utils.py:346 Removed: [&#x27;/tmp/biobb/unitests_21/fix_altlocs/601f10f2-d04b-46e0-961b-fd5141d9d7f7&#x27;]<br/> ----------------------------Captured stdout teardown---------------------------- <br/>
 Removing: /tmp/biobb/unitests_21
 <br/></div></td></tr></tbody>
       <tbody class="passed results-table-row">
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">biobb_model/test/unitests/test_model/test_fix_amides.py::TestFixAmides::test_launch</td>
-          <td class="col-duration">1.71</td>
+          <td class="col-duration">2.03</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>2023-04-05 08:19:27,567 [MainThread  ] [INFO ]  Executing biobb_model.model.fix_amides Version: 4.0.0
-2023-04-05 08:19:27,568 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_model/biobb_model/biobb_model/test/data/model/5s2z.pdb to /tmp/biobb/unitests_21/fix_amides/df8a5e3d-8f9f-48c9-8953-1b952a085323
-2023-04-05 08:19:27,568 [MainThread  ] [INFO ]  check_structure -i /tmp/biobb/unitests_21/fix_amides/df8a5e3d-8f9f-48c9-8953-1b952a085323/5s2z.pdb -o /tmp/biobb/unitests_21/fix_amides/df8a5e3d-8f9f-48c9-8953-1b952a085323/output_pdb_path.pdb --force_save amide --fix All
+            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>2023-04-05 08:20:35,857 [MainThread  ] [INFO ]  Executing biobb_model.model.fix_amides Version: 4.0.0
+2023-04-05 08:20:35,858 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_model/biobb_model/biobb_model/test/data/model/5s2z.pdb to /tmp/biobb/unitests_21/fix_amides/f1ce7077-36ac-49c8-b753-b32dc5916a57
+2023-04-05 08:20:35,858 [MainThread  ] [INFO ]  check_structure -i /tmp/biobb/unitests_21/fix_amides/f1ce7077-36ac-49c8-b753-b32dc5916a57/5s2z.pdb -o /tmp/biobb/unitests_21/fix_amides/f1ce7077-36ac-49c8-b753-b32dc5916a57/output_pdb_path.pdb --force_save amide --fix All
 
-2023-04-05 08:19:29,128 [MainThread  ] [INFO ]  Exit code 0
+2023-04-05 08:20:37,699 [MainThread  ] [INFO ]  Exit code 0
 
-2023-04-05 08:19:29,129 [MainThread  ] [INFO ]  ================================================================================
+2023-04-05 08:20:37,700 [MainThread  ] [INFO ]  ================================================================================
 =                   BioBB structure checking utility v3.12.1                   =
 =            P. Andrio, A. Hospital, G. Bayarri, J.L. Gelpi 2018-23            =
 ================================================================================
 
 Warning: sequence features only available in mmCIF format or with external fasta input
-Structure /tmp/biobb/unitests_21/fix_amides/df8a5e3d-8f9f-48c9-8953-1b952a085323/5s2z.pdb loaded
+Structure /tmp/biobb/unitests_21/fix_amides/f1ce7077-36ac-49c8-b753-b32dc5916a57/5s2z.pdb loaded
  PDB id: 5S2Z
  Title: pandda analysis group deposition -- crystal structure of sars-cov-2 nsp3 macrodomain in complex with z126932614
  Experimental method: x-ray diffraction
@@ -513,9 +513,9 @@ Final Num. water mol.:  457
 Final Num. atoms:  2998
 Modified residues found
 T6J A401
-Structure saved on /tmp/biobb/unitests_21/fix_amides/df8a5e3d-8f9f-48c9-8953-1b952a085323/output_pdb_path.pdb
+Structure saved on /tmp/biobb/unitests_21/fix_amides/f1ce7077-36ac-49c8-b753-b32dc5916a57/output_pdb_path.pdb
 
-2023-04-05 08:19:29,130 [MainThread  ] [INFO ]  Removed: [&#x27;/tmp/biobb/unitests_21/fix_amides/df8a5e3d-8f9f-48c9-8953-1b952a085323&#x27;]
+2023-04-05 08:20:37,701 [MainThread  ] [INFO ]  Removed: [&#x27;/tmp/biobb/unitests_21/fix_amides/f1ce7077-36ac-49c8-b753-b32dc5916a57&#x27;]
 Checking if empty file: /tmp/biobb/unitests_21/fix_amides/output_pdb_path.pdb
 Checking RMSD between:
      PDB_A: /tmp/biobb/unitests_21/fix_amides/output_pdb_path.pdb
@@ -527,8 +527,8 @@ Checking RMSD between:
      RMS: 7.377128764301629e-15
      RMS_CUTOFF: 1
 <br/> -------------------------------Captured log call-------------------------------- <br/>INFO     /tmp/biobb/unitests_21/fix_amides/fix_amides_log.out:file_utils.py:346 Executing biobb_model.model.fix_amides Version: 4.0.0
-INFO     /tmp/biobb/unitests_21/fix_amides/fix_amides_log.out:file_utils.py:346 Copy: /home/user/actions-runner/_work/biobb_model/biobb_model/biobb_model/test/data/model/5s2z.pdb to /tmp/biobb/unitests_21/fix_amides/df8a5e3d-8f9f-48c9-8953-1b952a085323
-INFO     /tmp/biobb/unitests_21/fix_amides/fix_amides_log.out:cmd_wrapper.py:32 check_structure -i /tmp/biobb/unitests_21/fix_amides/df8a5e3d-8f9f-48c9-8953-1b952a085323/5s2z.pdb -o /tmp/biobb/unitests_21/fix_amides/df8a5e3d-8f9f-48c9-8953-1b952a085323/output_pdb_path.pdb --force_save amide --fix All
+INFO     /tmp/biobb/unitests_21/fix_amides/fix_amides_log.out:file_utils.py:346 Copy: /home/user/actions-runner/_work/biobb_model/biobb_model/biobb_model/test/data/model/5s2z.pdb to /tmp/biobb/unitests_21/fix_amides/f1ce7077-36ac-49c8-b753-b32dc5916a57
+INFO     /tmp/biobb/unitests_21/fix_amides/fix_amides_log.out:cmd_wrapper.py:32 check_structure -i /tmp/biobb/unitests_21/fix_amides/f1ce7077-36ac-49c8-b753-b32dc5916a57/5s2z.pdb -o /tmp/biobb/unitests_21/fix_amides/f1ce7077-36ac-49c8-b753-b32dc5916a57/output_pdb_path.pdb --force_save amide --fix All
 
 INFO     /tmp/biobb/unitests_21/fix_amides/fix_amides_log.out:cmd_wrapper.py:49 Exit code 0
 
@@ -538,7 +538,7 @@ INFO     /tmp/biobb/unitests_21/fix_amides/fix_amides_log.out:cmd_wrapper.py:51 
 ================================================================================
 
 Warning: sequence features only available in mmCIF format or with external fasta input
-Structure /tmp/biobb/unitests_21/fix_amides/df8a5e3d-8f9f-48c9-8953-1b952a085323/5s2z.pdb loaded
+Structure /tmp/biobb/unitests_21/fix_amides/f1ce7077-36ac-49c8-b753-b32dc5916a57/5s2z.pdb loaded
  PDB id: 5S2Z
  Title: pandda analysis group deposition -- crystal structure of sars-cov-2 nsp3 macrodomain in complex with z126932614
  Experimental method: x-ray diffraction
@@ -574,32 +574,32 @@ Final Num. water mol.:  457
 Final Num. atoms:  2998
 Modified residues found
 T6J A401
-Structure saved on /tmp/biobb/unitests_21/fix_amides/df8a5e3d-8f9f-48c9-8953-1b952a085323/output_pdb_path.pdb
+Structure saved on /tmp/biobb/unitests_21/fix_amides/f1ce7077-36ac-49c8-b753-b32dc5916a57/output_pdb_path.pdb
 
-INFO     /tmp/biobb/unitests_21/fix_amides/fix_amides_log.out:file_utils.py:346 Removed: [&#x27;/tmp/biobb/unitests_21/fix_amides/df8a5e3d-8f9f-48c9-8953-1b952a085323&#x27;]<br/> ----------------------------Captured stdout teardown---------------------------- <br/>
+INFO     /tmp/biobb/unitests_21/fix_amides/fix_amides_log.out:file_utils.py:346 Removed: [&#x27;/tmp/biobb/unitests_21/fix_amides/f1ce7077-36ac-49c8-b753-b32dc5916a57&#x27;]<br/> ----------------------------Captured stdout teardown---------------------------- <br/>
 Removing: /tmp/biobb/unitests_21
 <br/></div></td></tr></tbody>
       <tbody class="passed results-table-row">
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">biobb_model/test/unitests/test_model/test_fix_chirality.py::TestFixChirality::test_launch</td>
-          <td class="col-duration">1.39</td>
+          <td class="col-duration">1.56</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>2023-04-05 08:19:29,286 [MainThread  ] [INFO ]  Executing biobb_model.model.fix_chirality Version: 4.0.0
-2023-04-05 08:19:29,287 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_model/biobb_model/biobb_model/test/data/model/3e2y.pdb to /tmp/biobb/unitests_21/fix_chirality/a4d1644e-9355-47e2-b60f-87cb8646dafd
-2023-04-05 08:19:29,287 [MainThread  ] [INFO ]  check_structure -i /tmp/biobb/unitests_21/fix_chirality/a4d1644e-9355-47e2-b60f-87cb8646dafd/3e2y.pdb -o /tmp/biobb/unitests_21/fix_chirality/a4d1644e-9355-47e2-b60f-87cb8646dafd/output_pdb_path.pdb --force_save chiral --fix All
+            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>2023-04-05 08:20:37,893 [MainThread  ] [INFO ]  Executing biobb_model.model.fix_chirality Version: 4.0.0
+2023-04-05 08:20:37,894 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_model/biobb_model/biobb_model/test/data/model/3e2y.pdb to /tmp/biobb/unitests_21/fix_chirality/006ebbe3-bc90-4759-8787-b7c42f95c1e2
+2023-04-05 08:20:37,894 [MainThread  ] [INFO ]  check_structure -i /tmp/biobb/unitests_21/fix_chirality/006ebbe3-bc90-4759-8787-b7c42f95c1e2/3e2y.pdb -o /tmp/biobb/unitests_21/fix_chirality/006ebbe3-bc90-4759-8787-b7c42f95c1e2/output_pdb_path.pdb --force_save chiral --fix All
 
-2023-04-05 08:19:30,279 [MainThread  ] [INFO ]  Exit code 0
+2023-04-05 08:20:38,999 [MainThread  ] [INFO ]  Exit code 0
 
-2023-04-05 08:19:30,280 [MainThread  ] [INFO ]  ================================================================================
+2023-04-05 08:20:38,999 [MainThread  ] [INFO ]  ================================================================================
 =                   BioBB structure checking utility v3.12.1                   =
 =            P. Andrio, A. Hospital, G. Bayarri, J.L. Gelpi 2018-23            =
 ================================================================================
 
 Warning: sequence features only available in mmCIF format or with external fasta input
-Structure /tmp/biobb/unitests_21/fix_chirality/a4d1644e-9355-47e2-b60f-87cb8646dafd/3e2y.pdb loaded
+Structure /tmp/biobb/unitests_21/fix_chirality/006ebbe3-bc90-4759-8787-b7c42f95c1e2/3e2y.pdb loaded
  PDB id: 3E2Y
  Title: crystal structure of mouse kynurenine aminotransferase iii in complex with glutamine
  Experimental method: x-ray diffraction
@@ -658,9 +658,9 @@ GOL A459
 PMP B456
 GOL B458
 GOL B459
-Structure saved on /tmp/biobb/unitests_21/fix_chirality/a4d1644e-9355-47e2-b60f-87cb8646dafd/output_pdb_path.pdb
+Structure saved on /tmp/biobb/unitests_21/fix_chirality/006ebbe3-bc90-4759-8787-b7c42f95c1e2/output_pdb_path.pdb
 
-2023-04-05 08:19:30,281 [MainThread  ] [INFO ]  Removed: [&#x27;/tmp/biobb/unitests_21/fix_chirality/a4d1644e-9355-47e2-b60f-87cb8646dafd&#x27;]
+2023-04-05 08:20:39,001 [MainThread  ] [INFO ]  Removed: [&#x27;/tmp/biobb/unitests_21/fix_chirality/006ebbe3-bc90-4759-8787-b7c42f95c1e2&#x27;]
 Checking if empty file: /tmp/biobb/unitests_21/fix_chirality/output_pdb_path.pdb
 Checking RMSD between:
      PDB_A: /tmp/biobb/unitests_21/fix_chirality/output_pdb_path.pdb
@@ -672,8 +672,8 @@ Checking RMSD between:
      RMS: 9.522437071777905e-15
      RMS_CUTOFF: 1
 <br/> -------------------------------Captured log call-------------------------------- <br/>INFO     /tmp/biobb/unitests_21/fix_chirality/fix_chirality_log.out:file_utils.py:346 Executing biobb_model.model.fix_chirality Version: 4.0.0
-INFO     /tmp/biobb/unitests_21/fix_chirality/fix_chirality_log.out:file_utils.py:346 Copy: /home/user/actions-runner/_work/biobb_model/biobb_model/biobb_model/test/data/model/3e2y.pdb to /tmp/biobb/unitests_21/fix_chirality/a4d1644e-9355-47e2-b60f-87cb8646dafd
-INFO     /tmp/biobb/unitests_21/fix_chirality/fix_chirality_log.out:cmd_wrapper.py:32 check_structure -i /tmp/biobb/unitests_21/fix_chirality/a4d1644e-9355-47e2-b60f-87cb8646dafd/3e2y.pdb -o /tmp/biobb/unitests_21/fix_chirality/a4d1644e-9355-47e2-b60f-87cb8646dafd/output_pdb_path.pdb --force_save chiral --fix All
+INFO     /tmp/biobb/unitests_21/fix_chirality/fix_chirality_log.out:file_utils.py:346 Copy: /home/user/actions-runner/_work/biobb_model/biobb_model/biobb_model/test/data/model/3e2y.pdb to /tmp/biobb/unitests_21/fix_chirality/006ebbe3-bc90-4759-8787-b7c42f95c1e2
+INFO     /tmp/biobb/unitests_21/fix_chirality/fix_chirality_log.out:cmd_wrapper.py:32 check_structure -i /tmp/biobb/unitests_21/fix_chirality/006ebbe3-bc90-4759-8787-b7c42f95c1e2/3e2y.pdb -o /tmp/biobb/unitests_21/fix_chirality/006ebbe3-bc90-4759-8787-b7c42f95c1e2/output_pdb_path.pdb --force_save chiral --fix All
 
 INFO     /tmp/biobb/unitests_21/fix_chirality/fix_chirality_log.out:cmd_wrapper.py:49 Exit code 0
 
@@ -683,7 +683,7 @@ INFO     /tmp/biobb/unitests_21/fix_chirality/fix_chirality_log.out:cmd_wrapper.
 ================================================================================
 
 Warning: sequence features only available in mmCIF format or with external fasta input
-Structure /tmp/biobb/unitests_21/fix_chirality/a4d1644e-9355-47e2-b60f-87cb8646dafd/3e2y.pdb loaded
+Structure /tmp/biobb/unitests_21/fix_chirality/006ebbe3-bc90-4759-8787-b7c42f95c1e2/3e2y.pdb loaded
  PDB id: 3E2Y
  Title: crystal structure of mouse kynurenine aminotransferase iii in complex with glutamine
  Experimental method: x-ray diffraction
@@ -742,20 +742,20 @@ GOL A459
 PMP B456
 GOL B458
 GOL B459
-Structure saved on /tmp/biobb/unitests_21/fix_chirality/a4d1644e-9355-47e2-b60f-87cb8646dafd/output_pdb_path.pdb
+Structure saved on /tmp/biobb/unitests_21/fix_chirality/006ebbe3-bc90-4759-8787-b7c42f95c1e2/output_pdb_path.pdb
 
-INFO     /tmp/biobb/unitests_21/fix_chirality/fix_chirality_log.out:file_utils.py:346 Removed: [&#x27;/tmp/biobb/unitests_21/fix_chirality/a4d1644e-9355-47e2-b60f-87cb8646dafd&#x27;]<br/> ----------------------------Captured stdout teardown---------------------------- <br/>
+INFO     /tmp/biobb/unitests_21/fix_chirality/fix_chirality_log.out:file_utils.py:346 Removed: [&#x27;/tmp/biobb/unitests_21/fix_chirality/006ebbe3-bc90-4759-8787-b7c42f95c1e2&#x27;]<br/> ----------------------------Captured stdout teardown---------------------------- <br/>
 Removing: /tmp/biobb/unitests_21
 <br/></div></td></tr></tbody>
       <tbody class="passed results-table-row">
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">biobb_model/test/unitests/test_model/test_fix_pdb.py::TestFixPdb::test_launch</td>
-          <td class="col-duration">4.10</td>
+          <td class="col-duration">5.72</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>2023-04-05 08:19:30,680 [MainThread  ] [INFO ]  Executing biobb_model.model.fix_pdb Version: 4.0.0
+            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>2023-04-05 08:20:39,456 [MainThread  ] [INFO ]  Executing biobb_model.model.fix_pdb Version: 4.0.0
 126 VVIKVCEFQFCNDPFLGVYYHKNNKSWMESEFRVYSSANNCTFEYVSQPFLMDLEGKQGNFKNLREFVFKNIDGYFK-----IYSKH------TPINLVRDLPQGF-SALEPLVDLPIG----INIT------------------RFQTLLAL--------HRSYLT-PGDS------SSGWTAG------------------AAAYYVGYLQ------PRTFLLKYNENGTITDAVDCALDPLSETKCTLKSFTVEKGIYQTSNFRVQPTESIVRF-----PNITNLCPFGEVFNATRFASVYA------------WNRKR--------------------ISNCVADYSVL-YNSASFSTFKCYGV--------SPTKLNDLCFTNVYADSFVIRGDEVRQIAPGQTGKIADYNYKLPDDFTGCVIAWNSNNLDSKVGGNYNY---LYRLFRKSNLKPF
     ||.|       |....|..|......|.    |.|........||.......|.|......|.|    ......|..     .|..|      .|..|..|....| ..|.||. .|.|    |..|                  .|.....|        ..|.|| |||.      ...|..|                  .|....|..|      ....||....|.....||.........|...||..    |.. .|.| ....|....|     .||....||.......|. .|..            |..||                    ......|||.. |.......|.....        .|....|.       ......|....|..  ..||.......| .||.|      |.|.|  ||....|   ||......|.|.|
 166 VVLK-------NEMARGYHYEDYGDYWR----RDYETEGSPDLEYSRDQLIKDVERIFAEIKPL----YEQLHAYVRTKLMDTYPFHISPTGCLPAHLLGDMWGRFWTNLYPLT-VPFGQKPNIDVTDAMLNQNWDAKRIFKEAEKFFVSIGLPNMTEGFWNNSMLTDPGDGRKVVCHPTAWDLGKGDFRIKMCTKVTMEDFLTAHHEMGHIQYDMAYASQPYLLRNGANEGFHEAVGEVMSLSVATPKHLKTM----GLL-SSDF-LEDNETEINFLFKQALNIVGTLPFTYMLEKWRW-MVFKGEIPKEEWMKKWWEMKRKIVGVVEPVPHDETYCDPASLFHVANDYSFIRYYTRTIFEFQFHEALCRIAKHDGPLHKCDI-------SNSTDAGEKLHQML--SVGKSQPWTSVL-KDFVG------SKNMD--VGPLLRYFEPLYTWLTEQNRKSF
@@ -786,7 +786,7 @@ Reference summary:
    A -&gt; Q9BYF1
    B -&gt; P0DTC2
 Fixed :)
-2023-04-05 08:19:34,767 [MainThread  ] [INFO ]  Removed: []
+2023-04-05 08:20:45,163 [MainThread  ] [INFO ]  Removed: []
 Checking if empty file: /tmp/biobb/unitests_21/fix_pdb/output_fixpdb.pdb
 Comparing: 
         File_A: /tmp/biobb/unitests_21/fix_pdb/output_fixpdb.pdb
@@ -801,23 +801,23 @@ Removing: /tmp/biobb/unitests_21
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">biobb_model/test/unitests/test_model/test_fix_side_chain.py::TestFixSideChain::test_launch</td>
-          <td class="col-duration">1.29</td>
+          <td class="col-duration">1.43</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>2023-04-05 08:19:34,788 [MainThread  ] [INFO ]  Executing biobb_model.model.fix_side_chain Version: 4.0.0
-2023-04-05 08:19:34,789 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_model/biobb_model/biobb_model/test/data/model/2ki5.pdb to /tmp/biobb/unitests_21/fix_side_chain/81dd184a-7889-4755-829f-a1e28fdbd882
-2023-04-05 08:19:34,789 [MainThread  ] [INFO ]  check_structure -i /tmp/biobb/unitests_21/fix_side_chain/81dd184a-7889-4755-829f-a1e28fdbd882/2ki5.pdb -o /tmp/biobb/unitests_21/fix_side_chain/81dd184a-7889-4755-829f-a1e28fdbd882/output_pdb_path.pdb --force_save fixside --fix ALL
+            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>2023-04-05 08:20:45,186 [MainThread  ] [INFO ]  Executing biobb_model.model.fix_side_chain Version: 4.0.0
+2023-04-05 08:20:45,187 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_model/biobb_model/biobb_model/test/data/model/2ki5.pdb to /tmp/biobb/unitests_21/fix_side_chain/34d6dc76-aa20-4cd2-a4af-41f2c7f1f77f
+2023-04-05 08:20:45,187 [MainThread  ] [INFO ]  check_structure -i /tmp/biobb/unitests_21/fix_side_chain/34d6dc76-aa20-4cd2-a4af-41f2c7f1f77f/2ki5.pdb -o /tmp/biobb/unitests_21/fix_side_chain/34d6dc76-aa20-4cd2-a4af-41f2c7f1f77f/output_pdb_path.pdb --force_save fixside --fix ALL
 
-2023-04-05 08:19:35,790 [MainThread  ] [INFO ]  Exit code 0
+2023-04-05 08:20:46,281 [MainThread  ] [INFO ]  Exit code 0
 
-2023-04-05 08:19:35,790 [MainThread  ] [INFO ]  ================================================================================
+2023-04-05 08:20:46,281 [MainThread  ] [INFO ]  ================================================================================
 =                   BioBB structure checking utility v3.12.1                   =
 =            P. Andrio, A. Hospital, G. Bayarri, J.L. Gelpi 2018-23            =
 ================================================================================
 
 Warning: sequence features only available in mmCIF format or with external fasta input
-Structure /tmp/biobb/unitests_21/fix_side_chain/81dd184a-7889-4755-829f-a1e28fdbd882/2ki5.pdb loaded
+Structure /tmp/biobb/unitests_21/fix_side_chain/34d6dc76-aa20-4cd2-a4af-41f2c7f1f77f/2ki5.pdb loaded
  PDB id: 2KI5
  Title: herpes simplex type-1 thymidine kinase in complex with the drug aciclovir at 1.9a resolution
  Experimental method: x-ray diffraction
@@ -905,9 +905,9 @@ SO4 A4
 AC2 A1
 SO4 B3
 AC2 B2
-Structure saved on /tmp/biobb/unitests_21/fix_side_chain/81dd184a-7889-4755-829f-a1e28fdbd882/output_pdb_path.pdb
+Structure saved on /tmp/biobb/unitests_21/fix_side_chain/34d6dc76-aa20-4cd2-a4af-41f2c7f1f77f/output_pdb_path.pdb
 
-2023-04-05 08:19:35,792 [MainThread  ] [INFO ]  Removed: [&#x27;/tmp/biobb/unitests_21/fix_side_chain/81dd184a-7889-4755-829f-a1e28fdbd882&#x27;]
+2023-04-05 08:20:46,283 [MainThread  ] [INFO ]  Removed: [&#x27;/tmp/biobb/unitests_21/fix_side_chain/34d6dc76-aa20-4cd2-a4af-41f2c7f1f77f&#x27;]
 Checking if empty file: /tmp/biobb/unitests_21/fix_side_chain/output_pdb_path.pdb
 Checking RMSD between:
      PDB_A: /tmp/biobb/unitests_21/fix_side_chain/output_pdb_path.pdb
@@ -919,8 +919,8 @@ Checking RMSD between:
      RMS: 1.0828731092531486e-14
      RMS_CUTOFF: 1
 <br/> -------------------------------Captured log call-------------------------------- <br/>INFO     /tmp/biobb/unitests_21/fix_side_chain/fix_side_chain_log.out:file_utils.py:346 Executing biobb_model.model.fix_side_chain Version: 4.0.0
-INFO     /tmp/biobb/unitests_21/fix_side_chain/fix_side_chain_log.out:file_utils.py:346 Copy: /home/user/actions-runner/_work/biobb_model/biobb_model/biobb_model/test/data/model/2ki5.pdb to /tmp/biobb/unitests_21/fix_side_chain/81dd184a-7889-4755-829f-a1e28fdbd882
-INFO     /tmp/biobb/unitests_21/fix_side_chain/fix_side_chain_log.out:cmd_wrapper.py:32 check_structure -i /tmp/biobb/unitests_21/fix_side_chain/81dd184a-7889-4755-829f-a1e28fdbd882/2ki5.pdb -o /tmp/biobb/unitests_21/fix_side_chain/81dd184a-7889-4755-829f-a1e28fdbd882/output_pdb_path.pdb --force_save fixside --fix ALL
+INFO     /tmp/biobb/unitests_21/fix_side_chain/fix_side_chain_log.out:file_utils.py:346 Copy: /home/user/actions-runner/_work/biobb_model/biobb_model/biobb_model/test/data/model/2ki5.pdb to /tmp/biobb/unitests_21/fix_side_chain/34d6dc76-aa20-4cd2-a4af-41f2c7f1f77f
+INFO     /tmp/biobb/unitests_21/fix_side_chain/fix_side_chain_log.out:cmd_wrapper.py:32 check_structure -i /tmp/biobb/unitests_21/fix_side_chain/34d6dc76-aa20-4cd2-a4af-41f2c7f1f77f/2ki5.pdb -o /tmp/biobb/unitests_21/fix_side_chain/34d6dc76-aa20-4cd2-a4af-41f2c7f1f77f/output_pdb_path.pdb --force_save fixside --fix ALL
 
 INFO     /tmp/biobb/unitests_21/fix_side_chain/fix_side_chain_log.out:cmd_wrapper.py:49 Exit code 0
 
@@ -930,7 +930,7 @@ INFO     /tmp/biobb/unitests_21/fix_side_chain/fix_side_chain_log.out:cmd_wrappe
 ================================================================================
 
 Warning: sequence features only available in mmCIF format or with external fasta input
-Structure /tmp/biobb/unitests_21/fix_side_chain/81dd184a-7889-4755-829f-a1e28fdbd882/2ki5.pdb loaded
+Structure /tmp/biobb/unitests_21/fix_side_chain/34d6dc76-aa20-4cd2-a4af-41f2c7f1f77f/2ki5.pdb loaded
  PDB id: 2KI5
  Title: herpes simplex type-1 thymidine kinase in complex with the drug aciclovir at 1.9a resolution
  Experimental method: x-ray diffraction
@@ -1018,32 +1018,32 @@ SO4 A4
 AC2 A1
 SO4 B3
 AC2 B2
-Structure saved on /tmp/biobb/unitests_21/fix_side_chain/81dd184a-7889-4755-829f-a1e28fdbd882/output_pdb_path.pdb
+Structure saved on /tmp/biobb/unitests_21/fix_side_chain/34d6dc76-aa20-4cd2-a4af-41f2c7f1f77f/output_pdb_path.pdb
 
-INFO     /tmp/biobb/unitests_21/fix_side_chain/fix_side_chain_log.out:file_utils.py:346 Removed: [&#x27;/tmp/biobb/unitests_21/fix_side_chain/81dd184a-7889-4755-829f-a1e28fdbd882&#x27;]<br/> ----------------------------Captured stdout teardown---------------------------- <br/>
+INFO     /tmp/biobb/unitests_21/fix_side_chain/fix_side_chain_log.out:file_utils.py:346 Removed: [&#x27;/tmp/biobb/unitests_21/fix_side_chain/34d6dc76-aa20-4cd2-a4af-41f2c7f1f77f&#x27;]<br/> ----------------------------Captured stdout teardown---------------------------- <br/>
 Removing: /tmp/biobb/unitests_21
 <br/></div></td></tr></tbody>
       <tbody class="passed results-table-row">
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">biobb_model/test/unitests/test_model/test_fix_ssbonds.py::TestFixSSBonds::test_launch</td>
-          <td class="col-duration">0.48</td>
+          <td class="col-duration">0.56</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>2023-04-05 08:19:36,086 [MainThread  ] [INFO ]  Executing biobb_model.model.fix_ssbonds Version: 4.0.0
-2023-04-05 08:19:36,087 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_model/biobb_model/biobb_model/test/data/model/1aki.pdb to /tmp/biobb/unitests_21/fix_ssbonds/2437e408-0894-449a-96bc-58dd9254e1ac
-2023-04-05 08:19:36,087 [MainThread  ] [INFO ]  check_structure -i /tmp/biobb/unitests_21/fix_ssbonds/2437e408-0894-449a-96bc-58dd9254e1ac/1aki.pdb -o /tmp/biobb/unitests_21/fix_ssbonds/2437e408-0894-449a-96bc-58dd9254e1ac/output_pdb_path.pdb --force_save --non_interactive getss --mark All
+            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>2023-04-05 08:20:46,620 [MainThread  ] [INFO ]  Executing biobb_model.model.fix_ssbonds Version: 4.0.0
+2023-04-05 08:20:46,621 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_model/biobb_model/biobb_model/test/data/model/1aki.pdb to /tmp/biobb/unitests_21/fix_ssbonds/f81d22e7-ebf4-436a-b7f7-044bc2e036f6
+2023-04-05 08:20:46,621 [MainThread  ] [INFO ]  check_structure -i /tmp/biobb/unitests_21/fix_ssbonds/f81d22e7-ebf4-436a-b7f7-044bc2e036f6/1aki.pdb -o /tmp/biobb/unitests_21/fix_ssbonds/f81d22e7-ebf4-436a-b7f7-044bc2e036f6/output_pdb_path.pdb --force_save --non_interactive getss --mark All
 
-2023-04-05 08:19:36,513 [MainThread  ] [INFO ]  Exit code 0
+2023-04-05 08:20:47,097 [MainThread  ] [INFO ]  Exit code 0
 
-2023-04-05 08:19:36,513 [MainThread  ] [INFO ]  ================================================================================
+2023-04-05 08:20:47,098 [MainThread  ] [INFO ]  ================================================================================
 =                   BioBB structure checking utility v3.12.1                   =
 =            P. Andrio, A. Hospital, G. Bayarri, J.L. Gelpi 2018-23            =
 ================================================================================
 
 Warning: sequence features only available in mmCIF format or with external fasta input
-Structure /tmp/biobb/unitests_21/fix_ssbonds/2437e408-0894-449a-96bc-58dd9254e1ac/1aki.pdb loaded
+Structure /tmp/biobb/unitests_21/fix_ssbonds/f81d22e7-ebf4-436a-b7f7-044bc2e036f6/1aki.pdb loaded
  PDB id: 1AKI
  Title: the structure of the orthorhombic form of hen egg-white lysozyme at 1.5 angstroms resolution
  Experimental method: x-ray diffraction
@@ -1074,9 +1074,9 @@ Final Num. HETATM residues:  78
 Final Num. ligands or modified residues:  0
 Final Num. water mol.:  78
 Final Num. atoms:  1079
-Structure saved on /tmp/biobb/unitests_21/fix_ssbonds/2437e408-0894-449a-96bc-58dd9254e1ac/output_pdb_path.pdb
+Structure saved on /tmp/biobb/unitests_21/fix_ssbonds/f81d22e7-ebf4-436a-b7f7-044bc2e036f6/output_pdb_path.pdb
 
-2023-04-05 08:19:36,514 [MainThread  ] [INFO ]  Removed: [&#x27;/tmp/biobb/unitests_21/fix_ssbonds/2437e408-0894-449a-96bc-58dd9254e1ac&#x27;]
+2023-04-05 08:20:47,099 [MainThread  ] [INFO ]  Removed: [&#x27;/tmp/biobb/unitests_21/fix_ssbonds/f81d22e7-ebf4-436a-b7f7-044bc2e036f6&#x27;]
 Checking if empty file: /tmp/biobb/unitests_21/fix_ssbonds/output_pdb_path.pdb
 Checking RMSD between:
      PDB_A: /tmp/biobb/unitests_21/fix_ssbonds/output_pdb_path.pdb
@@ -1088,8 +1088,8 @@ Checking RMSD between:
      RMS: 1.2715203725969384e-14
      RMS_CUTOFF: 1
 <br/> -------------------------------Captured log call-------------------------------- <br/>INFO     /tmp/biobb/unitests_21/fix_ssbonds/fix_ssbonds_log.out:file_utils.py:346 Executing biobb_model.model.fix_ssbonds Version: 4.0.0
-INFO     /tmp/biobb/unitests_21/fix_ssbonds/fix_ssbonds_log.out:file_utils.py:346 Copy: /home/user/actions-runner/_work/biobb_model/biobb_model/biobb_model/test/data/model/1aki.pdb to /tmp/biobb/unitests_21/fix_ssbonds/2437e408-0894-449a-96bc-58dd9254e1ac
-INFO     /tmp/biobb/unitests_21/fix_ssbonds/fix_ssbonds_log.out:cmd_wrapper.py:32 check_structure -i /tmp/biobb/unitests_21/fix_ssbonds/2437e408-0894-449a-96bc-58dd9254e1ac/1aki.pdb -o /tmp/biobb/unitests_21/fix_ssbonds/2437e408-0894-449a-96bc-58dd9254e1ac/output_pdb_path.pdb --force_save --non_interactive getss --mark All
+INFO     /tmp/biobb/unitests_21/fix_ssbonds/fix_ssbonds_log.out:file_utils.py:346 Copy: /home/user/actions-runner/_work/biobb_model/biobb_model/biobb_model/test/data/model/1aki.pdb to /tmp/biobb/unitests_21/fix_ssbonds/f81d22e7-ebf4-436a-b7f7-044bc2e036f6
+INFO     /tmp/biobb/unitests_21/fix_ssbonds/fix_ssbonds_log.out:cmd_wrapper.py:32 check_structure -i /tmp/biobb/unitests_21/fix_ssbonds/f81d22e7-ebf4-436a-b7f7-044bc2e036f6/1aki.pdb -o /tmp/biobb/unitests_21/fix_ssbonds/f81d22e7-ebf4-436a-b7f7-044bc2e036f6/output_pdb_path.pdb --force_save --non_interactive getss --mark All
 
 INFO     /tmp/biobb/unitests_21/fix_ssbonds/fix_ssbonds_log.out:cmd_wrapper.py:49 Exit code 0
 
@@ -1099,7 +1099,7 @@ INFO     /tmp/biobb/unitests_21/fix_ssbonds/fix_ssbonds_log.out:cmd_wrapper.py:5
 ================================================================================
 
 Warning: sequence features only available in mmCIF format or with external fasta input
-Structure /tmp/biobb/unitests_21/fix_ssbonds/2437e408-0894-449a-96bc-58dd9254e1ac/1aki.pdb loaded
+Structure /tmp/biobb/unitests_21/fix_ssbonds/f81d22e7-ebf4-436a-b7f7-044bc2e036f6/1aki.pdb loaded
  PDB id: 1AKI
  Title: the structure of the orthorhombic form of hen egg-white lysozyme at 1.5 angstroms resolution
  Experimental method: x-ray diffraction
@@ -1130,32 +1130,32 @@ Final Num. HETATM residues:  78
 Final Num. ligands or modified residues:  0
 Final Num. water mol.:  78
 Final Num. atoms:  1079
-Structure saved on /tmp/biobb/unitests_21/fix_ssbonds/2437e408-0894-449a-96bc-58dd9254e1ac/output_pdb_path.pdb
+Structure saved on /tmp/biobb/unitests_21/fix_ssbonds/f81d22e7-ebf4-436a-b7f7-044bc2e036f6/output_pdb_path.pdb
 
-INFO     /tmp/biobb/unitests_21/fix_ssbonds/fix_ssbonds_log.out:file_utils.py:346 Removed: [&#x27;/tmp/biobb/unitests_21/fix_ssbonds/2437e408-0894-449a-96bc-58dd9254e1ac&#x27;]<br/> ----------------------------Captured stdout teardown---------------------------- <br/>
+INFO     /tmp/biobb/unitests_21/fix_ssbonds/fix_ssbonds_log.out:file_utils.py:346 Removed: [&#x27;/tmp/biobb/unitests_21/fix_ssbonds/f81d22e7-ebf4-436a-b7f7-044bc2e036f6&#x27;]<br/> ----------------------------Captured stdout teardown---------------------------- <br/>
 Removing: /tmp/biobb/unitests_21
 <br/></div></td></tr></tbody>
       <tbody class="passed results-table-row">
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">biobb_model/test/unitests/test_model/test_mutate.py::TestFixSideChain::test_launch</td>
-          <td class="col-duration">1.19</td>
+          <td class="col-duration">1.29</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>2023-04-05 08:19:36,578 [MainThread  ] [INFO ]  Executing biobb_model.model.mutate Version: 4.0.0
-2023-04-05 08:19:36,579 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_model/biobb_model/biobb_model/test/data/model/2ki5.pdb to /tmp/biobb/unitests_21/mutate/3865124e-df3a-4cea-a52b-c27b9984a121
-2023-04-05 08:19:36,579 [MainThread  ] [INFO ]  check_structure -i /tmp/biobb/unitests_21/mutate/3865124e-df3a-4cea-a52b-c27b9984a121/2ki5.pdb -o /tmp/biobb/unitests_21/mutate/3865124e-df3a-4cea-a52b-c27b9984a121/output_mutated_pdb_path.pdb --force_save --non_interactive mutateside --mut Leu49Ile,B:arg51Lys
+            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>2023-04-05 08:20:47,182 [MainThread  ] [INFO ]  Executing biobb_model.model.mutate Version: 4.0.0
+2023-04-05 08:20:47,183 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_model/biobb_model/biobb_model/test/data/model/2ki5.pdb to /tmp/biobb/unitests_21/mutate/88b02498-1a7e-4c4a-89b5-3d4a61c5e541
+2023-04-05 08:20:47,183 [MainThread  ] [INFO ]  check_structure -i /tmp/biobb/unitests_21/mutate/88b02498-1a7e-4c4a-89b5-3d4a61c5e541/2ki5.pdb -o /tmp/biobb/unitests_21/mutate/88b02498-1a7e-4c4a-89b5-3d4a61c5e541/output_mutated_pdb_path.pdb --force_save --non_interactive mutateside --mut Leu49Ile,B:arg51Lys
 
-2023-04-05 08:19:37,499 [MainThread  ] [INFO ]  Exit code 0
+2023-04-05 08:20:48,150 [MainThread  ] [INFO ]  Exit code 0
 
-2023-04-05 08:19:37,499 [MainThread  ] [INFO ]  ================================================================================
+2023-04-05 08:20:48,151 [MainThread  ] [INFO ]  ================================================================================
 =                   BioBB structure checking utility v3.12.1                   =
 =            P. Andrio, A. Hospital, G. Bayarri, J.L. Gelpi 2018-23            =
 ================================================================================
 
 Warning: sequence features only available in mmCIF format or with external fasta input
-Structure /tmp/biobb/unitests_21/mutate/3865124e-df3a-4cea-a52b-c27b9984a121/2ki5.pdb loaded
+Structure /tmp/biobb/unitests_21/mutate/88b02498-1a7e-4c4a-89b5-3d4a61c5e541/2ki5.pdb loaded
  PDB id: 2KI5
  Title: herpes simplex type-1 thymidine kinase in complex with the drug aciclovir at 1.9a resolution
  Experimental method: x-ray diffraction
@@ -1222,9 +1222,9 @@ SO4 A4
 AC2 A1
 SO4 B3
 AC2 B2
-Structure saved on /tmp/biobb/unitests_21/mutate/3865124e-df3a-4cea-a52b-c27b9984a121/output_mutated_pdb_path.pdb
+Structure saved on /tmp/biobb/unitests_21/mutate/88b02498-1a7e-4c4a-89b5-3d4a61c5e541/output_mutated_pdb_path.pdb
 
-2023-04-05 08:19:37,501 [MainThread  ] [INFO ]  Removed: [&#x27;/tmp/biobb/unitests_21/mutate/3865124e-df3a-4cea-a52b-c27b9984a121&#x27;]
+2023-04-05 08:20:48,152 [MainThread  ] [INFO ]  Removed: [&#x27;/tmp/biobb/unitests_21/mutate/88b02498-1a7e-4c4a-89b5-3d4a61c5e541&#x27;]
 Checking if empty file: /tmp/biobb/unitests_21/mutate/output_mutated_pdb_path.pdb
 Checking RMSD between:
      PDB_A: /tmp/biobb/unitests_21/mutate/output_mutated_pdb_path.pdb
@@ -1236,8 +1236,8 @@ Checking RMSD between:
      RMS: 2.119734121230155e-14
      RMS_CUTOFF: 1
 <br/> -------------------------------Captured log call-------------------------------- <br/>INFO     /tmp/biobb/unitests_21/mutate/mutate_log.out:file_utils.py:346 Executing biobb_model.model.mutate Version: 4.0.0
-INFO     /tmp/biobb/unitests_21/mutate/mutate_log.out:file_utils.py:346 Copy: /home/user/actions-runner/_work/biobb_model/biobb_model/biobb_model/test/data/model/2ki5.pdb to /tmp/biobb/unitests_21/mutate/3865124e-df3a-4cea-a52b-c27b9984a121
-INFO     /tmp/biobb/unitests_21/mutate/mutate_log.out:cmd_wrapper.py:32 check_structure -i /tmp/biobb/unitests_21/mutate/3865124e-df3a-4cea-a52b-c27b9984a121/2ki5.pdb -o /tmp/biobb/unitests_21/mutate/3865124e-df3a-4cea-a52b-c27b9984a121/output_mutated_pdb_path.pdb --force_save --non_interactive mutateside --mut Leu49Ile,B:arg51Lys
+INFO     /tmp/biobb/unitests_21/mutate/mutate_log.out:file_utils.py:346 Copy: /home/user/actions-runner/_work/biobb_model/biobb_model/biobb_model/test/data/model/2ki5.pdb to /tmp/biobb/unitests_21/mutate/88b02498-1a7e-4c4a-89b5-3d4a61c5e541
+INFO     /tmp/biobb/unitests_21/mutate/mutate_log.out:cmd_wrapper.py:32 check_structure -i /tmp/biobb/unitests_21/mutate/88b02498-1a7e-4c4a-89b5-3d4a61c5e541/2ki5.pdb -o /tmp/biobb/unitests_21/mutate/88b02498-1a7e-4c4a-89b5-3d4a61c5e541/output_mutated_pdb_path.pdb --force_save --non_interactive mutateside --mut Leu49Ile,B:arg51Lys
 
 INFO     /tmp/biobb/unitests_21/mutate/mutate_log.out:cmd_wrapper.py:49 Exit code 0
 
@@ -1247,7 +1247,7 @@ INFO     /tmp/biobb/unitests_21/mutate/mutate_log.out:cmd_wrapper.py:51 ========
 ================================================================================
 
 Warning: sequence features only available in mmCIF format or with external fasta input
-Structure /tmp/biobb/unitests_21/mutate/3865124e-df3a-4cea-a52b-c27b9984a121/2ki5.pdb loaded
+Structure /tmp/biobb/unitests_21/mutate/88b02498-1a7e-4c4a-89b5-3d4a61c5e541/2ki5.pdb loaded
  PDB id: 2KI5
  Title: herpes simplex type-1 thymidine kinase in complex with the drug aciclovir at 1.9a resolution
  Experimental method: x-ray diffraction
@@ -1314,8 +1314,8 @@ SO4 A4
 AC2 A1
 SO4 B3
 AC2 B2
-Structure saved on /tmp/biobb/unitests_21/mutate/3865124e-df3a-4cea-a52b-c27b9984a121/output_mutated_pdb_path.pdb
+Structure saved on /tmp/biobb/unitests_21/mutate/88b02498-1a7e-4c4a-89b5-3d4a61c5e541/output_mutated_pdb_path.pdb
 
-INFO     /tmp/biobb/unitests_21/mutate/mutate_log.out:file_utils.py:346 Removed: [&#x27;/tmp/biobb/unitests_21/mutate/3865124e-df3a-4cea-a52b-c27b9984a121&#x27;]<br/> ----------------------------Captured stdout teardown---------------------------- <br/>
+INFO     /tmp/biobb/unitests_21/mutate/mutate_log.out:file_utils.py:346 Removed: [&#x27;/tmp/biobb/unitests_21/mutate/88b02498-1a7e-4c4a-89b5-3d4a61c5e541&#x27;]<br/> ----------------------------Captured stdout teardown---------------------------- <br/>
 Removing: /tmp/biobb/unitests_21
 <br/></div></td></tr></tbody></table></body></html>
