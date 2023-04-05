@@ -1,9 +1,0 @@
-{
-  "properties": {
-    "restart": false,
-    "forced_uniprot_references": [
-      "P0DTC2",
-      "Q9BYF1"
-    ]
-  }
-}

@@ -1,5 +1,0 @@
-properties:
-  forced_uniprot_references:
-  - P0DTC2
-  - Q9BYF1
-  restart: false
