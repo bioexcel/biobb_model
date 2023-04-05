@@ -66,7 +66,8 @@ class CheckingLog(BiobbObject):
         """Execute the :class:`CheckingLog <model.checking_log.CheckingLog>` object."""
 
         # Setup Biobb
-        if self.check_restart(): return 0
+        if self.check_restart():
+            return 0
         self.stage_files()
 
         # Create command line
