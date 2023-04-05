@@ -95,6 +95,9 @@ jobs:
           # Producction one
           pytest biobb_model/test/unitests/ --cov=./ --cov-report=xml --ignore-glob=*container.py --ignore-glob=*docker.py --ignore-glob=*singularity.py --junit-xml=./reports/junit/junit.xml --html=./reports/junit/report.html
 
+          # Avoiding fix_backbone because of the modeller installation
+          pytest biobb_model/test/unitests/ --cov=./ --cov-report=xml --ignore-glob=*fix_backbone.py --ignore-glob=*container.py --ignore-glob=*docker.py --ignore-glob=*singularity.py --junit-xml=./reports/junit/junit.xml --html=./reports/junit/report.html
+
       - name: Generate Tests badge
         shell: bash -l {0}  # necessary for conda env to be active
         run: |
