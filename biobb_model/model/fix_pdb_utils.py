@@ -119,12 +119,7 @@ class Residue:
     def __eq__(self, other):
         if type(self) != type(other):
             return False
-        return (
-            self._chain_index == other._chain_index and
-            # self.name == other.name and
-            self.number == other.number and
-            self.icode == other.icode
-        )
+        return (self._chain_index == other._chain_index and self.number == other.number and self.icode == other.icode)
 
     def __hash__(self):
         # WARNING: This is susceptible to duplicated residues
