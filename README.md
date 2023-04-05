@@ -1,7 +1,7 @@
 [![](https://img.shields.io/github/v/tag/bioexcel/biobb_model?label=Version)](https://GitHub.com/bioexcel/biobb_model/tags/)
 [![](https://img.shields.io/pypi/v/biobb-model.svg?label=Pypi)](https://pypi.python.org/pypi/biobb-model/)
 [![](https://img.shields.io/conda/vn/bioconda/biobb_model?label=Conda)](https://anaconda.org/bioconda/biobb_model)
-[![](https://anaconda.org/bioconda/biobb_model/badges/downloads.svg)](https://anaconda.org/bioconda/biobb_model)
+[![](https://img.shields.io/conda/dn/bioconda/biobb_model?label=Conda%20downloads)](https://anaconda.org/bioconda/biobb_model)
 [![](https://img.shields.io/badge/Docker-Quay.io-blue)](https://quay.io/repository/biocontainers/biobb_model?tab=tags)
 [![](https://img.shields.io/badge/Singularity-GalaxyProject-blue)](https://depot.galaxyproject.org/singularity/biobb_model:4.0.0--pyhdfd78af_0)
 
