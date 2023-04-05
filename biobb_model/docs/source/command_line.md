@@ -466,7 +466,7 @@ Config input / output arguments for this building block:
 Syntax: input_parameter (datatype) - (default_value) Definition
 
 Config parameters for this building block:
-* **mutation_list** (*string*): (A:Val2Ala) Mutation list in the format "Chain:WT_AA_ThreeLeterCode Resnum MUT_AA_ThreeLeterCode" (no spaces between the elements) separated by commas. If no chain is provided as chain code all the chains in the pdb file will be mutated. ie: "A:ALA15CYS".
+* **mutation_list** (*string*): (None) Mutation list in the format "Chain:WT_AA_ThreeLeterCode Resnum MUT_AA_ThreeLeterCode" (no spaces between the elements) separated by commas. If no chain is provided as chain code all the chains in the pdb file will be mutated. ie: "A:ALA15CYS".
 * **use_modeller** (*boolean*): (False) Use Modeller suite to optimize the side chains..
 * **modeller_key** (*string*): (None) Modeller license key..
 * **binary_path** (*string*): (check_structure) Path to the check_structure executable binary..

@@ -84,7 +84,7 @@ class Mutate(BiobbObject):
                     '--force_save',
                     '--non_interactive',
                     'mutateside']
-        
+
         if self.mutation_list:
             self.cmd.append('--mut')
             self.cmd.append(self.mutation_list)

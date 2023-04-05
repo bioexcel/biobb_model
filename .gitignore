@@ -6,6 +6,12 @@ __pycache__
 #Python compiled
 *.pyc
 
+# Idea
+.idea/
+
+# pytest
+.pytest_cache/
+
 # C extensions
 #*.so
 
