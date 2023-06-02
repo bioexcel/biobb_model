@@ -1,5 +1,8 @@
 # Biobb Model changelog
 
+## What's new in version [4.0.1](https://github.com/bioexcel/biobb_model/releases/tag/v4.0.1)?
+In version 4.0.1 new biobb_structure_checking 3.13.0
+
 ## What's new in version [4.0.0](https://github.com/bioexcel/biobb_model/releases/tag/v4.0.0)?
 In version 4.0.0 new biobb_common 4.0.0
 
