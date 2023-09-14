@@ -1,5 +1,5 @@
 2     E265 block comment should start with '# '
-1     E302 expected 2 blank lines, found 1
+4     E721 do not compare types, for exact checks use `is` / `is not`, for instance checks use `isinstance()`
 3     F821 undefined name 'first_cap_only'
 1     W292 no newline at end of file
 2     W504 line break after binary operator

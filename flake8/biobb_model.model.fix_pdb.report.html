@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
    <head>
-      <title>flake8 violations: biobb_model/test/unitests/test_model/test_fix_backbone.py</title>
+      <title>flake8 violations: biobb_model/model/fix_pdb.py</title>
       <meta http-equiv="Content-Type" value="text/html; charset=UTF-8">
       <link rel="stylesheet" href="styles.css">
 <script>
@@ -37,31 +37,31 @@ window.addEventListener('DOMContentLoaded', function () {
       <div id="page">
          <p id="srclink">
             <a title="View full annotated source"
-               href="biobb_model.test.unitests.test_model.test_fix_backbone.source.html">
+               href="biobb_model.model.fix_pdb.source.html">
                <img src="file.svg" alt="&#x2261;">
             </a></p>
          <h1>
             <a href="index.html">
                <img src="back.svg" alt="&#x2B05;">
-               biobb_model/test/unitests/test_model/test_fix_backbone.py
+               biobb_model/model/fix_pdb.py
             </a>
          </h1>
 
          <ul id="index">
          
          <li>
-            <a data-code="E302">
+            <a data-code="E721">
                <span class="count sev-2">
                   1
                </span>
-               <strong>E302:</strong> expected 2 blank lines, found 1
+               <strong>E721:</strong> do not compare types, for exact checks use `is` / `is not`, for instance checks use `isinstance()`
                
             </a>
             <ul class="details">
             <li>
                
-               <a href="biobb_model.test.unitests.test_model.test_fix_backbone.source.html#l4">
-                  <tt><i>4</i> <span class="k">class</span> <span class="nc">TestFixBackbone</span><span class="p">:</span></tt>
+               <a href="biobb_model.model.fix_pdb.source.html#l53">
+                  <tt><i>53</i>         <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">forced_uniprot_references</span><span class="p">)</span> <span class="o">==</span> <span class="nb">str</span><span class="p">:</span></tt>
                </a>
             </li>
             </ul>

@@ -374,7 +374,16 @@
                class="code sev- "><tt><i>119</i>     <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span></tt>
             </div>
             <div id="l120"
-               class="code sev- "><tt><i>120</i>         <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">type</span><span class="p">(</span><span class="n">other</span><span class="p">):</span></tt>
+               class="code sev-2  le">
+               <ul class="violations">
+               
+                  <li>
+                     <span class="count sev-2">
+                        E721
+                     </span>
+                     Do not compare types, for exact checks use `is` / `is not`, for instance checks use `isinstance()`</li>
+               
+               </ul><tt><i>120</i>         <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">type</span><span class="p">(</span><span class="n">other</span><span class="p">):</span></tt>
             </div>
             <div id="l121"
                class="code sev- "><tt><i>121</i>             <span class="k">return</span> <span class="kc">False</span></tt>
@@ -764,7 +773,16 @@
                class="code sev- "><tt><i>243</i>         <span class="c1"># In case the chain is just a string we must find/create the corresponding chain</span></tt>
             </div>
             <div id="l244"
-               class="code sev- "><tt><i>244</i>         <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">new_chain</span><span class="p">)</span> <span class="o">==</span> <span class="nb">str</span><span class="p">:</span></tt>
+               class="code sev-2  le">
+               <ul class="violations">
+               
+                  <li>
+                     <span class="count sev-2">
+                        E721
+                     </span>
+                     Do not compare types, for exact checks use `is` / `is not`, for instance checks use `isinstance()`</li>
+               
+               </ul><tt><i>244</i>         <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">new_chain</span><span class="p">)</span> <span class="o">==</span> <span class="nb">str</span><span class="p">:</span></tt>
             </div>
             <div id="l245"
                class="code sev- "><tt><i>245</i>             <span class="n">letter</span> <span class="o">=</span> <span class="n">new_chain</span></tt>
@@ -2276,7 +2294,16 @@
                class="code sev- "><tt><i>741</i>         <span class="c1"># Check forced_references is not a string</span></tt>
             </div>
             <div id="l742"
-               class="code sev- "><tt><i>742</i>         <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">forced_references</span><span class="p">)</span> <span class="o">==</span> <span class="nb">str</span><span class="p">:</span></tt>
+               class="code sev-2  le">
+               <ul class="violations">
+               
+                  <li>
+                     <span class="count sev-2">
+                        E721
+                     </span>
+                     Do not compare types, for exact checks use `is` / `is not`, for instance checks use `isinstance()`</li>
+               
+               </ul><tt><i>742</i>         <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">forced_references</span><span class="p">)</span> <span class="o">==</span> <span class="nb">str</span><span class="p">:</span></tt>
             </div>
             <div id="l743"
                class="code sev- "><tt><i>743</i>             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Forced references should be a list and not a string a this point&#39;</span><span class="p">)</span></tt>
