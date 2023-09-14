@@ -329,7 +329,7 @@ Command:
 ```python
 fix_pdb -h
 ```
-    /bin/sh: /Users/pau/anaconda3/envs/dev/bin/fix_pdb: Permission denied
+    /bin/sh: /Users/pau/mambaforge/envs/dev38/bin/fix_pdb: Permission denied
 ### I / O Arguments
 Syntax: input_argument (datatype) : Definition
 
