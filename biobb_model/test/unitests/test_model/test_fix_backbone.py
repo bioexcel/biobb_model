@@ -1,6 +1,7 @@
 from biobb_common.tools import test_fixtures as fx
 from biobb_model.model.fix_backbone import fix_backbone
 
+
 class TestFixBackbone:
     def setup_class(self):
         fx.test_setup(self, 'fix_backbone')
