@@ -2,1303 +2,769 @@
 <html>
   <head>
     <meta charset="utf-8"/>
-    <title>report.html</title>
-    <link href="assets/style.css" rel="stylesheet" type="text/css"/></head>
-  <body onLoad="init()">
-    <script>/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this file,
- * You can obtain one at http://mozilla.org/MPL/2.0/. */
-
-
-function toArray(iter) {
-    if (iter === null) {
-        return null;
-    }
-    return Array.prototype.slice.call(iter);
-}
-
-function find(selector, elem) { // eslint-disable-line no-redeclare
-    if (!elem) {
-        elem = document;
-    }
-    return elem.querySelector(selector);
-}
-
-function findAll(selector, elem) {
-    if (!elem) {
-        elem = document;
-    }
-    return toArray(elem.querySelectorAll(selector));
-}
-
-function sortColumn(elem) {
-    toggleSortStates(elem);
-    const colIndex = toArray(elem.parentNode.childNodes).indexOf(elem);
-    let key;
-    if (elem.classList.contains('result')) {
-        key = keyResult;
-    } else if (elem.classList.contains('links')) {
-        key = keyLink;
-    } else {
-        key = keyAlpha;
-    }
-    sortTable(elem, key(colIndex));
-}
-
-function showAllExtras() { // eslint-disable-line no-unused-vars
-    findAll('.col-result').forEach(showExtras);
-}
-
-function hideAllExtras() { // eslint-disable-line no-unused-vars
-    findAll('.col-result').forEach(hideExtras);
-}
-
-function showExtras(colresultElem) {
-    const extras = colresultElem.parentNode.nextElementSibling;
-    const expandcollapse = colresultElem.firstElementChild;
-    extras.classList.remove('collapsed');
-    expandcollapse.classList.remove('expander');
-    expandcollapse.classList.add('collapser');
-}
-
-function hideExtras(colresultElem) {
-    const extras = colresultElem.parentNode.nextElementSibling;
-    const expandcollapse = colresultElem.firstElementChild;
-    extras.classList.add('collapsed');
-    expandcollapse.classList.remove('collapser');
-    expandcollapse.classList.add('expander');
-}
-
-function showFilters() {
-    let visibleString = getQueryParameter('visible') || 'all';
-    visibleString = visibleString.toLowerCase();
-    const checkedItems = visibleString.split(',');
-
-    const filterItems = document.getElementsByClassName('filter');
-    for (let i = 0; i < filterItems.length; i++) {
-        filterItems[i].hidden = false;
-
-        if (visibleString != 'all') {
-            filterItems[i].checked = checkedItems.includes(filterItems[i].getAttribute('data-test-result'));
-            filterTable(filterItems[i]);
-        }
-    }
-}
-
-function addCollapse() {
-    // Add links for show/hide all
-    const resulttable = find('table#results-table');
-    const showhideall = document.createElement('p');
-    showhideall.innerHTML = '<a href="javascript:showAllExtras()">Show all details</a> / ' +
-                            '<a href="javascript:hideAllExtras()">Hide all details</a>';
-    resulttable.parentElement.insertBefore(showhideall, resulttable);
-
-    // Add show/hide link to each result
-    findAll('.col-result').forEach(function(elem) {
-        const collapsed = getQueryParameter('collapsed') || 'Passed';
-        const extras = elem.parentNode.nextElementSibling;
-        const expandcollapse = document.createElement('span');
-        if (extras.classList.contains('collapsed')) {
-            expandcollapse.classList.add('expander');
-        } else if (collapsed.includes(elem.innerHTML)) {
-            extras.classList.add('collapsed');
-            expandcollapse.classList.add('expander');
-        } else {
-            expandcollapse.classList.add('collapser');
-        }
-        elem.appendChild(expandcollapse);
-
-        elem.addEventListener('click', function(event) {
-            if (event.currentTarget.parentNode.nextElementSibling.classList.contains('collapsed')) {
-                showExtras(event.currentTarget);
-            } else {
-                hideExtras(event.currentTarget);
-            }
-        });
-    });
-}
-
-function getQueryParameter(name) {
-    const match = RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
-    return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
-}
-
-function init () { // eslint-disable-line no-unused-vars
-    resetSortHeaders();
-
-    addCollapse();
-
-    showFilters();
-
-    sortColumn(find('.initial-sort'));
-
-    findAll('.sortable').forEach(function(elem) {
-        elem.addEventListener('click',
-            function() {
-                sortColumn(elem);
-            }, false);
-    });
-}
-
-function sortTable(clicked, keyFunc) {
-    const rows = findAll('.results-table-row');
-    const reversed = !clicked.classList.contains('asc');
-    const sortedRows = sort(rows, keyFunc, reversed);
-    /* Whole table is removed here because browsers acts much slower
-     * when appending existing elements.
-     */
-    const thead = document.getElementById('results-table-head');
-    document.getElementById('results-table').remove();
-    const parent = document.createElement('table');
-    parent.id = 'results-table';
-    parent.appendChild(thead);
-    sortedRows.forEach(function(elem) {
-        parent.appendChild(elem);
-    });
-    document.getElementsByTagName('BODY')[0].appendChild(parent);
-}
-
-function sort(items, keyFunc, reversed) {
-    const sortArray = items.map(function(item, i) {
-        return [keyFunc(item), i];
-    });
-
-    sortArray.sort(function(a, b) {
-        const keyA = a[0];
-        const keyB = b[0];
-
-        if (keyA == keyB) return 0;
-
-        if (reversed) {
-            return keyA < keyB ? 1 : -1;
-        } else {
-            return keyA > keyB ? 1 : -1;
-        }
-    });
-
-    return sortArray.map(function(item) {
-        const index = item[1];
-        return items[index];
-    });
-}
-
-function keyAlpha(colIndex) {
-    return function(elem) {
-        return elem.childNodes[1].childNodes[colIndex].firstChild.data.toLowerCase();
-    };
-}
-
-function keyLink(colIndex) {
-    return function(elem) {
-        const dataCell = elem.childNodes[1].childNodes[colIndex].firstChild;
-        return dataCell == null ? '' : dataCell.innerText.toLowerCase();
-    };
-}
-
-function keyResult(colIndex) {
-    return function(elem) {
-        const strings = ['Error', 'Failed', 'Rerun', 'XFailed', 'XPassed',
-            'Skipped', 'Passed'];
-        return strings.indexOf(elem.childNodes[1].childNodes[colIndex].firstChild.data);
-    };
-}
-
-function resetSortHeaders() {
-    findAll('.sort-icon').forEach(function(elem) {
-        elem.parentNode.removeChild(elem);
-    });
-    findAll('.sortable').forEach(function(elem) {
-        const icon = document.createElement('div');
-        icon.className = 'sort-icon';
-        icon.textContent = 'vvv';
-        elem.insertBefore(icon, elem.firstChild);
-        elem.classList.remove('desc', 'active');
-        elem.classList.add('asc', 'inactive');
-    });
-}
-
-function toggleSortStates(elem) {
-    //if active, toggle between asc and desc
-    if (elem.classList.contains('active')) {
-        elem.classList.toggle('asc');
-        elem.classList.toggle('desc');
-    }
-
-    //if inactive, reset all other functions and add ascending active
-    if (elem.classList.contains('inactive')) {
-        resetSortHeaders();
-        elem.classList.remove('inactive');
-        elem.classList.add('active');
-    }
-}
-
-function isAllRowsHidden(value) {
-    return value.hidden == false;
-}
-
-function filterTable(elem) { // eslint-disable-line no-unused-vars
-    const outcomeAtt = 'data-test-result';
-    const outcome = elem.getAttribute(outcomeAtt);
-    const classOutcome = outcome + ' results-table-row';
-    const outcomeRows = document.getElementsByClassName(classOutcome);
-
-    for(let i = 0; i < outcomeRows.length; i++){
-        outcomeRows[i].hidden = !elem.checked;
-    }
-
-    const rows = findAll('.results-table-row').filter(isAllRowsHidden);
-    const allRowsHidden = rows.length == 0 ? true : false;
-    const notFoundMessage = document.getElementById('not-found-message');
-    notFoundMessage.hidden = !allRowsHidden;
-}
-</script>
-    <h1>report.html</h1>
-    <p>Report generated on 15-Sep-2023 at 07:50:50 by <a href="https://pypi.python.org/pypi/pytest-html">pytest-html</a> v3.2.0</p>
-    <h2>Summary</h2>
-    <p>8 tests ran in 31.27 seconds. </p>
-    <p class="filter" hidden="true">(Un)check the boxes to filter the results.</p><input checked="true" class="filter" data-test-result="passed" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="passed">8 passed</span>, <input checked="true" class="filter" data-test-result="skipped" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="skipped">0 skipped</span>, <input checked="true" class="filter" data-test-result="failed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="failed">0 failed</span>, <input checked="true" class="filter" data-test-result="error" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="error">0 errors</span>, <input checked="true" class="filter" data-test-result="xfailed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="xfailed">0 expected failures</span>, <input checked="true" class="filter" data-test-result="xpassed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="xpassed">0 unexpected passes</span>
-    <h2>Results</h2>
+    <title id="head-title">report.html</title>
+      <link href="assets/style.css" rel="stylesheet" type="text/css"/>
+  </head>
+  <body>
+    <h1 id="title">report.html</h1>
+    <p>Report generated on 12-Mar-2024 at 15:18:34 by <a href="https://pypi.python.org/pypi/pytest-html">pytest-html</a>
+        v4.1.1</p>
+    <div id="environment-header">
+      <h2>Environment</h2>
+    </div>
+    <table id="environment"></table>
+    <!-- TEMPLATES -->
+      <template id="template_environment_row">
+      <tr>
+        <td></td>
+        <td></td>
+      </tr>
+    </template>
+    <template id="template_results-table__body--empty">
+      <tbody class="results-table-row">
+        <tr id="not-found-message">
+          <td colspan="4">No results found. Check the filters.</th>
+        </tr>
+    </template>
+    <template id="template_results-table__tbody">
+      <tbody class="results-table-row">
+        <tr class="collapsible">
+        </tr>
+        <tr class="extras-row">
+          <td class="extra" colspan="4">
+            <div class="extraHTML"></div>
+            <div class="media">
+              <div class="media-container">
+                  <div class="media-container__nav--left"><</div>
+                  <div class="media-container__viewport">
+                    <img src="" />
+                    <video controls>
+                      <source src="" type="video/mp4">
+                    </video>
+                  </div>
+                  <div class="media-container__nav--right">></div>
+                </div>
+                <div class="media__name"></div>
+                <div class="media__counter"></div>
+            </div>
+            <div class="logwrapper">
+              <div class="logexpander"></div>
+              <div class="log"></div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </template>
+    <!-- END TEMPLATES -->
+    <div class="summary">
+      <div class="summary__data">
+        <h2>Summary</h2>
+        <div class="additional-summary prefix">
+        </div>
+        <p class="run-count">8 tests took 00:00:29.</p>
+        <p class="filter">(Un)check the boxes to filter the results.</p>
+        <div class="summary__reload">
+          <div class="summary__reload__button hidden" onclick="location.reload()">
+            <div>There are still tests running. <br />Reload this page to get the latest results!</div>
+          </div>
+        </div>
+        <div class="summary__spacer"></div>
+        <div class="controls">
+          <div class="filters">
+            <input checked="true" class="filter" name="filter_checkbox" type="checkbox" data-test-result="failed" disabled/>
+            <span class="failed">0 Failed,</span>
+            <input checked="true" class="filter" name="filter_checkbox" type="checkbox" data-test-result="passed" />
+            <span class="passed">8 Passed,</span>
+            <input checked="true" class="filter" name="filter_checkbox" type="checkbox" data-test-result="skipped" disabled/>
+            <span class="skipped">0 Skipped,</span>
+            <input checked="true" class="filter" name="filter_checkbox" type="checkbox" data-test-result="xfailed" disabled/>
+            <span class="xfailed">0 Expected failures,</span>
+            <input checked="true" class="filter" name="filter_checkbox" type="checkbox" data-test-result="xpassed" disabled/>
+            <span class="xpassed">0 Unexpected passes,</span>
+            <input checked="true" class="filter" name="filter_checkbox" type="checkbox" data-test-result="error" disabled/>
+            <span class="error">0 Errors,</span>
+            <input checked="true" class="filter" name="filter_checkbox" type="checkbox" data-test-result="rerun" disabled/>
+            <span class="rerun">0 Reruns</span>
+          </div>
+          <div class="collapse">
+            <button id="show_all_details">Show all details</button>&nbsp;/&nbsp;<button id="hide_all_details">Hide all details</button>
+          </div>
+        </div>
+      </div>
+      <div class="additional-summary summary">
+      </div>
+      <div class="additional-summary postfix">
+      </div>
+    </div>
     <table id="results-table">
       <thead id="results-table-head">
         <tr>
-          <th class="sortable result initial-sort" col="result">Result</th>
-          <th class="sortable" col="name">Test</th>
-          <th class="sortable" col="duration">Duration</th>
-          <th class="sortable links" col="links">Links</th></tr>
-        <tr hidden="true" id="not-found-message">
-          <th colspan="4">No results found. Try to check the filters</th></tr></thead>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">biobb_model/test/unitests/test_model/test_checking_log.py::TestCheckingLog::test_launch</td>
-          <td class="col-duration">18.33</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>2023-09-15 07:50:19,749 [MainThread  ] [INFO ]  Executing biobb_model.model.checking_log Version: 4.1.0
-2023-09-15 07:50:19,750 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_model/biobb_model/biobb_model/test/data/model/2ki5.pdb to /tmp/biobb/unitests_11/checking_log/95e69b7a-8fa2-4bc5-9406-8bf60c4b2262
-2023-09-15 07:50:19,750 [MainThread  ] [INFO ]  check_structure -i /tmp/biobb/unitests_11/checking_log/95e69b7a-8fa2-4bc5-9406-8bf60c4b2262/2ki5.pdb checkall &gt; /tmp/biobb/unitests_11/checking_log/95e69b7a-8fa2-4bc5-9406-8bf60c4b2262/output_log_path.log
-
-2023-09-15 07:50:38,061 [MainThread  ] [INFO ]  Exit code 0
-
-2023-09-15 07:50:38,062 [MainThread  ] [INFO ]  Removed: [&#x27;/tmp/biobb/unitests_11/checking_log/95e69b7a-8fa2-4bc5-9406-8bf60c4b2262&#x27;]
-Checking if empty file: /tmp/biobb/unitests_11/checking_log/output_log_path.log
-<br/> -------------------------------Captured log call-------------------------------- <br/>INFO     /tmp/biobb/unitests_11/checking_log/checking_log_log.out:file_utils.py:390 Executing biobb_model.model.checking_log Version: 4.1.0
-INFO     /tmp/biobb/unitests_11/checking_log/checking_log_log.out:file_utils.py:390 Copy: /home/user/actions-runner/_work/biobb_model/biobb_model/biobb_model/test/data/model/2ki5.pdb to /tmp/biobb/unitests_11/checking_log/95e69b7a-8fa2-4bc5-9406-8bf60c4b2262
-INFO     /tmp/biobb/unitests_11/checking_log/checking_log_log.out:cmd_wrapper.py:33 check_structure -i /tmp/biobb/unitests_11/checking_log/95e69b7a-8fa2-4bc5-9406-8bf60c4b2262/2ki5.pdb checkall &gt; /tmp/biobb/unitests_11/checking_log/95e69b7a-8fa2-4bc5-9406-8bf60c4b2262/output_log_path.log
-
-INFO     /tmp/biobb/unitests_11/checking_log/checking_log_log.out:cmd_wrapper.py:50 Exit code 0
-
-INFO     /tmp/biobb/unitests_11/checking_log/checking_log_log.out:file_utils.py:390 Removed: [&#x27;/tmp/biobb/unitests_11/checking_log/95e69b7a-8fa2-4bc5-9406-8bf60c4b2262&#x27;]<br/> ----------------------------Captured stdout teardown---------------------------- <br/>
-Removing: /tmp/biobb/unitests_11
-<br/></div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">biobb_model/test/unitests/test_model/test_fix_altlocs.py::TestFixAltlocs::test_launch</td>
-          <td class="col-duration">1.19</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>2023-09-15 07:50:38,103 [MainThread  ] [INFO ]  Executing biobb_model.model.fix_altlocs Version: 4.1.0
-2023-09-15 07:50:38,103 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_model/biobb_model/biobb_model/test/data/model/3ebp.pdb to /tmp/biobb/unitests_11/fix_altlocs/5d8be61d-9b73-4c55-a46f-7916091f5b1e
-2023-09-15 07:50:38,104 [MainThread  ] [INFO ]  check_structure -i /tmp/biobb/unitests_11/fix_altlocs/5d8be61d-9b73-4c55-a46f-7916091f5b1e/3ebp.pdb -o /tmp/biobb/unitests_11/fix_altlocs/5d8be61d-9b73-4c55-a46f-7916091f5b1e/output_pdb_path.pdb --force_save --non_interactive altloc --select A339:A,A171:B,A768:A
-
-2023-09-15 07:50:38,908 [MainThread  ] [INFO ]  Exit code 0
-
-2023-09-15 07:50:38,908 [MainThread  ] [INFO ]  ================================================================================
-=                   BioBB structure checking utility v3.13.4                   =
-=            P. Andrio, A. Hospital, G. Bayarri, J.L. Gelpi 2018-23            =
-================================================================================
-
-Warning: sequence features may not be available, use --sequence for  external fasta input
-Structure /tmp/biobb/unitests_11/fix_altlocs/5d8be61d-9b73-4c55-a46f-7916091f5b1e/3ebp.pdb loaded
- PDB id: 3EBP 
- Title: glycogen phosphorylase b/flavopiridol complex
- Experimental method: x-ray diffraction
- Keywords: glycogen phosphorylase, rational inhibitor design, glycogenolysis, diabetes type 2, allosteric enzyme, carbohydrate metabolism, glycogen metabolism, glycosyltransferase, nucleotide-binding, phosphoprotein, pyridoxal phosphate, transferase-transferase inhibitor complex
- Resolution (A): 2.0
-
- Num. models: 1
- Num. chains: 1 (A: Protein)
- Num. residues:  1097
- Num. residues with ins. codes:  0
- Num. residues with H atoms: 0
- Num. HETATM residues:  288
- Num. ligands or modified residues:  2
- Num. water mol.:  286
- Num. atoms:  6918
-Modified residues found
-LLP A680
-Small mol ligands found
-CPB A940
-Running altloc. Options: --select A339:A,A171:B,A768:A
-Detected 3 residues with alternative location labels
-CYS A171
-  CB   A (0.50) B (0.50)
-  SG   A (0.50) B (0.50)
-ASP A339
-  CG   A (0.50) B (0.50)
-  OD1  A (0.50) B (0.50)
-  OD2  A (0.50) B (0.50)
-HIS A768
-  CG   A (0.50) B (0.50)
-  ND1  A (0.50) B (0.50)
-  CD2  A (0.50) B (0.50)
-  CE1  A (0.50) B (0.50)
-  NE2  A (0.50) B (0.50)
-Selecting location A339:A,A171:B,A768:A
-Final Num. models: 1
-Final Num. chains: 1 (A: Protein)
-Final Num. residues:  1097
-Final Num. residues with ins. codes:  0
-Final Num. residues with H atoms: 0
-Final Num. HETATM residues:  288
-Final Num. ligands or modified residues:  2
-Final Num. water mol.:  286
-Final Num. atoms:  6918
-Modified residues found
-LLP A680
-Small mol ligands found
-CPB A940
-Structure saved on /tmp/biobb/unitests_11/fix_altlocs/5d8be61d-9b73-4c55-a46f-7916091f5b1e/output_pdb_path.pdb
-
-2023-09-15 07:50:38,910 [MainThread  ] [INFO ]  Removed: [&#x27;/tmp/biobb/unitests_11/fix_altlocs/5d8be61d-9b73-4c55-a46f-7916091f5b1e&#x27;]
-Checking if empty file: /tmp/biobb/unitests_11/fix_altlocs/output_pdb_path.pdb
-Checking RMSD between:
-     PDB_A: /tmp/biobb/unitests_11/fix_altlocs/output_pdb_path.pdb
-     PDB_B: /home/user/actions-runner/_work/biobb_model/biobb_model/biobb_model/test/reference/model/output_altloc.pdb
-     Ignoring HETAMT in RMSD
-     Ignoring Hydrogen atoms in RMSD
-     Atoms ALIGNED in PDB_A: 6866
-     Atoms ALIGNED in PDB_B: 6866
-     RMS: 1.0683071939348411e-14
-     RMS_CUTOFF: 1
-<br/> -------------------------------Captured log call-------------------------------- <br/>INFO     /tmp/biobb/unitests_11/fix_altlocs/fix_altlocs_log.out:file_utils.py:390 Executing biobb_model.model.fix_altlocs Version: 4.1.0
-INFO     /tmp/biobb/unitests_11/fix_altlocs/fix_altlocs_log.out:file_utils.py:390 Copy: /home/user/actions-runner/_work/biobb_model/biobb_model/biobb_model/test/data/model/3ebp.pdb to /tmp/biobb/unitests_11/fix_altlocs/5d8be61d-9b73-4c55-a46f-7916091f5b1e
-INFO     /tmp/biobb/unitests_11/fix_altlocs/fix_altlocs_log.out:cmd_wrapper.py:33 check_structure -i /tmp/biobb/unitests_11/fix_altlocs/5d8be61d-9b73-4c55-a46f-7916091f5b1e/3ebp.pdb -o /tmp/biobb/unitests_11/fix_altlocs/5d8be61d-9b73-4c55-a46f-7916091f5b1e/output_pdb_path.pdb --force_save --non_interactive altloc --select A339:A,A171:B,A768:A
-
-INFO     /tmp/biobb/unitests_11/fix_altlocs/fix_altlocs_log.out:cmd_wrapper.py:50 Exit code 0
-
-INFO     /tmp/biobb/unitests_11/fix_altlocs/fix_altlocs_log.out:cmd_wrapper.py:52 ================================================================================
-=                   BioBB structure checking utility v3.13.4                   =
-=            P. Andrio, A. Hospital, G. Bayarri, J.L. Gelpi 2018-23            =
-================================================================================
-
-Warning: sequence features may not be available, use --sequence for  external fasta input
-Structure /tmp/biobb/unitests_11/fix_altlocs/5d8be61d-9b73-4c55-a46f-7916091f5b1e/3ebp.pdb loaded
- PDB id: 3EBP 
- Title: glycogen phosphorylase b/flavopiridol complex
- Experimental method: x-ray diffraction
- Keywords: glycogen phosphorylase, rational inhibitor design, glycogenolysis, diabetes type 2, allosteric enzyme, carbohydrate metabolism, glycogen metabolism, glycosyltransferase, nucleotide-binding, phosphoprotein, pyridoxal phosphate, transferase-transferase inhibitor complex
- Resolution (A): 2.0
-
- Num. models: 1
- Num. chains: 1 (A: Protein)
- Num. residues:  1097
- Num. residues with ins. codes:  0
- Num. residues with H atoms: 0
- Num. HETATM residues:  288
- Num. ligands or modified residues:  2
- Num. water mol.:  286
- Num. atoms:  6918
-Modified residues found
-LLP A680
-Small mol ligands found
-CPB A940
-Running altloc. Options: --select A339:A,A171:B,A768:A
-Detected 3 residues with alternative location labels
-CYS A171
-  CB   A (0.50) B (0.50)
-  SG   A (0.50) B (0.50)
-ASP A339
-  CG   A (0.50) B (0.50)
-  OD1  A (0.50) B (0.50)
-  OD2  A (0.50) B (0.50)
-HIS A768
-  CG   A (0.50) B (0.50)
-  ND1  A (0.50) B (0.50)
-  CD2  A (0.50) B (0.50)
-  CE1  A (0.50) B (0.50)
-  NE2  A (0.50) B (0.50)
-Selecting location A339:A,A171:B,A768:A
-Final Num. models: 1
-Final Num. chains: 1 (A: Protein)
-Final Num. residues:  1097
-Final Num. residues with ins. codes:  0
-Final Num. residues with H atoms: 0
-Final Num. HETATM residues:  288
-Final Num. ligands or modified residues:  2
-Final Num. water mol.:  286
-Final Num. atoms:  6918
-Modified residues found
-LLP A680
-Small mol ligands found
-CPB A940
-Structure saved on /tmp/biobb/unitests_11/fix_altlocs/5d8be61d-9b73-4c55-a46f-7916091f5b1e/output_pdb_path.pdb
-
-INFO     /tmp/biobb/unitests_11/fix_altlocs/fix_altlocs_log.out:file_utils.py:390 Removed: [&#x27;/tmp/biobb/unitests_11/fix_altlocs/5d8be61d-9b73-4c55-a46f-7916091f5b1e&#x27;]<br/> ----------------------------Captured stdout teardown---------------------------- <br/>
-Removing: /tmp/biobb/unitests_11
-<br/></div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">biobb_model/test/unitests/test_model/test_fix_amides.py::TestFixAmides::test_launch</td>
-          <td class="col-duration">1.96</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>2023-09-15 07:50:39,301 [MainThread  ] [INFO ]  Executing biobb_model.model.fix_amides Version: 4.1.0
-2023-09-15 07:50:39,302 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_model/biobb_model/biobb_model/test/data/model/5s2z.pdb to /tmp/biobb/unitests_11/fix_amides/608d67ff-6e2b-4771-a16b-b99a537550af
-2023-09-15 07:50:39,302 [MainThread  ] [INFO ]  check_structure -i /tmp/biobb/unitests_11/fix_amides/608d67ff-6e2b-4771-a16b-b99a537550af/5s2z.pdb -o /tmp/biobb/unitests_11/fix_amides/608d67ff-6e2b-4771-a16b-b99a537550af/output_pdb_path.pdb --force_save amide --fix All
-
-2023-09-15 07:50:41,094 [MainThread  ] [INFO ]  Exit code 0
-
-2023-09-15 07:50:41,095 [MainThread  ] [INFO ]  ================================================================================
-=                   BioBB structure checking utility v3.13.4                   =
-=            P. Andrio, A. Hospital, G. Bayarri, J.L. Gelpi 2018-23            =
-================================================================================
-
-Warning: sequence features may not be available, use --sequence for  external fasta input
-Structure /tmp/biobb/unitests_11/fix_amides/608d67ff-6e2b-4771-a16b-b99a537550af/5s2z.pdb loaded
- PDB id: 5S2Z 
- Title: pandda analysis group deposition -- crystal structure of sars-cov-2 nsp3 macrodomain in complex with z126932614
- Experimental method: x-ray diffraction
- Keywords: sgc - diamond i04-1 fragment screening, pandda, xchemexplorer, sars- cov-2 nsp3 macrodomain, viral protein
- Resolution (A): 1.07
-
- Num. models: 1
- Num. chains: 2 (A: Protein, B: Protein)
- Num. residues:  792
- Num. residues with ins. codes:  0
- Num. residues with H atoms: 0
- Num. HETATM residues:  458
- Num. ligands or modified residues:  1
- Num. water mol.:  457
- Num. atoms:  2998
-Modified residues found
-T6J A401
-Running amide. Options: --fix All
-Found 2 unusual contact(s) involving amide atoms
- ASN B20.OD1  VAL B155.O      3.015 A
- ASN B20.OD1  PHE B156.O      2.894 A
-Amide residues fixed All (1)
-Rechecking
-Found no unusual contact(s) involving amide atoms
-Final Num. models: 1
-Final Num. chains: 2 (A: Protein, B: Protein)
-Final Num. residues:  792
-Final Num. residues with ins. codes:  0
-Final Num. residues with H atoms: 0
-Final Num. HETATM residues:  458
-Final Num. ligands or modified residues:  1
-Final Num. water mol.:  457
-Final Num. atoms:  2998
-Modified residues found
-T6J A401
-Structure saved on /tmp/biobb/unitests_11/fix_amides/608d67ff-6e2b-4771-a16b-b99a537550af/output_pdb_path.pdb
-
-2023-09-15 07:50:41,096 [MainThread  ] [INFO ]  Removed: [&#x27;/tmp/biobb/unitests_11/fix_amides/608d67ff-6e2b-4771-a16b-b99a537550af&#x27;]
-Checking if empty file: /tmp/biobb/unitests_11/fix_amides/output_pdb_path.pdb
-Checking RMSD between:
-     PDB_A: /tmp/biobb/unitests_11/fix_amides/output_pdb_path.pdb
-     PDB_B: /home/user/actions-runner/_work/biobb_model/biobb_model/biobb_model/test/reference/model/output_amide_pdb_path.pdb
-     Ignoring HETAMT in RMSD
-     Ignoring Hydrogen atoms in RMSD
-     Atoms ALIGNED in PDB_A: 2984
-     Atoms ALIGNED in PDB_B: 2984
-     RMS: 7.386865969918367e-15
-     RMS_CUTOFF: 1
-<br/> -------------------------------Captured log call-------------------------------- <br/>INFO     /tmp/biobb/unitests_11/fix_amides/fix_amides_log.out:file_utils.py:390 Executing biobb_model.model.fix_amides Version: 4.1.0
-INFO     /tmp/biobb/unitests_11/fix_amides/fix_amides_log.out:file_utils.py:390 Copy: /home/user/actions-runner/_work/biobb_model/biobb_model/biobb_model/test/data/model/5s2z.pdb to /tmp/biobb/unitests_11/fix_amides/608d67ff-6e2b-4771-a16b-b99a537550af
-INFO     /tmp/biobb/unitests_11/fix_amides/fix_amides_log.out:cmd_wrapper.py:33 check_structure -i /tmp/biobb/unitests_11/fix_amides/608d67ff-6e2b-4771-a16b-b99a537550af/5s2z.pdb -o /tmp/biobb/unitests_11/fix_amides/608d67ff-6e2b-4771-a16b-b99a537550af/output_pdb_path.pdb --force_save amide --fix All
-
-INFO     /tmp/biobb/unitests_11/fix_amides/fix_amides_log.out:cmd_wrapper.py:50 Exit code 0
-
-INFO     /tmp/biobb/unitests_11/fix_amides/fix_amides_log.out:cmd_wrapper.py:52 ================================================================================
-=                   BioBB structure checking utility v3.13.4                   =
-=            P. Andrio, A. Hospital, G. Bayarri, J.L. Gelpi 2018-23            =
-================================================================================
-
-Warning: sequence features may not be available, use --sequence for  external fasta input
-Structure /tmp/biobb/unitests_11/fix_amides/608d67ff-6e2b-4771-a16b-b99a537550af/5s2z.pdb loaded
- PDB id: 5S2Z 
- Title: pandda analysis group deposition -- crystal structure of sars-cov-2 nsp3 macrodomain in complex with z126932614
- Experimental method: x-ray diffraction
- Keywords: sgc - diamond i04-1 fragment screening, pandda, xchemexplorer, sars- cov-2 nsp3 macrodomain, viral protein
- Resolution (A): 1.07
-
- Num. models: 1
- Num. chains: 2 (A: Protein, B: Protein)
- Num. residues:  792
- Num. residues with ins. codes:  0
- Num. residues with H atoms: 0
- Num. HETATM residues:  458
- Num. ligands or modified residues:  1
- Num. water mol.:  457
- Num. atoms:  2998
-Modified residues found
-T6J A401
-Running amide. Options: --fix All
-Found 2 unusual contact(s) involving amide atoms
- ASN B20.OD1  VAL B155.O      3.015 A
- ASN B20.OD1  PHE B156.O      2.894 A
-Amide residues fixed All (1)
-Rechecking
-Found no unusual contact(s) involving amide atoms
-Final Num. models: 1
-Final Num. chains: 2 (A: Protein, B: Protein)
-Final Num. residues:  792
-Final Num. residues with ins. codes:  0
-Final Num. residues with H atoms: 0
-Final Num. HETATM residues:  458
-Final Num. ligands or modified residues:  1
-Final Num. water mol.:  457
-Final Num. atoms:  2998
-Modified residues found
-T6J A401
-Structure saved on /tmp/biobb/unitests_11/fix_amides/608d67ff-6e2b-4771-a16b-b99a537550af/output_pdb_path.pdb
-
-INFO     /tmp/biobb/unitests_11/fix_amides/fix_amides_log.out:file_utils.py:390 Removed: [&#x27;/tmp/biobb/unitests_11/fix_amides/608d67ff-6e2b-4771-a16b-b99a537550af&#x27;]<br/> ----------------------------Captured stdout teardown---------------------------- <br/>
-Removing: /tmp/biobb/unitests_11
-<br/></div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">biobb_model/test/unitests/test_model/test_fix_chirality.py::TestFixChirality::test_launch</td>
-          <td class="col-duration">1.54</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>2023-09-15 07:50:41,270 [MainThread  ] [INFO ]  Executing biobb_model.model.fix_chirality Version: 4.1.0
-2023-09-15 07:50:41,270 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_model/biobb_model/biobb_model/test/data/model/3e2y.pdb to /tmp/biobb/unitests_11/fix_chirality/77194d1e-7177-4034-9362-800b7f28d5e0
-2023-09-15 07:50:41,271 [MainThread  ] [INFO ]  check_structure -i /tmp/biobb/unitests_11/fix_chirality/77194d1e-7177-4034-9362-800b7f28d5e0/3e2y.pdb -o /tmp/biobb/unitests_11/fix_chirality/77194d1e-7177-4034-9362-800b7f28d5e0/output_pdb_path.pdb --force_save chiral --fix All
-
-2023-09-15 07:50:42,366 [MainThread  ] [INFO ]  Exit code 0
-
-2023-09-15 07:50:42,366 [MainThread  ] [INFO ]  ================================================================================
-=                   BioBB structure checking utility v3.13.4                   =
-=            P. Andrio, A. Hospital, G. Bayarri, J.L. Gelpi 2018-23            =
-================================================================================
-
-Warning: sequence features may not be available, use --sequence for  external fasta input
-Structure /tmp/biobb/unitests_11/fix_chirality/77194d1e-7177-4034-9362-800b7f28d5e0/3e2y.pdb loaded
- PDB id: 3E2Y 
- Title: crystal structure of mouse kynurenine aminotransferase iii in complex with glutamine
- Experimental method: x-ray diffraction
- Keywords: alpha beta protein, plp dependent protein, aminotransferase, lyase, pyridoxal phosphate, transferase
- Resolution (A): 2.26
-
- Num. models: 1
- Num. chains: 2 (A: Protein, B: Protein)
- Num. residues:  1239
- Num. residues with ins. codes:  0
- Num. residues with H atoms: 0
- Num. HETATM residues:  419
- Num. ligands or modified residues:  8
- Num. water mol.:  411
- Num. atoms:  6993
-Modified residues found
-GLN A456
-GLN B457
-Small mol ligands found
-PMP A457
-GOL A458
-GOL A459
-PMP B456
-GOL B458
-GOL B459
-Running chiral. Options: --fix All
-Found 2 residues with incorrect side-chain chirality
- THR A256  
- THR B286  
-Chiral side chains fixed All (2)
-Checking for steric clashes
-No severe clashes detected
-1 Steric apolar clashes detected
- THR A256.CG2 GLU A348.OE2    2.678 A
-No polar_acceptor clashes detected
-1 Steric polar_donor clashes detected
- GLN A97.NE2  THR B286.N      3.001 A
-No positive clashes detected
-No negative clashes detected
-Final Num. models: 1
-Final Num. chains: 2 (A: Protein, B: Protein)
-Final Num. residues:  1239
-Final Num. residues with ins. codes:  0
-Final Num. residues with H atoms: 0
-Final Num. HETATM residues:  419
-Final Num. ligands or modified residues:  8
-Final Num. water mol.:  411
-Final Num. atoms:  6993
-Modified residues found
-GLN A456
-GLN B457
-Small mol ligands found
-PMP A457
-GOL A458
-GOL A459
-PMP B456
-GOL B458
-GOL B459
-Structure saved on /tmp/biobb/unitests_11/fix_chirality/77194d1e-7177-4034-9362-800b7f28d5e0/output_pdb_path.pdb
-
-2023-09-15 07:50:42,368 [MainThread  ] [INFO ]  Removed: [&#x27;/tmp/biobb/unitests_11/fix_chirality/77194d1e-7177-4034-9362-800b7f28d5e0&#x27;]
-Checking if empty file: /tmp/biobb/unitests_11/fix_chirality/output_pdb_path.pdb
-Checking RMSD between:
-     PDB_A: /tmp/biobb/unitests_11/fix_chirality/output_pdb_path.pdb
-     PDB_B: /home/user/actions-runner/_work/biobb_model/biobb_model/biobb_model/test/reference/model/output_chirality_pdb_path.pdb
-     Ignoring HETAMT in RMSD
-     Ignoring Hydrogen atoms in RMSD
-     Atoms ALIGNED in PDB_A: 6917
-     Atoms ALIGNED in PDB_B: 6917
-     RMS: 6.2661067786844326e-15
-     RMS_CUTOFF: 1
-<br/> -------------------------------Captured log call-------------------------------- <br/>INFO     /tmp/biobb/unitests_11/fix_chirality/fix_chirality_log.out:file_utils.py:390 Executing biobb_model.model.fix_chirality Version: 4.1.0
-INFO     /tmp/biobb/unitests_11/fix_chirality/fix_chirality_log.out:file_utils.py:390 Copy: /home/user/actions-runner/_work/biobb_model/biobb_model/biobb_model/test/data/model/3e2y.pdb to /tmp/biobb/unitests_11/fix_chirality/77194d1e-7177-4034-9362-800b7f28d5e0
-INFO     /tmp/biobb/unitests_11/fix_chirality/fix_chirality_log.out:cmd_wrapper.py:33 check_structure -i /tmp/biobb/unitests_11/fix_chirality/77194d1e-7177-4034-9362-800b7f28d5e0/3e2y.pdb -o /tmp/biobb/unitests_11/fix_chirality/77194d1e-7177-4034-9362-800b7f28d5e0/output_pdb_path.pdb --force_save chiral --fix All
-
-INFO     /tmp/biobb/unitests_11/fix_chirality/fix_chirality_log.out:cmd_wrapper.py:50 Exit code 0
-
-INFO     /tmp/biobb/unitests_11/fix_chirality/fix_chirality_log.out:cmd_wrapper.py:52 ================================================================================
-=                   BioBB structure checking utility v3.13.4                   =
-=            P. Andrio, A. Hospital, G. Bayarri, J.L. Gelpi 2018-23            =
-================================================================================
-
-Warning: sequence features may not be available, use --sequence for  external fasta input
-Structure /tmp/biobb/unitests_11/fix_chirality/77194d1e-7177-4034-9362-800b7f28d5e0/3e2y.pdb loaded
- PDB id: 3E2Y 
- Title: crystal structure of mouse kynurenine aminotransferase iii in complex with glutamine
- Experimental method: x-ray diffraction
- Keywords: alpha beta protein, plp dependent protein, aminotransferase, lyase, pyridoxal phosphate, transferase
- Resolution (A): 2.26
-
- Num. models: 1
- Num. chains: 2 (A: Protein, B: Protein)
- Num. residues:  1239
- Num. residues with ins. codes:  0
- Num. residues with H atoms: 0
- Num. HETATM residues:  419
- Num. ligands or modified residues:  8
- Num. water mol.:  411
- Num. atoms:  6993
-Modified residues found
-GLN A456
-GLN B457
-Small mol ligands found
-PMP A457
-GOL A458
-GOL A459
-PMP B456
-GOL B458
-GOL B459
-Running chiral. Options: --fix All
-Found 2 residues with incorrect side-chain chirality
- THR A256  
- THR B286  
-Chiral side chains fixed All (2)
-Checking for steric clashes
-No severe clashes detected
-1 Steric apolar clashes detected
- THR A256.CG2 GLU A348.OE2    2.678 A
-No polar_acceptor clashes detected
-1 Steric polar_donor clashes detected
- GLN A97.NE2  THR B286.N      3.001 A
-No positive clashes detected
-No negative clashes detected
-Final Num. models: 1
-Final Num. chains: 2 (A: Protein, B: Protein)
-Final Num. residues:  1239
-Final Num. residues with ins. codes:  0
-Final Num. residues with H atoms: 0
-Final Num. HETATM residues:  419
-Final Num. ligands or modified residues:  8
-Final Num. water mol.:  411
-Final Num. atoms:  6993
-Modified residues found
-GLN A456
-GLN B457
-Small mol ligands found
-PMP A457
-GOL A458
-GOL A459
-PMP B456
-GOL B458
-GOL B459
-Structure saved on /tmp/biobb/unitests_11/fix_chirality/77194d1e-7177-4034-9362-800b7f28d5e0/output_pdb_path.pdb
-
-INFO     /tmp/biobb/unitests_11/fix_chirality/fix_chirality_log.out:file_utils.py:390 Removed: [&#x27;/tmp/biobb/unitests_11/fix_chirality/77194d1e-7177-4034-9362-800b7f28d5e0&#x27;]<br/> ----------------------------Captured stdout teardown---------------------------- <br/>
-Removing: /tmp/biobb/unitests_11
-<br/></div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">biobb_model/test/unitests/test_model/test_fix_pdb.py::TestFixPdb::test_launch</td>
-          <td class="col-duration">4.41</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>2023-09-15 07:50:42,819 [MainThread  ] [INFO ]  Executing biobb_model.model.fix_pdb Version: 4.1.0
-126 VVIKVCEFQFCNDPFLGVYYHKNNKSWMESEFRVYSSANNCTFEYVSQPFLMDLEGKQGNFKNLREFVFKNIDGYFK-----IYSKH------TPINLVRDLPQGF-SALEPLVDLPIG----INIT------------------RFQTLLAL--------HRSYLT-PGDS------SSGWTAG------------------AAAYYVGYLQ------PRTFLLKYNENGTITDAVDCALDPLSETKCTLKSFTVEKGIYQTSNFRVQPTESIVRF-----PNITNLCPFGEVFNATRFASVYA------------WNRKR--------------------ISNCVADYSVL-YNSASFSTFKCYGV--------SPTKLNDLCFTNVYADSFVIRGDEVRQIAPGQTGKIADYNYKLPDDFTGCVIAWNSNNLDSKVGGNYNY---LYRLFRKSNLKPF
-    ||.|       |....|..|......|.    |.|........||.......|.|......|.|    ......|..     .|..|      .|..|..|....| ..|.||. .|.|    |..|                  .|.....|        ..|.|| |||.      ...|..|                  .|....|..|      ....||....|.....||.........|...||..    |.. .|.| ....|....|     .||....||.......|. .|..            |..||                    ......|||.. |.......|.....        .|....|.       ......|....|..  ..||.......| .||.|      |.|.|  ||....|   ||......|.|.|
-166 VVLK-------NEMARGYHYEDYGDYWR----RDYETEGSPDLEYSRDQLIKDVERIFAEIKPL----YEQLHAYVRTKLMDTYPFHISPTGCLPAHLLGDMWGRFWTNLYPLT-VPFGQKPNIDVTDAMLNQNWDAKRIFKEAEKFFVSIGLPNMTEGFWNNSMLTDPGDGRKVVCHPTAWDLGKGDFRIKMCTKVTMEDFLTAHHEMGHIQYDMAYASQPYLLRNGANEGFHEAVGEVMSLSVATPKHLKTM----GLL-SSDF-LEDNETEINFLFKQALNIVGTLPFTYMLEKWRW-MVFKGEIPKEEWMKKWWEMKRKIVGVVEPVPHDETYCDPASLFHVANDYSFIRYYTRTIFEFQFHEALCRIAKHDGPLHKCDI-------SNSTDAGEKLHQML--SVGKSQPWTSVL-KDFVG------SKNMD--VGPLLRYFEPLYTWLTEQNRKSF
-  Score=67
-
-Normalized score: 0.11185308848080133
-Not valid alignment
-19 STIEEQAKTFLDKFNHEAEDLFYQSSLASWNYNTNITEENVQNMNNAGDKWSAFLKEQSTLAQMYPLQEIQNLTVKLQLQALQQNGSSVLSEDKSKRLNTILNTMSTIYSTGKVCNPDNPQECLLLEPGLNEIMANSLDYNERLWAWESWRSEVGKQLRPLYEEYVVLKNEMARANHYEDYGDYWRGDYEVNGVDGYDYSRGQLIEDVEHTFEEIKPLYEHLHAYVRAKLMNAYPSYISPIGCLPAHLLGDMWGRFWTNLYSLTVPFGQKPNIDVTDAMVDQAWDAQRIFKEAEKFFVSVGLPNMTQGFWENSMLTDPGNVQKAVCHPTAWDLGKGDFRILMCTKVTMDDFLTAHHEMGHIQYDMAYAAQPFLLRNGANEGFHEAVGEIMSLSAATPKHLKSIGLLSPDFQEDNETEINFLLKQALTIVGTLPFTYMLEKWRWMVFKGEIPKDQWMKKWWEMKREIVGVVEPVPHDETYCDPASLFHVSNDYSFIRYYTRTLYQFQFQEALCQAAKHEGPLHKCDISNSTEAGQKLFNMLRLGKSEPWTLALENVVGAKNMNVRPLLNYFEPLFTWLKDQNKNSFVGWSTDWSPYAD
-   ||.|..||.|||.||.|||.|..|||||||.|||||..||||.|..||.|||.|...||.||....|.||.|.|||||||.|||.||.|||||||||||.|||.|||||||||||.|.||||||||||||..||..|.||||||||||.||.||||||||||||||||||||||..||||||||||.|||..|.....|||.|||.|||..|.|||||||.||||||.|||..||..|||.||||||||||||||||||||.|||||||||||||||||..|.|||.||||||||||||.||||||.|||.||||||||...|.||||||||||||||||.|||||||.|||||||||||||||||||.||.||||||||||||||||.||||.|||||||..||||.||.||||||||||.||||.|||||||||||||||||||||||||..||||||||||.|||||||||||||||||||||||.||||||||||||...|||.||||..|||.||||||||||||.||.||..||..|||.|||..|...||.|||.|.|||.|||||.|||..||..|||||.||||||||
- 1 STTEDLAKKFLDDFNSEAENLSHQSSLASWEYNTNISDENVQKMDEAGAKWSDFYEKQSKLAKNFSLEEIHNDTVKLQLQILQQSGSPVLSEDKSKRLNSILNAMSTIYSTGKVCKPNNPQECLLLEPGLDNIMGTSKDYNERLWAWEGWRAEVGKQLRPLYEEYVVLKNEMARGYHYEDYGDYWRRDYETEGSPDLEYSRDQLIKDVERIFAEIKPLYEQLHAYVRTKLMDTYPFHISPTGCLPAHLLGDMWGRFWTNLYPLTVPFGQKPNIDVTDAMLNQNWDAKRIFKEAEKFFVSIGLPNMTEGFWNNSMLTDPGDGRKVVCHPTAWDLGKGDFRIKMCTKVTMEDFLTAHHEMGHIQYDMAYASQPYLLRNGANEGFHEAVGEVMSLSVATPKHLKTMGLLSSDFLEDNETEINFLFKQALNIVGTLPFTYMLEKWRWMVFKGEIPKEEWMKKWWEMKRKIVGVVEPVPHDETYCDPASLFHVANDYSFIRYYTRTIFEFQFHEALCRIAKHDGPLHKCDISNSTDAGEKLHQMLSVGKSQPWTSVLKDFVGSKNMDVGPLLRYFEPLYTWLTEQNRKSFVGWNTDWSPYAD
-  Score=2643
-
-Normalized score: 4.412353923205342
-334 NLCPFGEVFNATRFASVYAWNRKRISNCVADYSVLYNSASFSTFKCYGVSPTKLNDLCFTNVYADSFVIRGDEVRQIAPGQTGKIADYNYKLPDDFTGCVIAWNSNNLDSKVGGNYNYLYRLFRKSNLKPFERDISTEIYQAGSTPCNGVEGFNCYFPLQSYGFQPTNGVGYQPYRVVVLSFELLHAPATVCGP
-    ||||||||||||.|.|||||.||.||||||||||||||..||||||||||.||||||||.||||||||..||.||||||||||.||||||||||||.|||.|||..|.|....|||||.||..|...|.|||||||.........||. ....|||.||..|||..|.|.|||||||||||||||.||||||||
-  1 NLCPFGEVFNATKFPSVYAWERKKISNCVADYSVLYNSTFFSTFKCYGVSATKLNDLCFSNVYADSFVVKGDDVRQIAPGQTGVIADYNYKLPDDFMGCVLAWNTRNIDATSTGNYNYKYRYLRHGKLRPFERDISNVPFSPDGKPCT-PPALNCYWPLNDYGFYTTTGIGYQPYRVVVLSFELLNAPATVCGP
-  Score=792
-
-Normalized score: 4.103626943005182
-84 PLQEIQNLTVKLQLQALQQNGSSVLSEDKSKRLN--------------TILNTM--STIYSTGKVCNPDNPQECLLLEPGLNEIMANSLDYNERL--------WAWESWRSEV---------------GKQLRPLYEEYVVLKN----------EMARANHYEDYGDYWRGDYEVNGVDGY
-   |..|..|.|......|......|....|.|...|              |.||..  |..|....|...|....   ..||.....|   |||..|        .||.......               || |||....   ..|          .....|.|....||  |.|...|. ||
- 4 PFGEVFNATKFPSVYAWERKKISNCVADYSVLYNSTFFSTFKCYGVSATKLNDLCFSNVYADSFVVKGDDVRQ---IAPGQTGVIA---DYNYKLPDDFMGCVLAWNTRNIDATSTGNYNYKYRYLRHGK-LRPFERD---ISNVPFSPDGKPCTPPALNCYWPLNDY--GFYTTTGI-GY
-  Score=46.5
-
-Normalized score: 0.24093264248704663
-Not valid alignment
-Reference summary:
-   A -&gt; Q9BYF1
-   B -&gt; P0DTC2
-Fixed :)
-2023-09-15 07:50:47,216 [MainThread  ] [INFO ]  Removed: []
-Checking if empty file: /tmp/biobb/unitests_11/fix_pdb/output_fixpdb.pdb
-Comparing: 
-        File_A: /tmp/biobb/unitests_11/fix_pdb/output_fixpdb.pdb
-        File_B: /home/user/actions-runner/_work/biobb_model/biobb_model/biobb_model/test/reference/model/output_fixpdb.pdb
-        File_A hash: b&#x27;g\xebw_\xb7\xe0`\x92\xf8\xc0\xbd\xc5\xe6\x86\xbf\xd6\xc9\x8f\x17\x82\xfeV\xd6\xf7\x89v\xf6\x11\x80\x96\xfa_&#x27;
-        File_B hash: b&#x27;g\xebw_\xb7\xe0`\x92\xf8\xc0\xbd\xc5\xe6\x86\xbf\xd6\xc9\x8f\x17\x82\xfeV\xd6\xf7\x89v\xf6\x11\x80\x96\xfa_&#x27;
-<br/> -------------------------------Captured log call-------------------------------- <br/>INFO     /tmp/biobb/unitests_11/fix_pdb/fix_pdb_log.out:file_utils.py:390 Executing biobb_model.model.fix_pdb Version: 4.1.0
-INFO     /tmp/biobb/unitests_11/fix_pdb/fix_pdb_log.out:file_utils.py:390 Removed: []<br/> ----------------------------Captured stdout teardown---------------------------- <br/>
-Removing: /tmp/biobb/unitests_11
-<br/></div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">biobb_model/test/unitests/test_model/test_fix_side_chain.py::TestFixSideChain::test_launch</td>
-          <td class="col-duration">1.41</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>2023-09-15 07:50:47,238 [MainThread  ] [INFO ]  Executing biobb_model.model.fix_side_chain Version: 4.1.0
-2023-09-15 07:50:47,239 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_model/biobb_model/biobb_model/test/data/model/2ki5.pdb to /tmp/biobb/unitests_11/fix_side_chain/a22cfbac-0b86-4888-9d10-9af99e13124e
-2023-09-15 07:50:47,239 [MainThread  ] [INFO ]  check_structure -i /tmp/biobb/unitests_11/fix_side_chain/a22cfbac-0b86-4888-9d10-9af99e13124e/2ki5.pdb -o /tmp/biobb/unitests_11/fix_side_chain/a22cfbac-0b86-4888-9d10-9af99e13124e/output_pdb_path.pdb --force_save fixside --fix ALL
-
-2023-09-15 07:50:48,323 [MainThread  ] [INFO ]  Exit code 0
-
-2023-09-15 07:50:48,324 [MainThread  ] [INFO ]  ================================================================================
-=                   BioBB structure checking utility v3.13.4                   =
-=            P. Andrio, A. Hospital, G. Bayarri, J.L. Gelpi 2018-23            =
-================================================================================
-
-Warning: sequence features may not be available, use --sequence for  external fasta input
-Structure /tmp/biobb/unitests_11/fix_side_chain/a22cfbac-0b86-4888-9d10-9af99e13124e/2ki5.pdb loaded
- PDB id: 2KI5 
- Title: herpes simplex type-1 thymidine kinase in complex with the drug aciclovir at 1.9a resolution
- Experimental method: x-ray diffraction
- Keywords: transferase (phosphotransferase) thymid, transferase (phosphotransferase) thymidine kinase; viridae; ds-dna enveloped viruses; herpesviridae; alphaherpesvirinae antiviral drug (aciclovir)
- Resolution (A): 1.9
-
- Num. models: 1
- Num. chains: 2 (A: Protein, B: Protein)
- Num. residues:  908
- Num. residues with ins. codes:  0
- Num. residues with H atoms: 0
- Num. HETATM residues:  296
- Num. ligands or modified residues:  4
- Num. water mol.:  292
- Num. atoms:  4961
-Small mol ligands found
-SO4 A4
-AC2 A1
-SO4 B3
-AC2 B2
-Running fixside. Options: --fix ALL
-Found 6 Residues with missing side chain atoms
- MET A46    CG,SD,CE
- PRO A154   CG,CD
- PRO A280   CG,CD
- MET B46    CG,SD,CE
- PRO B154   CG,CD
- ARG B220   CG,CD,NE,CZ,NH1,NH2
-Fixing side chains
-MET A46
-  Adding new atom CG
-  Adding new atom SD
-  Adding new atom CE
-PRO A154
-  Adding new atom CG
-  Adding new atom CD
-PRO A280
-  Adding new atom CG
-  Adding new atom CD
-MET B46
-  Adding new atom CG
-  Adding new atom SD
-  Adding new atom CE
-PRO B154
-  Adding new atom CG
-  Adding new atom CD
-ARG B220
-  Adding new atom CG
-  Adding new atom CD
-  Adding new atom NE
-  Adding new atom CZ
-  Adding new atom NH1
-  Adding new atom NH2
-Fixed 6 side chain(s)
-Checking for steric clashes
-1 Steric severe clashes detected
- MET B46.CE   VAL B352.O      0.921 A
-5 Steric apolar clashes detected
- MET A46.CE   VAL A352.CG2    1.843 A
- MET A46.CE   THR A354.O      1.869 A
- MET B46.CE   VAL B352.O      0.921 A
- GLY B61.CA   ARG B220.NH1    2.301 A
- ARG B220.CZ  SO4 B3.O3       1.597 A
-3 Steric polar_acceptor clashes detected
- MET A46.SD   VAL A352.O      2.171 A
- MET A46.SD   THR A354.O      2.569 A
- MET B46.SD   VAL B352.O      2.291 A
-2 Steric polar_donor clashes detected
- GLY B61.N    ARG B220.NH1    2.443 A
- ARG B216.NH2 ARG B220.NH1    2.977 A
-1 Steric positive clashes detected
- ARG B216.NH2 ARG B220.NH1    2.977 A
-No negative clashes detected
-Final Num. models: 1
-Final Num. chains: 2 (A: Protein, B: Protein)
-Final Num. residues:  908
-Final Num. residues with ins. codes:  0
-Final Num. residues with H atoms: 0
-Final Num. HETATM residues:  296
-Final Num. ligands or modified residues:  4
-Final Num. water mol.:  292
-Final Num. atoms:  4979
-Small mol ligands found
-SO4 A4
-AC2 A1
-SO4 B3
-AC2 B2
-Structure saved on /tmp/biobb/unitests_11/fix_side_chain/a22cfbac-0b86-4888-9d10-9af99e13124e/output_pdb_path.pdb
-
-2023-09-15 07:50:48,325 [MainThread  ] [INFO ]  Removed: [&#x27;/tmp/biobb/unitests_11/fix_side_chain/a22cfbac-0b86-4888-9d10-9af99e13124e&#x27;]
-Checking if empty file: /tmp/biobb/unitests_11/fix_side_chain/output_pdb_path.pdb
-Checking RMSD between:
-     PDB_A: /tmp/biobb/unitests_11/fix_side_chain/output_pdb_path.pdb
-     PDB_B: /home/user/actions-runner/_work/biobb_model/biobb_model/biobb_model/test/reference/model/output_pdb_path.pdb
-     Ignoring HETAMT in RMSD
-     Ignoring Hydrogen atoms in RMSD
-     Atoms ALIGNED in PDB_A: 4937
-     Atoms ALIGNED in PDB_B: 4937
-     RMS: 6.0339467652777484e-15
-     RMS_CUTOFF: 1
-<br/> -------------------------------Captured log call-------------------------------- <br/>INFO     /tmp/biobb/unitests_11/fix_side_chain/fix_side_chain_log.out:file_utils.py:390 Executing biobb_model.model.fix_side_chain Version: 4.1.0
-INFO     /tmp/biobb/unitests_11/fix_side_chain/fix_side_chain_log.out:file_utils.py:390 Copy: /home/user/actions-runner/_work/biobb_model/biobb_model/biobb_model/test/data/model/2ki5.pdb to /tmp/biobb/unitests_11/fix_side_chain/a22cfbac-0b86-4888-9d10-9af99e13124e
-INFO     /tmp/biobb/unitests_11/fix_side_chain/fix_side_chain_log.out:cmd_wrapper.py:33 check_structure -i /tmp/biobb/unitests_11/fix_side_chain/a22cfbac-0b86-4888-9d10-9af99e13124e/2ki5.pdb -o /tmp/biobb/unitests_11/fix_side_chain/a22cfbac-0b86-4888-9d10-9af99e13124e/output_pdb_path.pdb --force_save fixside --fix ALL
-
-INFO     /tmp/biobb/unitests_11/fix_side_chain/fix_side_chain_log.out:cmd_wrapper.py:50 Exit code 0
-
-INFO     /tmp/biobb/unitests_11/fix_side_chain/fix_side_chain_log.out:cmd_wrapper.py:52 ================================================================================
-=                   BioBB structure checking utility v3.13.4                   =
-=            P. Andrio, A. Hospital, G. Bayarri, J.L. Gelpi 2018-23            =
-================================================================================
-
-Warning: sequence features may not be available, use --sequence for  external fasta input
-Structure /tmp/biobb/unitests_11/fix_side_chain/a22cfbac-0b86-4888-9d10-9af99e13124e/2ki5.pdb loaded
- PDB id: 2KI5 
- Title: herpes simplex type-1 thymidine kinase in complex with the drug aciclovir at 1.9a resolution
- Experimental method: x-ray diffraction
- Keywords: transferase (phosphotransferase) thymid, transferase (phosphotransferase) thymidine kinase; viridae; ds-dna enveloped viruses; herpesviridae; alphaherpesvirinae antiviral drug (aciclovir)
- Resolution (A): 1.9
-
- Num. models: 1
- Num. chains: 2 (A: Protein, B: Protein)
- Num. residues:  908
- Num. residues with ins. codes:  0
- Num. residues with H atoms: 0
- Num. HETATM residues:  296
- Num. ligands or modified residues:  4
- Num. water mol.:  292
- Num. atoms:  4961
-Small mol ligands found
-SO4 A4
-AC2 A1
-SO4 B3
-AC2 B2
-Running fixside. Options: --fix ALL
-Found 6 Residues with missing side chain atoms
- MET A46    CG,SD,CE
- PRO A154   CG,CD
- PRO A280   CG,CD
- MET B46    CG,SD,CE
- PRO B154   CG,CD
- ARG B220   CG,CD,NE,CZ,NH1,NH2
-Fixing side chains
-MET A46
-  Adding new atom CG
-  Adding new atom SD
-  Adding new atom CE
-PRO A154
-  Adding new atom CG
-  Adding new atom CD
-PRO A280
-  Adding new atom CG
-  Adding new atom CD
-MET B46
-  Adding new atom CG
-  Adding new atom SD
-  Adding new atom CE
-PRO B154
-  Adding new atom CG
-  Adding new atom CD
-ARG B220
-  Adding new atom CG
-  Adding new atom CD
-  Adding new atom NE
-  Adding new atom CZ
-  Adding new atom NH1
-  Adding new atom NH2
-Fixed 6 side chain(s)
-Checking for steric clashes
-1 Steric severe clashes detected
- MET B46.CE   VAL B352.O      0.921 A
-5 Steric apolar clashes detected
- MET A46.CE   VAL A352.CG2    1.843 A
- MET A46.CE   THR A354.O      1.869 A
- MET B46.CE   VAL B352.O      0.921 A
- GLY B61.CA   ARG B220.NH1    2.301 A
- ARG B220.CZ  SO4 B3.O3       1.597 A
-3 Steric polar_acceptor clashes detected
- MET A46.SD   VAL A352.O      2.171 A
- MET A46.SD   THR A354.O      2.569 A
- MET B46.SD   VAL B352.O      2.291 A
-2 Steric polar_donor clashes detected
- GLY B61.N    ARG B220.NH1    2.443 A
- ARG B216.NH2 ARG B220.NH1    2.977 A
-1 Steric positive clashes detected
- ARG B216.NH2 ARG B220.NH1    2.977 A
-No negative clashes detected
-Final Num. models: 1
-Final Num. chains: 2 (A: Protein, B: Protein)
-Final Num. residues:  908
-Final Num. residues with ins. codes:  0
-Final Num. residues with H atoms: 0
-Final Num. HETATM residues:  296
-Final Num. ligands or modified residues:  4
-Final Num. water mol.:  292
-Final Num. atoms:  4979
-Small mol ligands found
-SO4 A4
-AC2 A1
-SO4 B3
-AC2 B2
-Structure saved on /tmp/biobb/unitests_11/fix_side_chain/a22cfbac-0b86-4888-9d10-9af99e13124e/output_pdb_path.pdb
-
-INFO     /tmp/biobb/unitests_11/fix_side_chain/fix_side_chain_log.out:file_utils.py:390 Removed: [&#x27;/tmp/biobb/unitests_11/fix_side_chain/a22cfbac-0b86-4888-9d10-9af99e13124e&#x27;]<br/> ----------------------------Captured stdout teardown---------------------------- <br/>
-Removing: /tmp/biobb/unitests_11
-<br/></div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">biobb_model/test/unitests/test_model/test_fix_ssbonds.py::TestFixSSBonds::test_launch</td>
-          <td class="col-duration">0.53</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>2023-09-15 07:50:48,652 [MainThread  ] [INFO ]  Executing biobb_model.model.fix_ssbonds Version: 4.1.0
-2023-09-15 07:50:48,653 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_model/biobb_model/biobb_model/test/data/model/1aki.pdb to /tmp/biobb/unitests_11/fix_ssbonds/eb3f8a21-d434-4490-8e00-2420a2653678
-2023-09-15 07:50:48,653 [MainThread  ] [INFO ]  check_structure -i /tmp/biobb/unitests_11/fix_ssbonds/eb3f8a21-d434-4490-8e00-2420a2653678/1aki.pdb -o /tmp/biobb/unitests_11/fix_ssbonds/eb3f8a21-d434-4490-8e00-2420a2653678/output_pdb_path.pdb --force_save --non_interactive getss --mark All
-
-2023-09-15 07:50:49,114 [MainThread  ] [INFO ]  Exit code 0
-
-2023-09-15 07:50:49,114 [MainThread  ] [INFO ]  ================================================================================
-=                   BioBB structure checking utility v3.13.4                   =
-=            P. Andrio, A. Hospital, G. Bayarri, J.L. Gelpi 2018-23            =
-================================================================================
-
-Warning: sequence features may not be available, use --sequence for  external fasta input
-Structure /tmp/biobb/unitests_11/fix_ssbonds/eb3f8a21-d434-4490-8e00-2420a2653678/1aki.pdb loaded
- PDB id: 1AKI 
- Title: the structure of the orthorhombic form of hen egg-white lysozyme at 1.5 angstroms resolution
- Experimental method: x-ray diffraction
- Keywords: hydrolase, glycosidase
- Resolution (A): 1.5
-
- Num. models: 1
- Num. chains: 1 (A: Protein)
- Num. residues:  207
- Num. residues with ins. codes:  0
- Num. residues with H atoms: 0
- Num. HETATM residues:  78
- Num. ligands or modified residues:  0
- Num. water mol.:  78
- Num. atoms:  1079
-Running getss. Options: --mark All
-Detected 4 Possible SS Bonds
- CYS A6.SG    CYS A127.SG     3.880
- CYS A30.SG   CYS A115.SG     4.005
- CYS A64.SG   CYS A80.SG      3.948
- CYS A76.SG   CYS A94.SG      4.073
-Final Num. models: 1
-Final Num. chains: 1 (A: Protein)
-Final Num. residues:  207
-Final Num. residues with ins. codes:  0
-Final Num. residues with H atoms: 0
-Final Num. HETATM residues:  78
-Final Num. ligands or modified residues:  0
-Final Num. water mol.:  78
-Final Num. atoms:  1079
-Structure saved on /tmp/biobb/unitests_11/fix_ssbonds/eb3f8a21-d434-4490-8e00-2420a2653678/output_pdb_path.pdb
-
-2023-09-15 07:50:49,115 [MainThread  ] [INFO ]  Removed: [&#x27;/tmp/biobb/unitests_11/fix_ssbonds/eb3f8a21-d434-4490-8e00-2420a2653678&#x27;]
-Checking if empty file: /tmp/biobb/unitests_11/fix_ssbonds/output_pdb_path.pdb
-Checking RMSD between:
-     PDB_A: /tmp/biobb/unitests_11/fix_ssbonds/output_pdb_path.pdb
-     PDB_B: /home/user/actions-runner/_work/biobb_model/biobb_model/biobb_model/test/reference/model/output_ssbonds.pdb
-     Ignoring HETAMT in RMSD
-     Ignoring Hydrogen atoms in RMSD
-     Atoms ALIGNED in PDB_A: 1079
-     Atoms ALIGNED in PDB_B: 1079
-     RMS: 1.212094551631224e-14
-     RMS_CUTOFF: 1
-<br/> -------------------------------Captured log call-------------------------------- <br/>INFO     /tmp/biobb/unitests_11/fix_ssbonds/fix_ssbonds_log.out:file_utils.py:390 Executing biobb_model.model.fix_ssbonds Version: 4.1.0
-INFO     /tmp/biobb/unitests_11/fix_ssbonds/fix_ssbonds_log.out:file_utils.py:390 Copy: /home/user/actions-runner/_work/biobb_model/biobb_model/biobb_model/test/data/model/1aki.pdb to /tmp/biobb/unitests_11/fix_ssbonds/eb3f8a21-d434-4490-8e00-2420a2653678
-INFO     /tmp/biobb/unitests_11/fix_ssbonds/fix_ssbonds_log.out:cmd_wrapper.py:33 check_structure -i /tmp/biobb/unitests_11/fix_ssbonds/eb3f8a21-d434-4490-8e00-2420a2653678/1aki.pdb -o /tmp/biobb/unitests_11/fix_ssbonds/eb3f8a21-d434-4490-8e00-2420a2653678/output_pdb_path.pdb --force_save --non_interactive getss --mark All
-
-INFO     /tmp/biobb/unitests_11/fix_ssbonds/fix_ssbonds_log.out:cmd_wrapper.py:50 Exit code 0
-
-INFO     /tmp/biobb/unitests_11/fix_ssbonds/fix_ssbonds_log.out:cmd_wrapper.py:52 ================================================================================
-=                   BioBB structure checking utility v3.13.4                   =
-=            P. Andrio, A. Hospital, G. Bayarri, J.L. Gelpi 2018-23            =
-================================================================================
-
-Warning: sequence features may not be available, use --sequence for  external fasta input
-Structure /tmp/biobb/unitests_11/fix_ssbonds/eb3f8a21-d434-4490-8e00-2420a2653678/1aki.pdb loaded
- PDB id: 1AKI 
- Title: the structure of the orthorhombic form of hen egg-white lysozyme at 1.5 angstroms resolution
- Experimental method: x-ray diffraction
- Keywords: hydrolase, glycosidase
- Resolution (A): 1.5
-
- Num. models: 1
- Num. chains: 1 (A: Protein)
- Num. residues:  207
- Num. residues with ins. codes:  0
- Num. residues with H atoms: 0
- Num. HETATM residues:  78
- Num. ligands or modified residues:  0
- Num. water mol.:  78
- Num. atoms:  1079
-Running getss. Options: --mark All
-Detected 4 Possible SS Bonds
- CYS A6.SG    CYS A127.SG     3.880
- CYS A30.SG   CYS A115.SG     4.005
- CYS A64.SG   CYS A80.SG      3.948
- CYS A76.SG   CYS A94.SG      4.073
-Final Num. models: 1
-Final Num. chains: 1 (A: Protein)
-Final Num. residues:  207
-Final Num. residues with ins. codes:  0
-Final Num. residues with H atoms: 0
-Final Num. HETATM residues:  78
-Final Num. ligands or modified residues:  0
-Final Num. water mol.:  78
-Final Num. atoms:  1079
-Structure saved on /tmp/biobb/unitests_11/fix_ssbonds/eb3f8a21-d434-4490-8e00-2420a2653678/output_pdb_path.pdb
-
-INFO     /tmp/biobb/unitests_11/fix_ssbonds/fix_ssbonds_log.out:file_utils.py:390 Removed: [&#x27;/tmp/biobb/unitests_11/fix_ssbonds/eb3f8a21-d434-4490-8e00-2420a2653678&#x27;]<br/> ----------------------------Captured stdout teardown---------------------------- <br/>
-Removing: /tmp/biobb/unitests_11
-<br/></div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">biobb_model/test/unitests/test_model/test_mutate.py::TestFixSideChain::test_launch</td>
-          <td class="col-duration">1.31</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>2023-09-15 07:50:49,187 [MainThread  ] [INFO ]  Executing biobb_model.model.mutate Version: 4.1.0
-2023-09-15 07:50:49,187 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_model/biobb_model/biobb_model/test/data/model/2ki5.pdb to /tmp/biobb/unitests_11/mutate/57c18021-c87d-4152-93d8-49345332fd2f
-2023-09-15 07:50:49,188 [MainThread  ] [INFO ]  check_structure -i /tmp/biobb/unitests_11/mutate/57c18021-c87d-4152-93d8-49345332fd2f/2ki5.pdb -o /tmp/biobb/unitests_11/mutate/57c18021-c87d-4152-93d8-49345332fd2f/output_mutated_pdb_path.pdb --force_save --non_interactive mutateside --mut Leu49Ile,B:arg51Lys
-
-2023-09-15 07:50:50,190 [MainThread  ] [INFO ]  Exit code 0
-
-2023-09-15 07:50:50,190 [MainThread  ] [INFO ]  ================================================================================
-=                   BioBB structure checking utility v3.13.4                   =
-=            P. Andrio, A. Hospital, G. Bayarri, J.L. Gelpi 2018-23            =
-================================================================================
-
-Warning: sequence features may not be available, use --sequence for  external fasta input
-Structure /tmp/biobb/unitests_11/mutate/57c18021-c87d-4152-93d8-49345332fd2f/2ki5.pdb loaded
- PDB id: 2KI5 
- Title: herpes simplex type-1 thymidine kinase in complex with the drug aciclovir at 1.9a resolution
- Experimental method: x-ray diffraction
- Keywords: transferase (phosphotransferase) thymid, transferase (phosphotransferase) thymidine kinase; viridae; ds-dna enveloped viruses; herpesviridae; alphaherpesvirinae antiviral drug (aciclovir)
- Resolution (A): 1.9
-
- Num. models: 1
- Num. chains: 2 (A: Protein, B: Protein)
- Num. residues:  908
- Num. residues with ins. codes:  0
- Num. residues with H atoms: 0
- Num. HETATM residues:  296
- Num. ligands or modified residues:  4
- Num. water mol.:  292
- Num. atoms:  4961
-Small mol ligands found
-SO4 A4
-AC2 A1
-SO4 B3
-AC2 B2
-Running mutateside. Options: --mut Leu49Ile,B:arg51Lys
-Mutations to perform
-*:LEU49ILE
-B:ARG51LYS
-Replacing LEU A49 into ILE
-  Deleting CD2
-  Renaming CG to CG1
-  Adding new atom CG2
-Replacing LEU B49 into ILE
-  Deleting CD2
-  Renaming CG to CG1
-  Adding new atom CG2
-
-Replacing ARG B51 into LYS
-  Deleting NE
-  Deleting CZ
-  Deleting NH1
-  Deleting NH2
-  Adding new atom CE
-  Adding new atom NZ
-
-Checking for steric clashes
-No severe clashes detected
-4 Steric apolar clashes detected
- ILE A49.CG2  THR A350.OG1    2.815 A
- ILE B49.CG2  THR B350.OG1    2.611 A
- LYS B51.NZ   LEU B139.CG     2.403 A
- LYS B51.NZ   ILE B143.CD1    2.319 A
-No polar_acceptor clashes detected
-No polar_donor clashes detected
-No positive clashes detected
-No negative clashes detected
-Final Num. models: 1
-Final Num. chains: 2 (A: Protein, B: Protein)
-Final Num. residues:  908
-Final Num. residues with ins. codes:  0
-Final Num. residues with H atoms: 0
-Final Num. HETATM residues:  296
-Final Num. ligands or modified residues:  4
-Final Num. water mol.:  292
-Final Num. atoms:  4959
-Small mol ligands found
-SO4 A4
-AC2 A1
-SO4 B3
-AC2 B2
-Structure saved on /tmp/biobb/unitests_11/mutate/57c18021-c87d-4152-93d8-49345332fd2f/output_mutated_pdb_path.pdb
-
-2023-09-15 07:50:50,192 [MainThread  ] [INFO ]  Removed: [&#x27;/tmp/biobb/unitests_11/mutate/57c18021-c87d-4152-93d8-49345332fd2f&#x27;]
-Checking if empty file: /tmp/biobb/unitests_11/mutate/output_mutated_pdb_path.pdb
-Checking RMSD between:
-     PDB_A: /tmp/biobb/unitests_11/mutate/output_mutated_pdb_path.pdb
-     PDB_B: /home/user/actions-runner/_work/biobb_model/biobb_model/biobb_model/test/reference/model/output_mutated_pdb_path.pdb
-     Ignoring HETAMT in RMSD
-     Ignoring Hydrogen atoms in RMSD
-     Atoms ALIGNED in PDB_A: 4917
-     Atoms ALIGNED in PDB_B: 4917
-     RMS: 1.983345332028294e-14
-     RMS_CUTOFF: 1
-<br/> -------------------------------Captured log call-------------------------------- <br/>INFO     /tmp/biobb/unitests_11/mutate/mutate_log.out:file_utils.py:390 Executing biobb_model.model.mutate Version: 4.1.0
-INFO     /tmp/biobb/unitests_11/mutate/mutate_log.out:file_utils.py:390 Copy: /home/user/actions-runner/_work/biobb_model/biobb_model/biobb_model/test/data/model/2ki5.pdb to /tmp/biobb/unitests_11/mutate/57c18021-c87d-4152-93d8-49345332fd2f
-INFO     /tmp/biobb/unitests_11/mutate/mutate_log.out:cmd_wrapper.py:33 check_structure -i /tmp/biobb/unitests_11/mutate/57c18021-c87d-4152-93d8-49345332fd2f/2ki5.pdb -o /tmp/biobb/unitests_11/mutate/57c18021-c87d-4152-93d8-49345332fd2f/output_mutated_pdb_path.pdb --force_save --non_interactive mutateside --mut Leu49Ile,B:arg51Lys
-
-INFO     /tmp/biobb/unitests_11/mutate/mutate_log.out:cmd_wrapper.py:50 Exit code 0
-
-INFO     /tmp/biobb/unitests_11/mutate/mutate_log.out:cmd_wrapper.py:52 ================================================================================
-=                   BioBB structure checking utility v3.13.4                   =
-=            P. Andrio, A. Hospital, G. Bayarri, J.L. Gelpi 2018-23            =
-================================================================================
-
-Warning: sequence features may not be available, use --sequence for  external fasta input
-Structure /tmp/biobb/unitests_11/mutate/57c18021-c87d-4152-93d8-49345332fd2f/2ki5.pdb loaded
- PDB id: 2KI5 
- Title: herpes simplex type-1 thymidine kinase in complex with the drug aciclovir at 1.9a resolution
- Experimental method: x-ray diffraction
- Keywords: transferase (phosphotransferase) thymid, transferase (phosphotransferase) thymidine kinase; viridae; ds-dna enveloped viruses; herpesviridae; alphaherpesvirinae antiviral drug (aciclovir)
- Resolution (A): 1.9
-
- Num. models: 1
- Num. chains: 2 (A: Protein, B: Protein)
- Num. residues:  908
- Num. residues with ins. codes:  0
- Num. residues with H atoms: 0
- Num. HETATM residues:  296
- Num. ligands or modified residues:  4
- Num. water mol.:  292
- Num. atoms:  4961
-Small mol ligands found
-SO4 A4
-AC2 A1
-SO4 B3
-AC2 B2
-Running mutateside. Options: --mut Leu49Ile,B:arg51Lys
-Mutations to perform
-*:LEU49ILE
-B:ARG51LYS
-Replacing LEU A49 into ILE
-  Deleting CD2
-  Renaming CG to CG1
-  Adding new atom CG2
-Replacing LEU B49 into ILE
-  Deleting CD2
-  Renaming CG to CG1
-  Adding new atom CG2
-
-Replacing ARG B51 into LYS
-  Deleting NE
-  Deleting CZ
-  Deleting NH1
-  Deleting NH2
-  Adding new atom CE
-  Adding new atom NZ
-
-Checking for steric clashes
-No severe clashes detected
-4 Steric apolar clashes detected
- ILE A49.CG2  THR A350.OG1    2.815 A
- ILE B49.CG2  THR B350.OG1    2.611 A
- LYS B51.NZ   LEU B139.CG     2.403 A
- LYS B51.NZ   ILE B143.CD1    2.319 A
-No polar_acceptor clashes detected
-No polar_donor clashes detected
-No positive clashes detected
-No negative clashes detected
-Final Num. models: 1
-Final Num. chains: 2 (A: Protein, B: Protein)
-Final Num. residues:  908
-Final Num. residues with ins. codes:  0
-Final Num. residues with H atoms: 0
-Final Num. HETATM residues:  296
-Final Num. ligands or modified residues:  4
-Final Num. water mol.:  292
-Final Num. atoms:  4959
-Small mol ligands found
-SO4 A4
-AC2 A1
-SO4 B3
-AC2 B2
-Structure saved on /tmp/biobb/unitests_11/mutate/57c18021-c87d-4152-93d8-49345332fd2f/output_mutated_pdb_path.pdb
-
-INFO     /tmp/biobb/unitests_11/mutate/mutate_log.out:file_utils.py:390 Removed: [&#x27;/tmp/biobb/unitests_11/mutate/57c18021-c87d-4152-93d8-49345332fd2f&#x27;]<br/> ----------------------------Captured stdout teardown---------------------------- <br/>
-Removing: /tmp/biobb/unitests_11
-<br/></div></td></tr></tbody></table></body></html>
+          <th class="sortable" data-column-type="result">Result</th>
+          <th class="sortable" data-column-type="testId">Test</th>
+          <th class="sortable" data-column-type="duration">Duration</th>
+          <th>Links</th>
+        </tr>
+      </thead>
+    </table>
+  </body>
+  <footer>
+    <div id="data-container" data-jsonblob="{&#34;environment&#34;: {&#34;Python&#34;: &#34;3.9.18&#34;, &#34;Platform&#34;: &#34;Linux-5.4.0-159-generic-x86_64-with-glibc2.31&#34;, &#34;Packages&#34;: {&#34;pytest&#34;: &#34;8.1.1&#34;, &#34;pluggy&#34;: &#34;1.4.0&#34;}, &#34;Plugins&#34;: {&#34;cov&#34;: &#34;4.1.0&#34;, &#34;metadata&#34;: &#34;3.1.1&#34;, &#34;html&#34;: &#34;4.1.1&#34;}, &#34;CI&#34;: &#34;true&#34;}, &#34;tests&#34;: {&#34;biobb_model/test/unitests/test_model/test_checking_log.py::TestCheckingLog::test_launch&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;biobb_model/test/unitests/test_model/test_checking_log.py::TestCheckingLog::test_launch&#34;, &#34;duration&#34;: &#34;00:00:17&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;biobb_model/test/unitests/test_model/test_checking_log.py::TestCheckingLog::test_launch&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;00:00:17&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;----------------------------- Captured stdout call -----------------------------\n2024-03-12 15:18:05,239 [MainThread  ] [INFO ]  Executing biobb_model.model.checking_log Version: 4.1.0\n2024-03-12 15:18:05,240 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_model/biobb_model/biobb_model/test/data/model/2ki5.pdb to /tmp/biobb/unitests_13/checking_log/dd9ddad8-0216-4b2f-bc83-f5c3e18e8209\n2024-03-12 15:18:05,240 [MainThread  ] [INFO ]  check_structure -i /tmp/biobb/unitests_13/checking_log/dd9ddad8-0216-4b2f-bc83-f5c3e18e8209/2ki5.pdb checkall &amp;gt; /tmp/biobb/unitests_13/checking_log/dd9ddad8-0216-4b2f-bc83-f5c3e18e8209/output_log_path.log\n\n2024-03-12 15:18:22,430 [MainThread  ] [INFO ]  Exit code 0\n\n2024-03-12 15:18:22,431 [MainThread  ] [INFO ]  Removed: [&amp;#x27;/tmp/biobb/unitests_13/checking_log/dd9ddad8-0216-4b2f-bc83-f5c3e18e8209&amp;#x27;]\nChecking if empty file: /tmp/biobb/unitests_13/checking_log/output_log_path.log\n\n------------------------------ Captured log call -------------------------------\nINFO     /tmp/biobb/unitests_13/checking_log/checking_log_log.out:file_utils.py:390 Executing biobb_model.model.checking_log Version: 4.1.0\nINFO     /tmp/biobb/unitests_13/checking_log/checking_log_log.out:file_utils.py:390 Copy: /home/user/actions-runner/_work/biobb_model/biobb_model/biobb_model/test/data/model/2ki5.pdb to /tmp/biobb/unitests_13/checking_log/dd9ddad8-0216-4b2f-bc83-f5c3e18e8209\nINFO     /tmp/biobb/unitests_13/checking_log/checking_log_log.out:cmd_wrapper.py:33 check_structure -i /tmp/biobb/unitests_13/checking_log/dd9ddad8-0216-4b2f-bc83-f5c3e18e8209/2ki5.pdb checkall &amp;gt; /tmp/biobb/unitests_13/checking_log/dd9ddad8-0216-4b2f-bc83-f5c3e18e8209/output_log_path.log\n\nINFO     /tmp/biobb/unitests_13/checking_log/checking_log_log.out:cmd_wrapper.py:50 Exit code 0\n\nINFO     /tmp/biobb/unitests_13/checking_log/checking_log_log.out:file_utils.py:390 Removed: [&amp;#x27;/tmp/biobb/unitests_13/checking_log/dd9ddad8-0216-4b2f-bc83-f5c3e18e8209&amp;#x27;]\n\n--------------------------- Captured stdout teardown ---------------------------\n\nRemoving: /tmp/biobb/unitests_13\n&#34;}], &#34;biobb_model/test/unitests/test_model/test_fix_altlocs.py::TestFixAltlocs::test_launch&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;biobb_model/test/unitests/test_model/test_fix_altlocs.py::TestFixAltlocs::test_launch&#34;, &#34;duration&#34;: &#34;00:00:01&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;biobb_model/test/unitests/test_model/test_fix_altlocs.py::TestFixAltlocs::test_launch&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;00:00:01&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;----------------------------- Captured stdout call -----------------------------\n2024-03-12 15:18:22,471 [MainThread  ] [INFO ]  Executing biobb_model.model.fix_altlocs Version: 4.1.0\n2024-03-12 15:18:22,472 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_model/biobb_model/biobb_model/test/data/model/3ebp.pdb to /tmp/biobb/unitests_13/fix_altlocs/f8e120b1-2814-4287-8b3f-98713d7d9738\n2024-03-12 15:18:22,472 [MainThread  ] [INFO ]  check_structure -i /tmp/biobb/unitests_13/fix_altlocs/f8e120b1-2814-4287-8b3f-98713d7d9738/3ebp.pdb -o /tmp/biobb/unitests_13/fix_altlocs/f8e120b1-2814-4287-8b3f-98713d7d9738/output_pdb_path.pdb --force_save --non_interactive altloc --select A339:A,A171:B,A768:A\n\n2024-03-12 15:18:23,316 [MainThread  ] [INFO ]  Exit code 0\n\n2024-03-12 15:18:23,316 [MainThread  ] [INFO ]  ================================================================================\n=                   BioBB structure checking utility v3.13.4                   =\n=            P. Andrio, A. Hospital, G. Bayarri, J.L. Gelpi 2018-23            =\n================================================================================\n\nWarning: sequence features may not be available, use --sequence for  external fasta input\nStructure /tmp/biobb/unitests_13/fix_altlocs/f8e120b1-2814-4287-8b3f-98713d7d9738/3ebp.pdb loaded\n PDB id: 3EBP \n Title: glycogen phosphorylase b/flavopiridol complex\n Experimental method: x-ray diffraction\n Keywords: glycogen phosphorylase, rational inhibitor design, glycogenolysis, diabetes type 2, allosteric enzyme, carbohydrate metabolism, glycogen metabolism, glycosyltransferase, nucleotide-binding, phosphoprotein, pyridoxal phosphate, transferase-transferase inhibitor complex\n Resolution (A): 2.0\n\n Num. models: 1\n Num. chains: 1 (A: Protein)\n Num. residues:  1097\n Num. residues with ins. codes:  0\n Num. residues with H atoms: 0\n Num. HETATM residues:  288\n Num. ligands or modified residues:  2\n Num. water mol.:  286\n Num. atoms:  6918\nModified residues found\nLLP A680\nSmall mol ligands found\nCPB A940\nRunning altloc. Options: --select A339:A,A171:B,A768:A\nDetected 3 residues with alternative location labels\nCYS A171\n  CB   A (0.50) B (0.50)\n  SG   A (0.50) B (0.50)\nASP A339\n  CG   A (0.50) B (0.50)\n  OD1  A (0.50) B (0.50)\n  OD2  A (0.50) B (0.50)\nHIS A768\n  CG   A (0.50) B (0.50)\n  ND1  A (0.50) B (0.50)\n  CD2  A (0.50) B (0.50)\n  CE1  A (0.50) B (0.50)\n  NE2  A (0.50) B (0.50)\nSelecting location A339:A,A171:B,A768:A\nFinal Num. models: 1\nFinal Num. chains: 1 (A: Protein)\nFinal Num. residues:  1097\nFinal Num. residues with ins. codes:  0\nFinal Num. residues with H atoms: 0\nFinal Num. HETATM residues:  288\nFinal Num. ligands or modified residues:  2\nFinal Num. water mol.:  286\nFinal Num. atoms:  6918\nModified residues found\nLLP A680\nSmall mol ligands found\nCPB A940\nStructure saved on /tmp/biobb/unitests_13/fix_altlocs/f8e120b1-2814-4287-8b3f-98713d7d9738/output_pdb_path.pdb\n\n2024-03-12 15:18:23,318 [MainThread  ] [INFO ]  Removed: [&amp;#x27;/tmp/biobb/unitests_13/fix_altlocs/f8e120b1-2814-4287-8b3f-98713d7d9738&amp;#x27;]\nChecking if empty file: /tmp/biobb/unitests_13/fix_altlocs/output_pdb_path.pdb\nChecking RMSD between:\n     PDB_A: /tmp/biobb/unitests_13/fix_altlocs/output_pdb_path.pdb\n     PDB_B: /home/user/actions-runner/_work/biobb_model/biobb_model/biobb_model/test/reference/model/output_altloc.pdb\n     Ignoring HETAMT in RMSD\n     Ignoring Hydrogen atoms in RMSD\n     Atoms ALIGNED in PDB_A: 6866\n     Atoms ALIGNED in PDB_B: 6866\n     RMS: 1.0683071939348411e-14\n     RMS_CUTOFF: 1\n\n------------------------------ Captured log call -------------------------------\nINFO     /tmp/biobb/unitests_13/fix_altlocs/fix_altlocs_log.out:file_utils.py:390 Executing biobb_model.model.fix_altlocs Version: 4.1.0\nINFO     /tmp/biobb/unitests_13/fix_altlocs/fix_altlocs_log.out:file_utils.py:390 Copy: /home/user/actions-runner/_work/biobb_model/biobb_model/biobb_model/test/data/model/3ebp.pdb to /tmp/biobb/unitests_13/fix_altlocs/f8e120b1-2814-4287-8b3f-98713d7d9738\nINFO     /tmp/biobb/unitests_13/fix_altlocs/fix_altlocs_log.out:cmd_wrapper.py:33 check_structure -i /tmp/biobb/unitests_13/fix_altlocs/f8e120b1-2814-4287-8b3f-98713d7d9738/3ebp.pdb -o /tmp/biobb/unitests_13/fix_altlocs/f8e120b1-2814-4287-8b3f-98713d7d9738/output_pdb_path.pdb --force_save --non_interactive altloc --select A339:A,A171:B,A768:A\n\nINFO     /tmp/biobb/unitests_13/fix_altlocs/fix_altlocs_log.out:cmd_wrapper.py:50 Exit code 0\n\nINFO     /tmp/biobb/unitests_13/fix_altlocs/fix_altlocs_log.out:cmd_wrapper.py:52 ================================================================================\n=                   BioBB structure checking utility v3.13.4                   =\n=            P. Andrio, A. Hospital, G. Bayarri, J.L. Gelpi 2018-23            =\n================================================================================\n\nWarning: sequence features may not be available, use --sequence for  external fasta input\nStructure /tmp/biobb/unitests_13/fix_altlocs/f8e120b1-2814-4287-8b3f-98713d7d9738/3ebp.pdb loaded\n PDB id: 3EBP \n Title: glycogen phosphorylase b/flavopiridol complex\n Experimental method: x-ray diffraction\n Keywords: glycogen phosphorylase, rational inhibitor design, glycogenolysis, diabetes type 2, allosteric enzyme, carbohydrate metabolism, glycogen metabolism, glycosyltransferase, nucleotide-binding, phosphoprotein, pyridoxal phosphate, transferase-transferase inhibitor complex\n Resolution (A): 2.0\n\n Num. models: 1\n Num. chains: 1 (A: Protein)\n Num. residues:  1097\n Num. residues with ins. codes:  0\n Num. residues with H atoms: 0\n Num. HETATM residues:  288\n Num. ligands or modified residues:  2\n Num. water mol.:  286\n Num. atoms:  6918\nModified residues found\nLLP A680\nSmall mol ligands found\nCPB A940\nRunning altloc. Options: --select A339:A,A171:B,A768:A\nDetected 3 residues with alternative location labels\nCYS A171\n  CB   A (0.50) B (0.50)\n  SG   A (0.50) B (0.50)\nASP A339\n  CG   A (0.50) B (0.50)\n  OD1  A (0.50) B (0.50)\n  OD2  A (0.50) B (0.50)\nHIS A768\n  CG   A (0.50) B (0.50)\n  ND1  A (0.50) B (0.50)\n  CD2  A (0.50) B (0.50)\n  CE1  A (0.50) B (0.50)\n  NE2  A (0.50) B (0.50)\nSelecting location A339:A,A171:B,A768:A\nFinal Num. models: 1\nFinal Num. chains: 1 (A: Protein)\nFinal Num. residues:  1097\nFinal Num. residues with ins. codes:  0\nFinal Num. residues with H atoms: 0\nFinal Num. HETATM residues:  288\nFinal Num. ligands or modified residues:  2\nFinal Num. water mol.:  286\nFinal Num. atoms:  6918\nModified residues found\nLLP A680\nSmall mol ligands found\nCPB A940\nStructure saved on /tmp/biobb/unitests_13/fix_altlocs/f8e120b1-2814-4287-8b3f-98713d7d9738/output_pdb_path.pdb\n\nINFO     /tmp/biobb/unitests_13/fix_altlocs/fix_altlocs_log.out:file_utils.py:390 Removed: [&amp;#x27;/tmp/biobb/unitests_13/fix_altlocs/f8e120b1-2814-4287-8b3f-98713d7d9738&amp;#x27;]\n\n--------------------------- Captured stdout teardown ---------------------------\n\nRemoving: /tmp/biobb/unitests_13\n&#34;}], &#34;biobb_model/test/unitests/test_model/test_fix_amides.py::TestFixAmides::test_launch&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;biobb_model/test/unitests/test_model/test_fix_amides.py::TestFixAmides::test_launch&#34;, &#34;duration&#34;: &#34;00:00:02&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;biobb_model/test/unitests/test_model/test_fix_amides.py::TestFixAmides::test_launch&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;00:00:02&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;----------------------------- Captured stdout call -----------------------------\n2024-03-12 15:18:23,679 [MainThread  ] [INFO ]  Executing biobb_model.model.fix_amides Version: 4.1.0\n2024-03-12 15:18:23,680 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_model/biobb_model/biobb_model/test/data/model/5s2z.pdb to /tmp/biobb/unitests_13/fix_amides/b2e1d255-4ed4-48dd-975f-7653901746a4\n2024-03-12 15:18:23,680 [MainThread  ] [INFO ]  check_structure -i /tmp/biobb/unitests_13/fix_amides/b2e1d255-4ed4-48dd-975f-7653901746a4/5s2z.pdb -o /tmp/biobb/unitests_13/fix_amides/b2e1d255-4ed4-48dd-975f-7653901746a4/output_pdb_path.pdb --force_save amide --fix All\n\n2024-03-12 15:18:25,348 [MainThread  ] [INFO ]  Exit code 0\n\n2024-03-12 15:18:25,348 [MainThread  ] [INFO ]  ================================================================================\n=                   BioBB structure checking utility v3.13.4                   =\n=            P. Andrio, A. Hospital, G. Bayarri, J.L. Gelpi 2018-23            =\n================================================================================\n\nWarning: sequence features may not be available, use --sequence for  external fasta input\nStructure /tmp/biobb/unitests_13/fix_amides/b2e1d255-4ed4-48dd-975f-7653901746a4/5s2z.pdb loaded\n PDB id: 5S2Z \n Title: pandda analysis group deposition -- crystal structure of sars-cov-2 nsp3 macrodomain in complex with z126932614\n Experimental method: x-ray diffraction\n Keywords: sgc - diamond i04-1 fragment screening, pandda, xchemexplorer, sars- cov-2 nsp3 macrodomain, viral protein\n Resolution (A): 1.07\n\n Num. models: 1\n Num. chains: 2 (A: Protein, B: Protein)\n Num. residues:  792\n Num. residues with ins. codes:  0\n Num. residues with H atoms: 0\n Num. HETATM residues:  458\n Num. ligands or modified residues:  1\n Num. water mol.:  457\n Num. atoms:  2998\nModified residues found\nT6J A401\nRunning amide. Options: --fix All\nFound 2 unusual contact(s) involving amide atoms\n ASN B20.OD1  VAL B155.O      3.015 A\n ASN B20.OD1  PHE B156.O      2.894 A\nAmide residues fixed All (1)\nRechecking\nFound no unusual contact(s) involving amide atoms\nFinal Num. models: 1\nFinal Num. chains: 2 (A: Protein, B: Protein)\nFinal Num. residues:  792\nFinal Num. residues with ins. codes:  0\nFinal Num. residues with H atoms: 0\nFinal Num. HETATM residues:  458\nFinal Num. ligands or modified residues:  1\nFinal Num. water mol.:  457\nFinal Num. atoms:  2998\nModified residues found\nT6J A401\nStructure saved on /tmp/biobb/unitests_13/fix_amides/b2e1d255-4ed4-48dd-975f-7653901746a4/output_pdb_path.pdb\n\n2024-03-12 15:18:25,349 [MainThread  ] [INFO ]  Removed: [&amp;#x27;/tmp/biobb/unitests_13/fix_amides/b2e1d255-4ed4-48dd-975f-7653901746a4&amp;#x27;]\nChecking if empty file: /tmp/biobb/unitests_13/fix_amides/output_pdb_path.pdb\nChecking RMSD between:\n     PDB_A: /tmp/biobb/unitests_13/fix_amides/output_pdb_path.pdb\n     PDB_B: /home/user/actions-runner/_work/biobb_model/biobb_model/biobb_model/test/reference/model/output_amide_pdb_path.pdb\n     Ignoring HETAMT in RMSD\n     Ignoring Hydrogen atoms in RMSD\n     Atoms ALIGNED in PDB_A: 2984\n     Atoms ALIGNED in PDB_B: 2984\n     RMS: 7.386865969918367e-15\n     RMS_CUTOFF: 1\n\n------------------------------ Captured log call -------------------------------\nINFO     /tmp/biobb/unitests_13/fix_amides/fix_amides_log.out:file_utils.py:390 Executing biobb_model.model.fix_amides Version: 4.1.0\nINFO     /tmp/biobb/unitests_13/fix_amides/fix_amides_log.out:file_utils.py:390 Copy: /home/user/actions-runner/_work/biobb_model/biobb_model/biobb_model/test/data/model/5s2z.pdb to /tmp/biobb/unitests_13/fix_amides/b2e1d255-4ed4-48dd-975f-7653901746a4\nINFO     /tmp/biobb/unitests_13/fix_amides/fix_amides_log.out:cmd_wrapper.py:33 check_structure -i /tmp/biobb/unitests_13/fix_amides/b2e1d255-4ed4-48dd-975f-7653901746a4/5s2z.pdb -o /tmp/biobb/unitests_13/fix_amides/b2e1d255-4ed4-48dd-975f-7653901746a4/output_pdb_path.pdb --force_save amide --fix All\n\nINFO     /tmp/biobb/unitests_13/fix_amides/fix_amides_log.out:cmd_wrapper.py:50 Exit code 0\n\nINFO     /tmp/biobb/unitests_13/fix_amides/fix_amides_log.out:cmd_wrapper.py:52 ================================================================================\n=                   BioBB structure checking utility v3.13.4                   =\n=            P. Andrio, A. Hospital, G. Bayarri, J.L. Gelpi 2018-23            =\n================================================================================\n\nWarning: sequence features may not be available, use --sequence for  external fasta input\nStructure /tmp/biobb/unitests_13/fix_amides/b2e1d255-4ed4-48dd-975f-7653901746a4/5s2z.pdb loaded\n PDB id: 5S2Z \n Title: pandda analysis group deposition -- crystal structure of sars-cov-2 nsp3 macrodomain in complex with z126932614\n Experimental method: x-ray diffraction\n Keywords: sgc - diamond i04-1 fragment screening, pandda, xchemexplorer, sars- cov-2 nsp3 macrodomain, viral protein\n Resolution (A): 1.07\n\n Num. models: 1\n Num. chains: 2 (A: Protein, B: Protein)\n Num. residues:  792\n Num. residues with ins. codes:  0\n Num. residues with H atoms: 0\n Num. HETATM residues:  458\n Num. ligands or modified residues:  1\n Num. water mol.:  457\n Num. atoms:  2998\nModified residues found\nT6J A401\nRunning amide. Options: --fix All\nFound 2 unusual contact(s) involving amide atoms\n ASN B20.OD1  VAL B155.O      3.015 A\n ASN B20.OD1  PHE B156.O      2.894 A\nAmide residues fixed All (1)\nRechecking\nFound no unusual contact(s) involving amide atoms\nFinal Num. models: 1\nFinal Num. chains: 2 (A: Protein, B: Protein)\nFinal Num. residues:  792\nFinal Num. residues with ins. codes:  0\nFinal Num. residues with H atoms: 0\nFinal Num. HETATM residues:  458\nFinal Num. ligands or modified residues:  1\nFinal Num. water mol.:  457\nFinal Num. atoms:  2998\nModified residues found\nT6J A401\nStructure saved on /tmp/biobb/unitests_13/fix_amides/b2e1d255-4ed4-48dd-975f-7653901746a4/output_pdb_path.pdb\n\nINFO     /tmp/biobb/unitests_13/fix_amides/fix_amides_log.out:file_utils.py:390 Removed: [&amp;#x27;/tmp/biobb/unitests_13/fix_amides/b2e1d255-4ed4-48dd-975f-7653901746a4&amp;#x27;]\n\n--------------------------- Captured stdout teardown ---------------------------\n\nRemoving: /tmp/biobb/unitests_13\n&#34;}], &#34;biobb_model/test/unitests/test_model/test_fix_chirality.py::TestFixChirality::test_launch&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;biobb_model/test/unitests/test_model/test_fix_chirality.py::TestFixChirality::test_launch&#34;, &#34;duration&#34;: &#34;00:00:01&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;biobb_model/test/unitests/test_model/test_fix_chirality.py::TestFixChirality::test_launch&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;00:00:01&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;----------------------------- Captured stdout call -----------------------------\n2024-03-12 15:18:25,587 [MainThread  ] [INFO ]  Executing biobb_model.model.fix_chirality Version: 4.1.0\n2024-03-12 15:18:25,588 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_model/biobb_model/biobb_model/test/data/model/3e2y.pdb to /tmp/biobb/unitests_13/fix_chirality/c4427f1f-bd3f-4249-acfc-3cd69d3eb811\n2024-03-12 15:18:25,588 [MainThread  ] [INFO ]  check_structure -i /tmp/biobb/unitests_13/fix_chirality/c4427f1f-bd3f-4249-acfc-3cd69d3eb811/3e2y.pdb -o /tmp/biobb/unitests_13/fix_chirality/c4427f1f-bd3f-4249-acfc-3cd69d3eb811/output_pdb_path.pdb --force_save chiral --fix All\n\n2024-03-12 15:18:26,668 [MainThread  ] [INFO ]  Exit code 0\n\n2024-03-12 15:18:26,668 [MainThread  ] [INFO ]  ================================================================================\n=                   BioBB structure checking utility v3.13.4                   =\n=            P. Andrio, A. Hospital, G. Bayarri, J.L. Gelpi 2018-23            =\n================================================================================\n\nWarning: sequence features may not be available, use --sequence for  external fasta input\nStructure /tmp/biobb/unitests_13/fix_chirality/c4427f1f-bd3f-4249-acfc-3cd69d3eb811/3e2y.pdb loaded\n PDB id: 3E2Y \n Title: crystal structure of mouse kynurenine aminotransferase iii in complex with glutamine\n Experimental method: x-ray diffraction\n Keywords: alpha beta protein, plp dependent protein, aminotransferase, lyase, pyridoxal phosphate, transferase\n Resolution (A): 2.26\n\n Num. models: 1\n Num. chains: 2 (A: Protein, B: Protein)\n Num. residues:  1239\n Num. residues with ins. codes:  0\n Num. residues with H atoms: 0\n Num. HETATM residues:  419\n Num. ligands or modified residues:  8\n Num. water mol.:  411\n Num. atoms:  6993\nModified residues found\nGLN A456\nGLN B457\nSmall mol ligands found\nPMP A457\nGOL A458\nGOL A459\nPMP B456\nGOL B458\nGOL B459\nRunning chiral. Options: --fix All\nFound 2 residues with incorrect side-chain chirality\n THR A256  \n THR B286  \nChiral side chains fixed All (2)\nChecking for steric clashes\nNo severe clashes detected\n1 Steric apolar clashes detected\n THR A256.CG2 GLU A348.OE2    2.678 A\nNo polar_acceptor clashes detected\n1 Steric polar_donor clashes detected\n GLN A97.NE2  THR B286.N      3.001 A\nNo positive clashes detected\nNo negative clashes detected\nFinal Num. models: 1\nFinal Num. chains: 2 (A: Protein, B: Protein)\nFinal Num. residues:  1239\nFinal Num. residues with ins. codes:  0\nFinal Num. residues with H atoms: 0\nFinal Num. HETATM residues:  419\nFinal Num. ligands or modified residues:  8\nFinal Num. water mol.:  411\nFinal Num. atoms:  6993\nModified residues found\nGLN A456\nGLN B457\nSmall mol ligands found\nPMP A457\nGOL A458\nGOL A459\nPMP B456\nGOL B458\nGOL B459\nStructure saved on /tmp/biobb/unitests_13/fix_chirality/c4427f1f-bd3f-4249-acfc-3cd69d3eb811/output_pdb_path.pdb\n\n2024-03-12 15:18:26,670 [MainThread  ] [INFO ]  Removed: [&amp;#x27;/tmp/biobb/unitests_13/fix_chirality/c4427f1f-bd3f-4249-acfc-3cd69d3eb811&amp;#x27;]\nChecking if empty file: /tmp/biobb/unitests_13/fix_chirality/output_pdb_path.pdb\nChecking RMSD between:\n     PDB_A: /tmp/biobb/unitests_13/fix_chirality/output_pdb_path.pdb\n     PDB_B: /home/user/actions-runner/_work/biobb_model/biobb_model/biobb_model/test/reference/model/output_chirality_pdb_path.pdb\n     Ignoring HETAMT in RMSD\n     Ignoring Hydrogen atoms in RMSD\n     Atoms ALIGNED in PDB_A: 6917\n     Atoms ALIGNED in PDB_B: 6917\n     RMS: 6.2661067786844326e-15\n     RMS_CUTOFF: 1\n\n------------------------------ Captured log call -------------------------------\nINFO     /tmp/biobb/unitests_13/fix_chirality/fix_chirality_log.out:file_utils.py:390 Executing biobb_model.model.fix_chirality Version: 4.1.0\nINFO     /tmp/biobb/unitests_13/fix_chirality/fix_chirality_log.out:file_utils.py:390 Copy: /home/user/actions-runner/_work/biobb_model/biobb_model/biobb_model/test/data/model/3e2y.pdb to /tmp/biobb/unitests_13/fix_chirality/c4427f1f-bd3f-4249-acfc-3cd69d3eb811\nINFO     /tmp/biobb/unitests_13/fix_chirality/fix_chirality_log.out:cmd_wrapper.py:33 check_structure -i /tmp/biobb/unitests_13/fix_chirality/c4427f1f-bd3f-4249-acfc-3cd69d3eb811/3e2y.pdb -o /tmp/biobb/unitests_13/fix_chirality/c4427f1f-bd3f-4249-acfc-3cd69d3eb811/output_pdb_path.pdb --force_save chiral --fix All\n\nINFO     /tmp/biobb/unitests_13/fix_chirality/fix_chirality_log.out:cmd_wrapper.py:50 Exit code 0\n\nINFO     /tmp/biobb/unitests_13/fix_chirality/fix_chirality_log.out:cmd_wrapper.py:52 ================================================================================\n=                   BioBB structure checking utility v3.13.4                   =\n=            P. Andrio, A. Hospital, G. Bayarri, J.L. Gelpi 2018-23            =\n================================================================================\n\nWarning: sequence features may not be available, use --sequence for  external fasta input\nStructure /tmp/biobb/unitests_13/fix_chirality/c4427f1f-bd3f-4249-acfc-3cd69d3eb811/3e2y.pdb loaded\n PDB id: 3E2Y \n Title: crystal structure of mouse kynurenine aminotransferase iii in complex with glutamine\n Experimental method: x-ray diffraction\n Keywords: alpha beta protein, plp dependent protein, aminotransferase, lyase, pyridoxal phosphate, transferase\n Resolution (A): 2.26\n\n Num. models: 1\n Num. chains: 2 (A: Protein, B: Protein)\n Num. residues:  1239\n Num. residues with ins. codes:  0\n Num. residues with H atoms: 0\n Num. HETATM residues:  419\n Num. ligands or modified residues:  8\n Num. water mol.:  411\n Num. atoms:  6993\nModified residues found\nGLN A456\nGLN B457\nSmall mol ligands found\nPMP A457\nGOL A458\nGOL A459\nPMP B456\nGOL B458\nGOL B459\nRunning chiral. Options: --fix All\nFound 2 residues with incorrect side-chain chirality\n THR A256  \n THR B286  \nChiral side chains fixed All (2)\nChecking for steric clashes\nNo severe clashes detected\n1 Steric apolar clashes detected\n THR A256.CG2 GLU A348.OE2    2.678 A\nNo polar_acceptor clashes detected\n1 Steric polar_donor clashes detected\n GLN A97.NE2  THR B286.N      3.001 A\nNo positive clashes detected\nNo negative clashes detected\nFinal Num. models: 1\nFinal Num. chains: 2 (A: Protein, B: Protein)\nFinal Num. residues:  1239\nFinal Num. residues with ins. codes:  0\nFinal Num. residues with H atoms: 0\nFinal Num. HETATM residues:  419\nFinal Num. ligands or modified residues:  8\nFinal Num. water mol.:  411\nFinal Num. atoms:  6993\nModified residues found\nGLN A456\nGLN B457\nSmall mol ligands found\nPMP A457\nGOL A458\nGOL A459\nPMP B456\nGOL B458\nGOL B459\nStructure saved on /tmp/biobb/unitests_13/fix_chirality/c4427f1f-bd3f-4249-acfc-3cd69d3eb811/output_pdb_path.pdb\n\nINFO     /tmp/biobb/unitests_13/fix_chirality/fix_chirality_log.out:file_utils.py:390 Removed: [&amp;#x27;/tmp/biobb/unitests_13/fix_chirality/c4427f1f-bd3f-4249-acfc-3cd69d3eb811&amp;#x27;]\n\n--------------------------- Captured stdout teardown ---------------------------\n\nRemoving: /tmp/biobb/unitests_13\n&#34;}], &#34;biobb_model/test/unitests/test_model/test_fix_pdb.py::TestFixPdb::test_launch&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;biobb_model/test/unitests/test_model/test_fix_pdb.py::TestFixPdb::test_launch&#34;, &#34;duration&#34;: &#34;00:00:04&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;biobb_model/test/unitests/test_model/test_fix_pdb.py::TestFixPdb::test_launch&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;00:00:04&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;----------------------------- Captured stdout call -----------------------------\n2024-03-12 15:18:27,054 [MainThread  ] [INFO ]  Executing biobb_model.model.fix_pdb Version: 4.1.0\n126 VVIKVCEFQFCNDPFLGVYYHKNNKSWMESEFRVYSSANNCTFEYVSQPFLMDLEGKQGNFKNLREFVFKNIDGYFK-----IYSKH------TPINLVRDLPQGF-SALEPLVDLPIG----INIT------------------RFQTLLAL--------HRSYLT-PGDS------SSGWTAG------------------AAAYYVGYLQ------PRTFLLKYNENGTITDAVDCALDPLSETKCTLKSFTVEKGIYQTSNFRVQPTESIVRF-----PNITNLCPFGEVFNATRFASVYA------------WNRKR--------------------ISNCVADYSVL-YNSASFSTFKCYGV--------SPTKLNDLCFTNVYADSFVIRGDEVRQIAPGQTGKIADYNYKLPDDFTGCVIAWNSNNLDSKVGGNYNY---LYRLFRKSNLKPF\n    ||.|       |....|..|......|.    |.|........||.......|.|......|.|    ......|..     .|..|      .|..|..|....| ..|.||. .|.|    |..|                  .|.....|        ..|.|| |||.      ...|..|                  .|....|..|      ....||....|.....||.........|...||..    |.. .|.| ....|....|     .||....||.......|. .|..            |..||                    ......|||.. |.......|.....        .|....|.       ......|....|..  ..||.......| .||.|      |.|.|  ||....|   ||......|.|.|\n166 VVLK-------NEMARGYHYEDYGDYWR----RDYETEGSPDLEYSRDQLIKDVERIFAEIKPL----YEQLHAYVRTKLMDTYPFHISPTGCLPAHLLGDMWGRFWTNLYPLT-VPFGQKPNIDVTDAMLNQNWDAKRIFKEAEKFFVSIGLPNMTEGFWNNSMLTDPGDGRKVVCHPTAWDLGKGDFRIKMCTKVTMEDFLTAHHEMGHIQYDMAYASQPYLLRNGANEGFHEAVGEVMSLSVATPKHLKTM----GLL-SSDF-LEDNETEINFLFKQALNIVGTLPFTYMLEKWRW-MVFKGEIPKEEWMKKWWEMKRKIVGVVEPVPHDETYCDPASLFHVANDYSFIRYYTRTIFEFQFHEALCRIAKHDGPLHKCDI-------SNSTDAGEKLHQML--SVGKSQPWTSVL-KDFVG------SKNMD--VGPLLRYFEPLYTWLTEQNRKSF\n  Score=67\n\nNormalized score: 0.11185308848080133\nNot valid alignment\n19 STIEEQAKTFLDKFNHEAEDLFYQSSLASWNYNTNITEENVQNMNNAGDKWSAFLKEQSTLAQMYPLQEIQNLTVKLQLQALQQNGSSVLSEDKSKRLNTILNTMSTIYSTGKVCNPDNPQECLLLEPGLNEIMANSLDYNERLWAWESWRSEVGKQLRPLYEEYVVLKNEMARANHYEDYGDYWRGDYEVNGVDGYDYSRGQLIEDVEHTFEEIKPLYEHLHAYVRAKLMNAYPSYISPIGCLPAHLLGDMWGRFWTNLYSLTVPFGQKPNIDVTDAMVDQAWDAQRIFKEAEKFFVSVGLPNMTQGFWENSMLTDPGNVQKAVCHPTAWDLGKGDFRILMCTKVTMDDFLTAHHEMGHIQYDMAYAAQPFLLRNGANEGFHEAVGEIMSLSAATPKHLKSIGLLSPDFQEDNETEINFLLKQALTIVGTLPFTYMLEKWRWMVFKGEIPKDQWMKKWWEMKREIVGVVEPVPHDETYCDPASLFHVSNDYSFIRYYTRTLYQFQFQEALCQAAKHEGPLHKCDISNSTEAGQKLFNMLRLGKSEPWTLALENVVGAKNMNVRPLLNYFEPLFTWLKDQNKNSFVGWSTDWSPYAD\n   ||.|..||.|||.||.|||.|..|||||||.|||||..||||.|..||.|||.|...||.||....|.||.|.|||||||.|||.||.|||||||||||.|||.|||||||||||.|.||||||||||||..||..|.||||||||||.||.||||||||||||||||||||||..||||||||||.|||..|.....|||.|||.|||..|.|||||||.||||||.|||..||..|||.||||||||||||||||||||.|||||||||||||||||..|.|||.||||||||||||.||||||.|||.||||||||...|.||||||||||||||||.|||||||.|||||||||||||||||||.||.||||||||||||||||.||||.|||||||..||||.||.||||||||||.||||.|||||||||||||||||||||||||..||||||||||.|||||||||||||||||||||||.||||||||||||...|||.||||..|||.||||||||||||.||.||..||..|||.|||..|...||.|||.|.|||.|||||.|||..||..|||||.||||||||\n 1 STTEDLAKKFLDDFNSEAENLSHQSSLASWEYNTNISDENVQKMDEAGAKWSDFYEKQSKLAKNFSLEEIHNDTVKLQLQILQQSGSPVLSEDKSKRLNSILNAMSTIYSTGKVCKPNNPQECLLLEPGLDNIMGTSKDYNERLWAWEGWRAEVGKQLRPLYEEYVVLKNEMARGYHYEDYGDYWRRDYETEGSPDLEYSRDQLIKDVERIFAEIKPLYEQLHAYVRTKLMDTYPFHISPTGCLPAHLLGDMWGRFWTNLYPLTVPFGQKPNIDVTDAMLNQNWDAKRIFKEAEKFFVSIGLPNMTEGFWNNSMLTDPGDGRKVVCHPTAWDLGKGDFRIKMCTKVTMEDFLTAHHEMGHIQYDMAYASQPYLLRNGANEGFHEAVGEVMSLSVATPKHLKTMGLLSSDFLEDNETEINFLFKQALNIVGTLPFTYMLEKWRWMVFKGEIPKEEWMKKWWEMKRKIVGVVEPVPHDETYCDPASLFHVANDYSFIRYYTRTIFEFQFHEALCRIAKHDGPLHKCDISNSTDAGEKLHQMLSVGKSQPWTSVLKDFVGSKNMDVGPLLRYFEPLYTWLTEQNRKSFVGWNTDWSPYAD\n  Score=2643\n\nNormalized score: 4.412353923205342\n334 NLCPFGEVFNATRFASVYAWNRKRISNCVADYSVLYNSASFSTFKCYGVSPTKLNDLCFTNVYADSFVIRGDEVRQIAPGQTGKIADYNYKLPDDFTGCVIAWNSNNLDSKVGGNYNYLYRLFRKSNLKPFERDISTEIYQAGSTPCNGVEGFNCYFPLQSYGFQPTNGVGYQPYRVVVLSFELLHAPATVCGP\n    ||||||||||||.|.|||||.||.||||||||||||||..||||||||||.||||||||.||||||||..||.||||||||||.||||||||||||.|||.|||..|.|....|||||.||..|...|.|||||||.........||. ....|||.||..|||..|.|.|||||||||||||||.||||||||\n  1 NLCPFGEVFNATKFPSVYAWERKKISNCVADYSVLYNSTFFSTFKCYGVSATKLNDLCFSNVYADSFVVKGDDVRQIAPGQTGVIADYNYKLPDDFMGCVLAWNTRNIDATSTGNYNYKYRYLRHGKLRPFERDISNVPFSPDGKPCT-PPALNCYWPLNDYGFYTTTGIGYQPYRVVVLSFELLNAPATVCGP\n  Score=792\n\nNormalized score: 4.103626943005182\n84 PLQEIQNLTVKLQLQALQQNGSSVLSEDKSKRLN--------------TILNTM--STIYSTGKVCNPDNPQECLLLEPGLNEIMANSLDYNERL--------WAWESWRSEV---------------GKQLRPLYEEYVVLKN----------EMARANHYEDYGDYWRGDYEVNGVDGY\n   |..|..|.|......|......|....|.|...|              |.||..  |..|....|...|....   ..||.....|   |||..|        .||.......               || |||....   ..|          .....|.|....||  |.|...|. ||\n 4 PFGEVFNATKFPSVYAWERKKISNCVADYSVLYNSTFFSTFKCYGVSATKLNDLCFSNVYADSFVVKGDDVRQ---IAPGQTGVIA---DYNYKLPDDFMGCVLAWNTRNIDATSTGNYNYKYRYLRHGK-LRPFERD---ISNVPFSPDGKPCTPPALNCYWPLNDY--GFYTTTGI-GY\n  Score=46.5\n\nNormalized score: 0.24093264248704663\nNot valid alignment\nReference summary:\n   A -&amp;gt; Q9BYF1\n   B -&amp;gt; P0DTC2\nFixed :)\n2024-03-12 15:18:31,301 [MainThread  ] [INFO ]  Removed: []\nChecking if empty file: /tmp/biobb/unitests_13/fix_pdb/output_fixpdb.pdb\nComparing: \n        File_A: /tmp/biobb/unitests_13/fix_pdb/output_fixpdb.pdb\n        File_B: /home/user/actions-runner/_work/biobb_model/biobb_model/biobb_model/test/reference/model/output_fixpdb.pdb\n        File_A hash: b&amp;#x27;g\\xebw_\\xb7\\xe0`\\x92\\xf8\\xc0\\xbd\\xc5\\xe6\\x86\\xbf\\xd6\\xc9\\x8f\\x17\\x82\\xfeV\\xd6\\xf7\\x89v\\xf6\\x11\\x80\\x96\\xfa_&amp;#x27;\n        File_B hash: b&amp;#x27;g\\xebw_\\xb7\\xe0`\\x92\\xf8\\xc0\\xbd\\xc5\\xe6\\x86\\xbf\\xd6\\xc9\\x8f\\x17\\x82\\xfeV\\xd6\\xf7\\x89v\\xf6\\x11\\x80\\x96\\xfa_&amp;#x27;\n\n------------------------------ Captured log call -------------------------------\nINFO     /tmp/biobb/unitests_13/fix_pdb/fix_pdb_log.out:file_utils.py:390 Executing biobb_model.model.fix_pdb Version: 4.1.0\nINFO     /tmp/biobb/unitests_13/fix_pdb/fix_pdb_log.out:file_utils.py:390 Removed: []\n\n--------------------------- Captured stdout teardown ---------------------------\n\nRemoving: /tmp/biobb/unitests_13\n&#34;}], &#34;biobb_model/test/unitests/test_model/test_fix_side_chain.py::TestFixSideChain::test_launch&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;biobb_model/test/unitests/test_model/test_fix_side_chain.py::TestFixSideChain::test_launch&#34;, &#34;duration&#34;: &#34;00:00:01&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;biobb_model/test/unitests/test_model/test_fix_side_chain.py::TestFixSideChain::test_launch&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;00:00:01&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;----------------------------- Captured stdout call -----------------------------\n2024-03-12 15:18:31,325 [MainThread  ] [INFO ]  Executing biobb_model.model.fix_side_chain Version: 4.1.0\n2024-03-12 15:18:31,326 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_model/biobb_model/biobb_model/test/data/model/2ki5.pdb to /tmp/biobb/unitests_13/fix_side_chain/f6eea4bc-4cd7-4f01-afa2-5a387a1081d7\n2024-03-12 15:18:31,326 [MainThread  ] [INFO ]  check_structure -i /tmp/biobb/unitests_13/fix_side_chain/f6eea4bc-4cd7-4f01-afa2-5a387a1081d7/2ki5.pdb -o /tmp/biobb/unitests_13/fix_side_chain/f6eea4bc-4cd7-4f01-afa2-5a387a1081d7/output_pdb_path.pdb --force_save fixside --fix ALL\n\n2024-03-12 15:18:32,467 [MainThread  ] [INFO ]  Exit code 0\n\n2024-03-12 15:18:32,468 [MainThread  ] [INFO ]  ================================================================================\n=                   BioBB structure checking utility v3.13.4                   =\n=            P. Andrio, A. Hospital, G. Bayarri, J.L. Gelpi 2018-23            =\n================================================================================\n\nWarning: sequence features may not be available, use --sequence for  external fasta input\nStructure /tmp/biobb/unitests_13/fix_side_chain/f6eea4bc-4cd7-4f01-afa2-5a387a1081d7/2ki5.pdb loaded\n PDB id: 2KI5 \n Title: herpes simplex type-1 thymidine kinase in complex with the drug aciclovir at 1.9a resolution\n Experimental method: x-ray diffraction\n Keywords: transferase (phosphotransferase) thymid, transferase (phosphotransferase) thymidine kinase; viridae; ds-dna enveloped viruses; herpesviridae; alphaherpesvirinae antiviral drug (aciclovir)\n Resolution (A): 1.9\n\n Num. models: 1\n Num. chains: 2 (A: Protein, B: Protein)\n Num. residues:  908\n Num. residues with ins. codes:  0\n Num. residues with H atoms: 0\n Num. HETATM residues:  296\n Num. ligands or modified residues:  4\n Num. water mol.:  292\n Num. atoms:  4961\nSmall mol ligands found\nSO4 A4\nAC2 A1\nSO4 B3\nAC2 B2\nRunning fixside. Options: --fix ALL\nFound 6 Residues with missing side chain atoms\n MET A46    CG,SD,CE\n PRO A154   CG,CD\n PRO A280   CG,CD\n MET B46    CG,SD,CE\n PRO B154   CG,CD\n ARG B220   CG,CD,NE,CZ,NH1,NH2\nFixing side chains\nMET A46\n  Adding new atom CG\n  Adding new atom SD\n  Adding new atom CE\nPRO A154\n  Adding new atom CG\n  Adding new atom CD\nPRO A280\n  Adding new atom CG\n  Adding new atom CD\nMET B46\n  Adding new atom CG\n  Adding new atom SD\n  Adding new atom CE\nPRO B154\n  Adding new atom CG\n  Adding new atom CD\nARG B220\n  Adding new atom CG\n  Adding new atom CD\n  Adding new atom NE\n  Adding new atom CZ\n  Adding new atom NH1\n  Adding new atom NH2\nFixed 6 side chain(s)\nChecking for steric clashes\n1 Steric severe clashes detected\n MET B46.CE   VAL B352.O      0.921 A\n5 Steric apolar clashes detected\n MET A46.CE   VAL A352.CG2    1.843 A\n MET A46.CE   THR A354.O      1.869 A\n MET B46.CE   VAL B352.O      0.921 A\n GLY B61.CA   ARG B220.NH1    2.301 A\n ARG B220.CZ  SO4 B3.O3       1.597 A\n3 Steric polar_acceptor clashes detected\n MET A46.SD   VAL A352.O      2.171 A\n MET A46.SD   THR A354.O      2.569 A\n MET B46.SD   VAL B352.O      2.291 A\n2 Steric polar_donor clashes detected\n GLY B61.N    ARG B220.NH1    2.443 A\n ARG B216.NH2 ARG B220.NH1    2.977 A\n1 Steric positive clashes detected\n ARG B216.NH2 ARG B220.NH1    2.977 A\nNo negative clashes detected\nFinal Num. models: 1\nFinal Num. chains: 2 (A: Protein, B: Protein)\nFinal Num. residues:  908\nFinal Num. residues with ins. codes:  0\nFinal Num. residues with H atoms: 0\nFinal Num. HETATM residues:  296\nFinal Num. ligands or modified residues:  4\nFinal Num. water mol.:  292\nFinal Num. atoms:  4979\nSmall mol ligands found\nSO4 A4\nAC2 A1\nSO4 B3\nAC2 B2\nStructure saved on /tmp/biobb/unitests_13/fix_side_chain/f6eea4bc-4cd7-4f01-afa2-5a387a1081d7/output_pdb_path.pdb\n\n2024-03-12 15:18:32,469 [MainThread  ] [INFO ]  Removed: [&amp;#x27;/tmp/biobb/unitests_13/fix_side_chain/f6eea4bc-4cd7-4f01-afa2-5a387a1081d7&amp;#x27;]\nChecking if empty file: /tmp/biobb/unitests_13/fix_side_chain/output_pdb_path.pdb\nChecking RMSD between:\n     PDB_A: /tmp/biobb/unitests_13/fix_side_chain/output_pdb_path.pdb\n     PDB_B: /home/user/actions-runner/_work/biobb_model/biobb_model/biobb_model/test/reference/model/output_pdb_path.pdb\n     Ignoring HETAMT in RMSD\n     Ignoring Hydrogen atoms in RMSD\n     Atoms ALIGNED in PDB_A: 4937\n     Atoms ALIGNED in PDB_B: 4937\n     RMS: 6.0339467652777484e-15\n     RMS_CUTOFF: 1\n\n------------------------------ Captured log call -------------------------------\nINFO     /tmp/biobb/unitests_13/fix_side_chain/fix_side_chain_log.out:file_utils.py:390 Executing biobb_model.model.fix_side_chain Version: 4.1.0\nINFO     /tmp/biobb/unitests_13/fix_side_chain/fix_side_chain_log.out:file_utils.py:390 Copy: /home/user/actions-runner/_work/biobb_model/biobb_model/biobb_model/test/data/model/2ki5.pdb to /tmp/biobb/unitests_13/fix_side_chain/f6eea4bc-4cd7-4f01-afa2-5a387a1081d7\nINFO     /tmp/biobb/unitests_13/fix_side_chain/fix_side_chain_log.out:cmd_wrapper.py:33 check_structure -i /tmp/biobb/unitests_13/fix_side_chain/f6eea4bc-4cd7-4f01-afa2-5a387a1081d7/2ki5.pdb -o /tmp/biobb/unitests_13/fix_side_chain/f6eea4bc-4cd7-4f01-afa2-5a387a1081d7/output_pdb_path.pdb --force_save fixside --fix ALL\n\nINFO     /tmp/biobb/unitests_13/fix_side_chain/fix_side_chain_log.out:cmd_wrapper.py:50 Exit code 0\n\nINFO     /tmp/biobb/unitests_13/fix_side_chain/fix_side_chain_log.out:cmd_wrapper.py:52 ================================================================================\n=                   BioBB structure checking utility v3.13.4                   =\n=            P. Andrio, A. Hospital, G. Bayarri, J.L. Gelpi 2018-23            =\n================================================================================\n\nWarning: sequence features may not be available, use --sequence for  external fasta input\nStructure /tmp/biobb/unitests_13/fix_side_chain/f6eea4bc-4cd7-4f01-afa2-5a387a1081d7/2ki5.pdb loaded\n PDB id: 2KI5 \n Title: herpes simplex type-1 thymidine kinase in complex with the drug aciclovir at 1.9a resolution\n Experimental method: x-ray diffraction\n Keywords: transferase (phosphotransferase) thymid, transferase (phosphotransferase) thymidine kinase; viridae; ds-dna enveloped viruses; herpesviridae; alphaherpesvirinae antiviral drug (aciclovir)\n Resolution (A): 1.9\n\n Num. models: 1\n Num. chains: 2 (A: Protein, B: Protein)\n Num. residues:  908\n Num. residues with ins. codes:  0\n Num. residues with H atoms: 0\n Num. HETATM residues:  296\n Num. ligands or modified residues:  4\n Num. water mol.:  292\n Num. atoms:  4961\nSmall mol ligands found\nSO4 A4\nAC2 A1\nSO4 B3\nAC2 B2\nRunning fixside. Options: --fix ALL\nFound 6 Residues with missing side chain atoms\n MET A46    CG,SD,CE\n PRO A154   CG,CD\n PRO A280   CG,CD\n MET B46    CG,SD,CE\n PRO B154   CG,CD\n ARG B220   CG,CD,NE,CZ,NH1,NH2\nFixing side chains\nMET A46\n  Adding new atom CG\n  Adding new atom SD\n  Adding new atom CE\nPRO A154\n  Adding new atom CG\n  Adding new atom CD\nPRO A280\n  Adding new atom CG\n  Adding new atom CD\nMET B46\n  Adding new atom CG\n  Adding new atom SD\n  Adding new atom CE\nPRO B154\n  Adding new atom CG\n  Adding new atom CD\nARG B220\n  Adding new atom CG\n  Adding new atom CD\n  Adding new atom NE\n  Adding new atom CZ\n  Adding new atom NH1\n  Adding new atom NH2\nFixed 6 side chain(s)\nChecking for steric clashes\n1 Steric severe clashes detected\n MET B46.CE   VAL B352.O      0.921 A\n5 Steric apolar clashes detected\n MET A46.CE   VAL A352.CG2    1.843 A\n MET A46.CE   THR A354.O      1.869 A\n MET B46.CE   VAL B352.O      0.921 A\n GLY B61.CA   ARG B220.NH1    2.301 A\n ARG B220.CZ  SO4 B3.O3       1.597 A\n3 Steric polar_acceptor clashes detected\n MET A46.SD   VAL A352.O      2.171 A\n MET A46.SD   THR A354.O      2.569 A\n MET B46.SD   VAL B352.O      2.291 A\n2 Steric polar_donor clashes detected\n GLY B61.N    ARG B220.NH1    2.443 A\n ARG B216.NH2 ARG B220.NH1    2.977 A\n1 Steric positive clashes detected\n ARG B216.NH2 ARG B220.NH1    2.977 A\nNo negative clashes detected\nFinal Num. models: 1\nFinal Num. chains: 2 (A: Protein, B: Protein)\nFinal Num. residues:  908\nFinal Num. residues with ins. codes:  0\nFinal Num. residues with H atoms: 0\nFinal Num. HETATM residues:  296\nFinal Num. ligands or modified residues:  4\nFinal Num. water mol.:  292\nFinal Num. atoms:  4979\nSmall mol ligands found\nSO4 A4\nAC2 A1\nSO4 B3\nAC2 B2\nStructure saved on /tmp/biobb/unitests_13/fix_side_chain/f6eea4bc-4cd7-4f01-afa2-5a387a1081d7/output_pdb_path.pdb\n\nINFO     /tmp/biobb/unitests_13/fix_side_chain/fix_side_chain_log.out:file_utils.py:390 Removed: [&amp;#x27;/tmp/biobb/unitests_13/fix_side_chain/f6eea4bc-4cd7-4f01-afa2-5a387a1081d7&amp;#x27;]\n\n--------------------------- Captured stdout teardown ---------------------------\n\nRemoving: /tmp/biobb/unitests_13\n&#34;}], &#34;biobb_model/test/unitests/test_model/test_fix_ssbonds.py::TestFixSSBonds::test_launch&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;biobb_model/test/unitests/test_model/test_fix_ssbonds.py::TestFixSSBonds::test_launch&#34;, &#34;duration&#34;: &#34;608 ms&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;biobb_model/test/unitests/test_model/test_fix_ssbonds.py::TestFixSSBonds::test_launch&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;608 ms&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;----------------------------- Captured stdout call -----------------------------\n2024-03-12 15:18:32,781 [MainThread  ] [INFO ]  Executing biobb_model.model.fix_ssbonds Version: 4.1.0\n2024-03-12 15:18:32,781 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_model/biobb_model/biobb_model/test/data/model/1aki.pdb to /tmp/biobb/unitests_13/fix_ssbonds/b83c0ae1-eb62-4208-88a2-da5e525c15a8\n2024-03-12 15:18:32,781 [MainThread  ] [INFO ]  check_structure -i /tmp/biobb/unitests_13/fix_ssbonds/b83c0ae1-eb62-4208-88a2-da5e525c15a8/1aki.pdb -o /tmp/biobb/unitests_13/fix_ssbonds/b83c0ae1-eb62-4208-88a2-da5e525c15a8/output_pdb_path.pdb --force_save --non_interactive getss --mark All\n\n2024-03-12 15:18:33,321 [MainThread  ] [INFO ]  Exit code 0\n\n2024-03-12 15:18:33,321 [MainThread  ] [INFO ]  ================================================================================\n=                   BioBB structure checking utility v3.13.4                   =\n=            P. Andrio, A. Hospital, G. Bayarri, J.L. Gelpi 2018-23            =\n================================================================================\n\nWarning: sequence features may not be available, use --sequence for  external fasta input\nStructure /tmp/biobb/unitests_13/fix_ssbonds/b83c0ae1-eb62-4208-88a2-da5e525c15a8/1aki.pdb loaded\n PDB id: 1AKI \n Title: the structure of the orthorhombic form of hen egg-white lysozyme at 1.5 angstroms resolution\n Experimental method: x-ray diffraction\n Keywords: hydrolase, glycosidase\n Resolution (A): 1.5\n\n Num. models: 1\n Num. chains: 1 (A: Protein)\n Num. residues:  207\n Num. residues with ins. codes:  0\n Num. residues with H atoms: 0\n Num. HETATM residues:  78\n Num. ligands or modified residues:  0\n Num. water mol.:  78\n Num. atoms:  1079\nRunning getss. Options: --mark All\nDetected 4 Possible SS Bonds\n CYS A6.SG    CYS A127.SG     3.880\n CYS A30.SG   CYS A115.SG     4.005\n CYS A64.SG   CYS A80.SG      3.948\n CYS A76.SG   CYS A94.SG      4.073\nFinal Num. models: 1\nFinal Num. chains: 1 (A: Protein)\nFinal Num. residues:  207\nFinal Num. residues with ins. codes:  0\nFinal Num. residues with H atoms: 0\nFinal Num. HETATM residues:  78\nFinal Num. ligands or modified residues:  0\nFinal Num. water mol.:  78\nFinal Num. atoms:  1079\nStructure saved on /tmp/biobb/unitests_13/fix_ssbonds/b83c0ae1-eb62-4208-88a2-da5e525c15a8/output_pdb_path.pdb\n\n2024-03-12 15:18:33,322 [MainThread  ] [INFO ]  Removed: [&amp;#x27;/tmp/biobb/unitests_13/fix_ssbonds/b83c0ae1-eb62-4208-88a2-da5e525c15a8&amp;#x27;]\nChecking if empty file: /tmp/biobb/unitests_13/fix_ssbonds/output_pdb_path.pdb\nChecking RMSD between:\n     PDB_A: /tmp/biobb/unitests_13/fix_ssbonds/output_pdb_path.pdb\n     PDB_B: /home/user/actions-runner/_work/biobb_model/biobb_model/biobb_model/test/reference/model/output_ssbonds.pdb\n     Ignoring HETAMT in RMSD\n     Ignoring Hydrogen atoms in RMSD\n     Atoms ALIGNED in PDB_A: 1079\n     Atoms ALIGNED in PDB_B: 1079\n     RMS: 1.212094551631224e-14\n     RMS_CUTOFF: 1\n\n------------------------------ Captured log call -------------------------------\nINFO     /tmp/biobb/unitests_13/fix_ssbonds/fix_ssbonds_log.out:file_utils.py:390 Executing biobb_model.model.fix_ssbonds Version: 4.1.0\nINFO     /tmp/biobb/unitests_13/fix_ssbonds/fix_ssbonds_log.out:file_utils.py:390 Copy: /home/user/actions-runner/_work/biobb_model/biobb_model/biobb_model/test/data/model/1aki.pdb to /tmp/biobb/unitests_13/fix_ssbonds/b83c0ae1-eb62-4208-88a2-da5e525c15a8\nINFO     /tmp/biobb/unitests_13/fix_ssbonds/fix_ssbonds_log.out:cmd_wrapper.py:33 check_structure -i /tmp/biobb/unitests_13/fix_ssbonds/b83c0ae1-eb62-4208-88a2-da5e525c15a8/1aki.pdb -o /tmp/biobb/unitests_13/fix_ssbonds/b83c0ae1-eb62-4208-88a2-da5e525c15a8/output_pdb_path.pdb --force_save --non_interactive getss --mark All\n\nINFO     /tmp/biobb/unitests_13/fix_ssbonds/fix_ssbonds_log.out:cmd_wrapper.py:50 Exit code 0\n\nINFO     /tmp/biobb/unitests_13/fix_ssbonds/fix_ssbonds_log.out:cmd_wrapper.py:52 ================================================================================\n=                   BioBB structure checking utility v3.13.4                   =\n=            P. Andrio, A. Hospital, G. Bayarri, J.L. Gelpi 2018-23            =\n================================================================================\n\nWarning: sequence features may not be available, use --sequence for  external fasta input\nStructure /tmp/biobb/unitests_13/fix_ssbonds/b83c0ae1-eb62-4208-88a2-da5e525c15a8/1aki.pdb loaded\n PDB id: 1AKI \n Title: the structure of the orthorhombic form of hen egg-white lysozyme at 1.5 angstroms resolution\n Experimental method: x-ray diffraction\n Keywords: hydrolase, glycosidase\n Resolution (A): 1.5\n\n Num. models: 1\n Num. chains: 1 (A: Protein)\n Num. residues:  207\n Num. residues with ins. codes:  0\n Num. residues with H atoms: 0\n Num. HETATM residues:  78\n Num. ligands or modified residues:  0\n Num. water mol.:  78\n Num. atoms:  1079\nRunning getss. Options: --mark All\nDetected 4 Possible SS Bonds\n CYS A6.SG    CYS A127.SG     3.880\n CYS A30.SG   CYS A115.SG     4.005\n CYS A64.SG   CYS A80.SG      3.948\n CYS A76.SG   CYS A94.SG      4.073\nFinal Num. models: 1\nFinal Num. chains: 1 (A: Protein)\nFinal Num. residues:  207\nFinal Num. residues with ins. codes:  0\nFinal Num. residues with H atoms: 0\nFinal Num. HETATM residues:  78\nFinal Num. ligands or modified residues:  0\nFinal Num. water mol.:  78\nFinal Num. atoms:  1079\nStructure saved on /tmp/biobb/unitests_13/fix_ssbonds/b83c0ae1-eb62-4208-88a2-da5e525c15a8/output_pdb_path.pdb\n\nINFO     /tmp/biobb/unitests_13/fix_ssbonds/fix_ssbonds_log.out:file_utils.py:390 Removed: [&amp;#x27;/tmp/biobb/unitests_13/fix_ssbonds/b83c0ae1-eb62-4208-88a2-da5e525c15a8&amp;#x27;]\n\n--------------------------- Captured stdout teardown ---------------------------\n\nRemoving: /tmp/biobb/unitests_13\n&#34;}], &#34;biobb_model/test/unitests/test_model/test_mutate.py::TestFixSideChain::test_launch&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;biobb_model/test/unitests/test_model/test_mutate.py::TestFixSideChain::test_launch&#34;, &#34;duration&#34;: &#34;00:00:01&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;biobb_model/test/unitests/test_model/test_mutate.py::TestFixSideChain::test_launch&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;00:00:01&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;----------------------------- Captured stdout call -----------------------------\n2024-03-12 15:18:33,391 [MainThread  ] [INFO ]  Executing biobb_model.model.mutate Version: 4.1.0\n2024-03-12 15:18:33,391 [MainThread  ] [INFO ]  Copy: /home/user/actions-runner/_work/biobb_model/biobb_model/biobb_model/test/data/model/2ki5.pdb to /tmp/biobb/unitests_13/mutate/90eb500c-2ade-4708-b540-a4f18abefb40\n2024-03-12 15:18:33,392 [MainThread  ] [INFO ]  check_structure -i /tmp/biobb/unitests_13/mutate/90eb500c-2ade-4708-b540-a4f18abefb40/2ki5.pdb -o /tmp/biobb/unitests_13/mutate/90eb500c-2ade-4708-b540-a4f18abefb40/output_mutated_pdb_path.pdb --force_save --non_interactive mutateside --mut Leu49Ile,B:arg51Lys\n\n2024-03-12 15:18:34,358 [MainThread  ] [INFO ]  Exit code 0\n\n2024-03-12 15:18:34,358 [MainThread  ] [INFO ]  ================================================================================\n=                   BioBB structure checking utility v3.13.4                   =\n=            P. Andrio, A. Hospital, G. Bayarri, J.L. Gelpi 2018-23            =\n================================================================================\n\nWarning: sequence features may not be available, use --sequence for  external fasta input\nStructure /tmp/biobb/unitests_13/mutate/90eb500c-2ade-4708-b540-a4f18abefb40/2ki5.pdb loaded\n PDB id: 2KI5 \n Title: herpes simplex type-1 thymidine kinase in complex with the drug aciclovir at 1.9a resolution\n Experimental method: x-ray diffraction\n Keywords: transferase (phosphotransferase) thymid, transferase (phosphotransferase) thymidine kinase; viridae; ds-dna enveloped viruses; herpesviridae; alphaherpesvirinae antiviral drug (aciclovir)\n Resolution (A): 1.9\n\n Num. models: 1\n Num. chains: 2 (A: Protein, B: Protein)\n Num. residues:  908\n Num. residues with ins. codes:  0\n Num. residues with H atoms: 0\n Num. HETATM residues:  296\n Num. ligands or modified residues:  4\n Num. water mol.:  292\n Num. atoms:  4961\nSmall mol ligands found\nSO4 A4\nAC2 A1\nSO4 B3\nAC2 B2\nRunning mutateside. Options: --mut Leu49Ile,B:arg51Lys\nMutations to perform\n*:LEU49ILE\nB:ARG51LYS\nReplacing LEU A49 into ILE\n  Deleting CD2\n  Renaming CG to CG1\n  Adding new atom CG2\nReplacing LEU B49 into ILE\n  Deleting CD2\n  Renaming CG to CG1\n  Adding new atom CG2\n\nReplacing ARG B51 into LYS\n  Deleting NE\n  Deleting CZ\n  Deleting NH1\n  Deleting NH2\n  Adding new atom CE\n  Adding new atom NZ\n\nChecking for steric clashes\nNo severe clashes detected\n4 Steric apolar clashes detected\n ILE A49.CG2  THR A350.OG1    2.815 A\n ILE B49.CG2  THR B350.OG1    2.611 A\n LYS B51.NZ   LEU B139.CG     2.403 A\n LYS B51.NZ   ILE B143.CD1    2.319 A\nNo polar_acceptor clashes detected\nNo polar_donor clashes detected\nNo positive clashes detected\nNo negative clashes detected\nFinal Num. models: 1\nFinal Num. chains: 2 (A: Protein, B: Protein)\nFinal Num. residues:  908\nFinal Num. residues with ins. codes:  0\nFinal Num. residues with H atoms: 0\nFinal Num. HETATM residues:  296\nFinal Num. ligands or modified residues:  4\nFinal Num. water mol.:  292\nFinal Num. atoms:  4959\nSmall mol ligands found\nSO4 A4\nAC2 A1\nSO4 B3\nAC2 B2\nStructure saved on /tmp/biobb/unitests_13/mutate/90eb500c-2ade-4708-b540-a4f18abefb40/output_mutated_pdb_path.pdb\n\n2024-03-12 15:18:34,360 [MainThread  ] [INFO ]  Removed: [&amp;#x27;/tmp/biobb/unitests_13/mutate/90eb500c-2ade-4708-b540-a4f18abefb40&amp;#x27;]\nChecking if empty file: /tmp/biobb/unitests_13/mutate/output_mutated_pdb_path.pdb\nChecking RMSD between:\n     PDB_A: /tmp/biobb/unitests_13/mutate/output_mutated_pdb_path.pdb\n     PDB_B: /home/user/actions-runner/_work/biobb_model/biobb_model/biobb_model/test/reference/model/output_mutated_pdb_path.pdb\n     Ignoring HETAMT in RMSD\n     Ignoring Hydrogen atoms in RMSD\n     Atoms ALIGNED in PDB_A: 4917\n     Atoms ALIGNED in PDB_B: 4917\n     RMS: 1.983345332028294e-14\n     RMS_CUTOFF: 1\n\n------------------------------ Captured log call -------------------------------\nINFO     /tmp/biobb/unitests_13/mutate/mutate_log.out:file_utils.py:390 Executing biobb_model.model.mutate Version: 4.1.0\nINFO     /tmp/biobb/unitests_13/mutate/mutate_log.out:file_utils.py:390 Copy: /home/user/actions-runner/_work/biobb_model/biobb_model/biobb_model/test/data/model/2ki5.pdb to /tmp/biobb/unitests_13/mutate/90eb500c-2ade-4708-b540-a4f18abefb40\nINFO     /tmp/biobb/unitests_13/mutate/mutate_log.out:cmd_wrapper.py:33 check_structure -i /tmp/biobb/unitests_13/mutate/90eb500c-2ade-4708-b540-a4f18abefb40/2ki5.pdb -o /tmp/biobb/unitests_13/mutate/90eb500c-2ade-4708-b540-a4f18abefb40/output_mutated_pdb_path.pdb --force_save --non_interactive mutateside --mut Leu49Ile,B:arg51Lys\n\nINFO     /tmp/biobb/unitests_13/mutate/mutate_log.out:cmd_wrapper.py:50 Exit code 0\n\nINFO     /tmp/biobb/unitests_13/mutate/mutate_log.out:cmd_wrapper.py:52 ================================================================================\n=                   BioBB structure checking utility v3.13.4                   =\n=            P. Andrio, A. Hospital, G. Bayarri, J.L. Gelpi 2018-23            =\n================================================================================\n\nWarning: sequence features may not be available, use --sequence for  external fasta input\nStructure /tmp/biobb/unitests_13/mutate/90eb500c-2ade-4708-b540-a4f18abefb40/2ki5.pdb loaded\n PDB id: 2KI5 \n Title: herpes simplex type-1 thymidine kinase in complex with the drug aciclovir at 1.9a resolution\n Experimental method: x-ray diffraction\n Keywords: transferase (phosphotransferase) thymid, transferase (phosphotransferase) thymidine kinase; viridae; ds-dna enveloped viruses; herpesviridae; alphaherpesvirinae antiviral drug (aciclovir)\n Resolution (A): 1.9\n\n Num. models: 1\n Num. chains: 2 (A: Protein, B: Protein)\n Num. residues:  908\n Num. residues with ins. codes:  0\n Num. residues with H atoms: 0\n Num. HETATM residues:  296\n Num. ligands or modified residues:  4\n Num. water mol.:  292\n Num. atoms:  4961\nSmall mol ligands found\nSO4 A4\nAC2 A1\nSO4 B3\nAC2 B2\nRunning mutateside. Options: --mut Leu49Ile,B:arg51Lys\nMutations to perform\n*:LEU49ILE\nB:ARG51LYS\nReplacing LEU A49 into ILE\n  Deleting CD2\n  Renaming CG to CG1\n  Adding new atom CG2\nReplacing LEU B49 into ILE\n  Deleting CD2\n  Renaming CG to CG1\n  Adding new atom CG2\n\nReplacing ARG B51 into LYS\n  Deleting NE\n  Deleting CZ\n  Deleting NH1\n  Deleting NH2\n  Adding new atom CE\n  Adding new atom NZ\n\nChecking for steric clashes\nNo severe clashes detected\n4 Steric apolar clashes detected\n ILE A49.CG2  THR A350.OG1    2.815 A\n ILE B49.CG2  THR B350.OG1    2.611 A\n LYS B51.NZ   LEU B139.CG     2.403 A\n LYS B51.NZ   ILE B143.CD1    2.319 A\nNo polar_acceptor clashes detected\nNo polar_donor clashes detected\nNo positive clashes detected\nNo negative clashes detected\nFinal Num. models: 1\nFinal Num. chains: 2 (A: Protein, B: Protein)\nFinal Num. residues:  908\nFinal Num. residues with ins. codes:  0\nFinal Num. residues with H atoms: 0\nFinal Num. HETATM residues:  296\nFinal Num. ligands or modified residues:  4\nFinal Num. water mol.:  292\nFinal Num. atoms:  4959\nSmall mol ligands found\nSO4 A4\nAC2 A1\nSO4 B3\nAC2 B2\nStructure saved on /tmp/biobb/unitests_13/mutate/90eb500c-2ade-4708-b540-a4f18abefb40/output_mutated_pdb_path.pdb\n\nINFO     /tmp/biobb/unitests_13/mutate/mutate_log.out:file_utils.py:390 Removed: [&amp;#x27;/tmp/biobb/unitests_13/mutate/90eb500c-2ade-4708-b540-a4f18abefb40&amp;#x27;]\n\n--------------------------- Captured stdout teardown ---------------------------\n\nRemoving: /tmp/biobb/unitests_13\n&#34;}]}, &#34;renderCollapsed&#34;: [&#34;passed&#34;], &#34;initialSort&#34;: &#34;result&#34;, &#34;title&#34;: &#34;report.html&#34;}"></div>
+    <script>
+      (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
+const { getCollapsedCategory, setCollapsedIds } = require('./storage.js')
+
+class DataManager {
+    setManager(data) {
+        const collapsedCategories = [...getCollapsedCategory(data.renderCollapsed)]
+        const collapsedIds = []
+        const tests = Object.values(data.tests).flat().map((test, index) => {
+            const collapsed = collapsedCategories.includes(test.result.toLowerCase())
+            const id = `test_${index}`
+            if (collapsed) {
+                collapsedIds.push(id)
+            }
+            return {
+                ...test,
+                id,
+                collapsed,
+            }
+        })
+        const dataBlob = { ...data, tests }
+        this.data = { ...dataBlob }
+        this.renderData = { ...dataBlob }
+        setCollapsedIds(collapsedIds)
+    }
+
+    get allData() {
+        return { ...this.data }
+    }
+
+    resetRender() {
+        this.renderData = { ...this.data }
+    }
+
+    setRender(data) {
+        this.renderData.tests = [...data]
+    }
+
+    toggleCollapsedItem(id) {
+        this.renderData.tests = this.renderData.tests.map((test) =>
+            test.id === id ? { ...test, collapsed: !test.collapsed } : test,
+        )
+    }
+
+    set allCollapsed(collapsed) {
+        this.renderData = { ...this.renderData, tests: [...this.renderData.tests.map((test) => (
+            { ...test, collapsed }
+        ))] }
+    }
+
+    get testSubset() {
+        return [...this.renderData.tests]
+    }
+
+    get environment() {
+        return this.renderData.environment
+    }
+
+    get initialSort() {
+        return this.data.initialSort
+    }
+}
+
+module.exports = {
+    manager: new DataManager(),
+}
+
+},{"./storage.js":8}],2:[function(require,module,exports){
+const mediaViewer = require('./mediaviewer.js')
+const templateEnvRow = document.getElementById('template_environment_row')
+const templateResult = document.getElementById('template_results-table__tbody')
+
+function htmlToElements(html) {
+    const temp = document.createElement('template')
+    temp.innerHTML = html
+    return temp.content.childNodes
+}
+
+const find = (selector, elem) => {
+    if (!elem) {
+        elem = document
+    }
+    return elem.querySelector(selector)
+}
+
+const findAll = (selector, elem) => {
+    if (!elem) {
+        elem = document
+    }
+    return [...elem.querySelectorAll(selector)]
+}
+
+const dom = {
+    getStaticRow: (key, value) => {
+        const envRow = templateEnvRow.content.cloneNode(true)
+        const isObj = typeof value === 'object' && value !== null
+        const values = isObj ? Object.keys(value).map((k) => `${k}: ${value[k]}`) : null
+
+        const valuesElement = htmlToElements(
+            values ? `<ul>${values.map((val) => `<li>${val}</li>`).join('')}<ul>` : `<div>${value}</div>`)[0]
+        const td = findAll('td', envRow)
+        td[0].textContent = key
+        td[1].appendChild(valuesElement)
+
+        return envRow
+    },
+    getResultTBody: ({ testId, id, log, extras, resultsTableRow, tableHtml, result, collapsed }) => {
+        const resultBody = templateResult.content.cloneNode(true)
+        resultBody.querySelector('tbody').classList.add(result.toLowerCase())
+        resultBody.querySelector('tbody').id = testId
+        resultBody.querySelector('.collapsible').dataset.id = id
+
+        resultsTableRow.forEach((html) => {
+            const t = document.createElement('template')
+            t.innerHTML = html
+            resultBody.querySelector('.collapsible').appendChild(t.content)
+        })
+
+        if (log) {
+            // Wrap lines starting with "E" with span.error to color those lines red
+            const wrappedLog = log.replace(/^E.*$/gm, (match) => `<span class="error">${match}</span>`)
+            resultBody.querySelector('.log').innerHTML = wrappedLog
+        } else {
+            resultBody.querySelector('.log').remove()
+        }
+
+        if (collapsed) {
+            resultBody.querySelector('.collapsible > td')?.classList.add('collapsed')
+            resultBody.querySelector('.extras-row').classList.add('hidden')
+        } else {
+            resultBody.querySelector('.collapsible > td')?.classList.remove('collapsed')
+        }
+
+        const media = []
+        extras?.forEach(({ name, format_type, content }) => {
+            if (['image', 'video'].includes(format_type)) {
+                media.push({ path: content, name, format_type })
+            }
+
+            if (format_type === 'html') {
+                resultBody.querySelector('.extraHTML').insertAdjacentHTML('beforeend', `<div>${content}</div>`)
+            }
+        })
+        mediaViewer.setup(resultBody, media)
+
+        // Add custom html from the pytest_html_results_table_html hook
+        tableHtml?.forEach((item) => {
+            resultBody.querySelector('td[class="extra"]').insertAdjacentHTML('beforeend', item)
+        })
+
+        return resultBody
+    },
+}
+
+module.exports = {
+    dom,
+    htmlToElements,
+    find,
+    findAll,
+}
+
+},{"./mediaviewer.js":6}],3:[function(require,module,exports){
+const { manager } = require('./datamanager.js')
+const { doSort } = require('./sort.js')
+const storageModule = require('./storage.js')
+
+const getFilteredSubSet = (filter) =>
+    manager.allData.tests.filter(({ result }) => filter.includes(result.toLowerCase()))
+
+const doInitFilter = () => {
+    const currentFilter = storageModule.getVisible()
+    const filteredSubset = getFilteredSubSet(currentFilter)
+    manager.setRender(filteredSubset)
+}
+
+const doFilter = (type, show) => {
+    if (show) {
+        storageModule.showCategory(type)
+    } else {
+        storageModule.hideCategory(type)
+    }
+
+    const currentFilter = storageModule.getVisible()
+    const filteredSubset = getFilteredSubSet(currentFilter)
+    manager.setRender(filteredSubset)
+
+    const sortColumn = storageModule.getSort()
+    doSort(sortColumn, true)
+}
+
+module.exports = {
+    doFilter,
+    doInitFilter,
+}
+
+},{"./datamanager.js":1,"./sort.js":7,"./storage.js":8}],4:[function(require,module,exports){
+const { redraw, bindEvents, renderStatic } = require('./main.js')
+const { doInitFilter } = require('./filter.js')
+const { doInitSort } = require('./sort.js')
+const { manager } = require('./datamanager.js')
+const data = JSON.parse(document.getElementById('data-container').dataset.jsonblob)
+
+function init() {
+    manager.setManager(data)
+    doInitFilter()
+    doInitSort()
+    renderStatic()
+    redraw()
+    bindEvents()
+}
+
+init()
+
+},{"./datamanager.js":1,"./filter.js":3,"./main.js":5,"./sort.js":7}],5:[function(require,module,exports){
+const { dom, find, findAll } = require('./dom.js')
+const { manager } = require('./datamanager.js')
+const { doSort } = require('./sort.js')
+const { doFilter } = require('./filter.js')
+const {
+    getVisible,
+    getCollapsedIds,
+    setCollapsedIds,
+    getSort,
+    getSortDirection,
+    possibleFilters,
+} = require('./storage.js')
+
+const removeChildren = (node) => {
+    while (node.firstChild) {
+        node.removeChild(node.firstChild)
+    }
+}
+
+const renderStatic = () => {
+    const renderEnvironmentTable = () => {
+        const environment = manager.environment
+        const rows = Object.keys(environment).map((key) => dom.getStaticRow(key, environment[key]))
+        const table = document.getElementById('environment')
+        removeChildren(table)
+        rows.forEach((row) => table.appendChild(row))
+    }
+    renderEnvironmentTable()
+}
+
+const addItemToggleListener = (elem) => {
+    elem.addEventListener('click', ({ target }) => {
+        const id = target.parentElement.dataset.id
+        manager.toggleCollapsedItem(id)
+
+        const collapsedIds = getCollapsedIds()
+        if (collapsedIds.includes(id)) {
+            const updated = collapsedIds.filter((item) => item !== id)
+            setCollapsedIds(updated)
+        } else {
+            collapsedIds.push(id)
+            setCollapsedIds(collapsedIds)
+        }
+        redraw()
+    })
+}
+
+const renderContent = (tests) => {
+    const sortAttr = getSort(manager.initialSort)
+    const sortAsc = JSON.parse(getSortDirection())
+    const rows = tests.map(dom.getResultTBody)
+    const table = document.getElementById('results-table')
+    const tableHeader = document.getElementById('results-table-head')
+
+    const newTable = document.createElement('table')
+    newTable.id = 'results-table'
+
+    // remove all sorting classes and set the relevant
+    findAll('.sortable', tableHeader).forEach((elem) => elem.classList.remove('asc', 'desc'))
+    tableHeader.querySelector(`.sortable[data-column-type="${sortAttr}"]`)?.classList.add(sortAsc ? 'desc' : 'asc')
+    newTable.appendChild(tableHeader)
+
+    if (!rows.length) {
+        const emptyTable = document.getElementById('template_results-table__body--empty').content.cloneNode(true)
+        newTable.appendChild(emptyTable)
+    } else {
+        rows.forEach((row) => {
+            if (!!row) {
+                findAll('.collapsible td:not(.col-links', row).forEach(addItemToggleListener)
+                find('.logexpander', row).addEventListener('click',
+                    (evt) => evt.target.parentNode.classList.toggle('expanded'),
+                )
+                newTable.appendChild(row)
+            }
+        })
+    }
+
+    table.replaceWith(newTable)
+}
+
+const renderDerived = () => {
+    const currentFilter = getVisible()
+    possibleFilters.forEach((result) => {
+        const input = document.querySelector(`input[data-test-result="${result}"]`)
+        input.checked = currentFilter.includes(result)
+    })
+}
+
+const bindEvents = () => {
+    const filterColumn = (evt) => {
+        const { target: element } = evt
+        const { testResult } = element.dataset
+
+        doFilter(testResult, element.checked)
+        const collapsedIds = getCollapsedIds()
+        const updated = manager.renderData.tests.map((test) => {
+            return {
+                ...test,
+                collapsed: collapsedIds.includes(test.id),
+            }
+        })
+        manager.setRender(updated)
+        redraw()
+    }
+
+    const header = document.getElementById('environment-header')
+    header.addEventListener('click', () => {
+        const table = document.getElementById('environment')
+        table.classList.toggle('hidden')
+        header.classList.toggle('collapsed')
+    })
+
+    findAll('input[name="filter_checkbox"]').forEach((elem) => {
+        elem.addEventListener('click', filterColumn)
+    })
+
+    findAll('.sortable').forEach((elem) => {
+        elem.addEventListener('click', (evt) => {
+            const { target: element } = evt
+            const { columnType } = element.dataset
+            doSort(columnType)
+            redraw()
+        })
+    })
+
+    document.getElementById('show_all_details').addEventListener('click', () => {
+        manager.allCollapsed = false
+        setCollapsedIds([])
+        redraw()
+    })
+    document.getElementById('hide_all_details').addEventListener('click', () => {
+        manager.allCollapsed = true
+        const allIds = manager.renderData.tests.map((test) => test.id)
+        setCollapsedIds(allIds)
+        redraw()
+    })
+}
+
+const redraw = () => {
+    const { testSubset } = manager
+
+    renderContent(testSubset)
+    renderDerived()
+}
+
+module.exports = {
+    redraw,
+    bindEvents,
+    renderStatic,
+}
+
+},{"./datamanager.js":1,"./dom.js":2,"./filter.js":3,"./sort.js":7,"./storage.js":8}],6:[function(require,module,exports){
+class MediaViewer {
+    constructor(assets) {
+        this.assets = assets
+        this.index = 0
+    }
+
+    nextActive() {
+        this.index = this.index === this.assets.length - 1 ? 0 : this.index + 1
+        return [this.activeFile, this.index]
+    }
+
+    prevActive() {
+        this.index = this.index === 0 ? this.assets.length - 1 : this.index -1
+        return [this.activeFile, this.index]
+    }
+
+    get currentIndex() {
+        return this.index
+    }
+
+    get activeFile() {
+        return this.assets[this.index]
+    }
+}
+
+
+const setup = (resultBody, assets) => {
+    if (!assets.length) {
+        resultBody.querySelector('.media').classList.add('hidden')
+        return
+    }
+
+    const mediaViewer = new MediaViewer(assets)
+    const container = resultBody.querySelector('.media-container')
+    const leftArrow = resultBody.querySelector('.media-container__nav--left')
+    const rightArrow = resultBody.querySelector('.media-container__nav--right')
+    const mediaName = resultBody.querySelector('.media__name')
+    const counter = resultBody.querySelector('.media__counter')
+    const imageEl = resultBody.querySelector('img')
+    const sourceEl = resultBody.querySelector('source')
+    const videoEl = resultBody.querySelector('video')
+
+    const setImg = (media, index) => {
+        if (media?.format_type === 'image') {
+            imageEl.src = media.path
+
+            imageEl.classList.remove('hidden')
+            videoEl.classList.add('hidden')
+        } else if (media?.format_type === 'video') {
+            sourceEl.src = media.path
+
+            videoEl.classList.remove('hidden')
+            imageEl.classList.add('hidden')
+        }
+
+        mediaName.innerText = media?.name
+        counter.innerText = `${index + 1} / ${assets.length}`
+    }
+    setImg(mediaViewer.activeFile, mediaViewer.currentIndex)
+
+    const moveLeft = () => {
+        const [media, index] = mediaViewer.prevActive()
+        setImg(media, index)
+    }
+    const doRight = () => {
+        const [media, index] = mediaViewer.nextActive()
+        setImg(media, index)
+    }
+    const openImg = () => {
+        window.open(mediaViewer.activeFile.path, '_blank')
+    }
+    if (assets.length === 1) {
+        container.classList.add('media-container--fullscreen')
+    } else {
+        leftArrow.addEventListener('click', moveLeft)
+        rightArrow.addEventListener('click', doRight)
+    }
+    imageEl.addEventListener('click', openImg)
+}
+
+module.exports = {
+    setup,
+}
+
+},{}],7:[function(require,module,exports){
+const { manager } = require('./datamanager.js')
+const storageModule = require('./storage.js')
+
+const genericSort = (list, key, ascending, customOrder) => {
+    let sorted
+    if (customOrder) {
+        sorted = list.sort((a, b) => {
+            const aValue = a.result.toLowerCase()
+            const bValue = b.result.toLowerCase()
+
+            const aIndex = customOrder.findIndex((item) => item.toLowerCase() === aValue)
+            const bIndex = customOrder.findIndex((item) => item.toLowerCase() === bValue)
+
+            // Compare the indices to determine the sort order
+            return aIndex - bIndex
+        })
+    } else {
+        sorted = list.sort((a, b) => a[key] === b[key] ? 0 : a[key] > b[key] ? 1 : -1)
+    }
+
+    if (ascending) {
+        sorted.reverse()
+    }
+    return sorted
+}
+
+const durationSort = (list, ascending) => {
+    const parseDuration = (duration) => {
+        if (duration.includes(':')) {
+            // If it's in the format "HH:mm:ss"
+            const [hours, minutes, seconds] = duration.split(':').map(Number)
+            return (hours * 3600 + minutes * 60 + seconds) * 1000
+        } else {
+            // If it's in the format "nnn ms"
+            return parseInt(duration)
+        }
+    }
+    const sorted = list.sort((a, b) => parseDuration(a['duration']) - parseDuration(b['duration']))
+    if (ascending) {
+        sorted.reverse()
+    }
+    return sorted
+}
+
+const doInitSort = () => {
+    const type = storageModule.getSort(manager.initialSort)
+    const ascending = storageModule.getSortDirection()
+    const list = manager.testSubset
+    const initialOrder = ['Error', 'Failed', 'Rerun', 'XFailed', 'XPassed', 'Skipped', 'Passed']
+
+    storageModule.setSort(type)
+    storageModule.setSortDirection(ascending)
+
+    if (type?.toLowerCase() === 'original') {
+        manager.setRender(list)
+    } else {
+        let sortedList
+        switch (type) {
+        case 'duration':
+            sortedList = durationSort(list, ascending)
+            break
+        case 'result':
+            sortedList = genericSort(list, type, ascending, initialOrder)
+            break
+        default:
+            sortedList = genericSort(list, type, ascending)
+            break
+        }
+        manager.setRender(sortedList)
+    }
+}
+
+const doSort = (type, skipDirection) => {
+    const newSortType = storageModule.getSort(manager.initialSort) !== type
+    const currentAsc = storageModule.getSortDirection()
+    let ascending
+    if (skipDirection) {
+        ascending = currentAsc
+    } else {
+        ascending = newSortType ? false : !currentAsc
+    }
+    storageModule.setSort(type)
+    storageModule.setSortDirection(ascending)
+
+    const list = manager.testSubset
+    const sortedList = type === 'duration' ? durationSort(list, ascending) : genericSort(list, type, ascending)
+    manager.setRender(sortedList)
+}
+
+module.exports = {
+    doInitSort,
+    doSort,
+}
+
+},{"./datamanager.js":1,"./storage.js":8}],8:[function(require,module,exports){
+const possibleFilters = [
+    'passed',
+    'skipped',
+    'failed',
+    'error',
+    'xfailed',
+    'xpassed',
+    'rerun',
+]
+
+const getVisible = () => {
+    const url = new URL(window.location.href)
+    const settings = new URLSearchParams(url.search).get('visible')
+    const lower = (item) => {
+        const lowerItem = item.toLowerCase()
+        if (possibleFilters.includes(lowerItem)) {
+            return lowerItem
+        }
+        return null
+    }
+    return settings === null ?
+        possibleFilters :
+        [...new Set(settings?.split(',').map(lower).filter((item) => item))]
+}
+
+const hideCategory = (categoryToHide) => {
+    const url = new URL(window.location.href)
+    const visibleParams = new URLSearchParams(url.search).get('visible')
+    const currentVisible = visibleParams ? visibleParams.split(',') : [...possibleFilters]
+    const settings = [...new Set(currentVisible)].filter((f) => f !== categoryToHide).join(',')
+
+    url.searchParams.set('visible', settings)
+    window.history.pushState({}, null, unescape(url.href))
+}
+
+const showCategory = (categoryToShow) => {
+    if (typeof window === 'undefined') {
+        return
+    }
+    const url = new URL(window.location.href)
+    const currentVisible = new URLSearchParams(url.search).get('visible')?.split(',').filter(Boolean) ||
+        [...possibleFilters]
+    const settings = [...new Set([categoryToShow, ...currentVisible])]
+    const noFilter = possibleFilters.length === settings.length || !settings.length
+
+    noFilter ? url.searchParams.delete('visible') : url.searchParams.set('visible', settings.join(','))
+    window.history.pushState({}, null, unescape(url.href))
+}
+
+const getSort = (initialSort) => {
+    const url = new URL(window.location.href)
+    let sort = new URLSearchParams(url.search).get('sort')
+    if (!sort) {
+        sort = initialSort || 'result'
+    }
+    return sort
+}
+
+const setSort = (type) => {
+    const url = new URL(window.location.href)
+    url.searchParams.set('sort', type)
+    window.history.pushState({}, null, unescape(url.href))
+}
+
+const getCollapsedCategory = (renderCollapsed) => {
+    let categories
+    if (typeof window !== 'undefined') {
+        const url = new URL(window.location.href)
+        const collapsedItems = new URLSearchParams(url.search).get('collapsed')
+        switch (true) {
+        case !renderCollapsed && collapsedItems === null:
+            categories = ['passed']
+            break
+        case collapsedItems?.length === 0 || /^["']{2}$/.test(collapsedItems):
+            categories = []
+            break
+        case /^all$/.test(collapsedItems) || collapsedItems === null && /^all$/.test(renderCollapsed):
+            categories = [...possibleFilters]
+            break
+        default:
+            categories = collapsedItems?.split(',').map((item) => item.toLowerCase()) || renderCollapsed
+            break
+        }
+    } else {
+        categories = []
+    }
+    return categories
+}
+
+const getSortDirection = () => JSON.parse(sessionStorage.getItem('sortAsc')) || false
+const setSortDirection = (ascending) => sessionStorage.setItem('sortAsc', ascending)
+
+const getCollapsedIds = () => JSON.parse(sessionStorage.getItem('collapsedIds')) || []
+const setCollapsedIds = (list) => sessionStorage.setItem('collapsedIds', JSON.stringify(list))
+
+module.exports = {
+    getVisible,
+    hideCategory,
+    showCategory,
+    getCollapsedIds,
+    setCollapsedIds,
+    getSort,
+    setSort,
+    getSortDirection,
+    setSortDirection,
+    getCollapsedCategory,
+    possibleFilters,
+}
+
+},{}]},{},[4]);
+    </script>
+  </footer>
+</html>
