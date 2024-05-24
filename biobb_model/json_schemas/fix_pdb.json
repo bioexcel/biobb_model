@@ -3,7 +3,7 @@
     "$id": "http://bioexcel.eu/biobb_model/json_schemas/1.0/fix_pdb",
     "name": "biobb_model FixPdb",
     "title": "Class to renumerate residues in a PDB structure according to a reference sequence from UniProt.",
-    "description": null,
+    "description": "Fix the residue numbering in a PDB structure according to a reference sequence from UniProt.",
     "type": "object",
     "info": {
         "wrapped_software": {

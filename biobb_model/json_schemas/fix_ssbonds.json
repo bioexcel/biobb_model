@@ -3,7 +3,7 @@
     "$id": "http://bioexcel.eu/biobb_model/json_schemas/1.0/fix_ssbonds",
     "name": "biobb_model FixSSBonds",
     "title": "Fix SS bonds from residues.",
-    "description": null,
+    "description": "Fix the SS bonds in a PDB structure.",
     "type": "object",
     "info": {
         "wrapped_software": {

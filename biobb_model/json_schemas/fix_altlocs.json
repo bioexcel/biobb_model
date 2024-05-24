@@ -3,7 +3,7 @@
     "$id": "http://bioexcel.eu/biobb_model/json_schemas/1.0/fix_altlocs",
     "name": "biobb_model FixAltLocs",
     "title": "Fix alternate locations from residues.",
-    "description": null,
+    "description": "Fix alternate locations using the altlocs list or occupancy.",
     "type": "object",
     "info": {
         "wrapped_software": {
