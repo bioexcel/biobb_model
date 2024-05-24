@@ -11,7 +11,7 @@ class FixAltLocs(BiobbObject):
     """
     | biobb_model FixAltLocs
     | Fix alternate locations from residues.
-    | Fixt alternate locations using the altlocs list or occupancy.
+    | Fix alternate locations using the altlocs list or occupancy.
 
     Args:
         input_pdb_path (str): Input PDB file path. File type: input. `Sample file <https://github.com/bioexcel/biobb_model/raw/master/biobb_model/test/data/model/3ebp.pdb>`_. Accepted formats: pdb (edam:format_1476).
