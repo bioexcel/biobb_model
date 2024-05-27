@@ -13,6 +13,8 @@ class FixPdb(BiobbObject):
     """
     | biobb_model FixPdb
     | Class to renumerate residues in a PDB structure according to a reference sequence from UniProt.
+    | Fix the residue numbering in a PDB structure according to a reference sequence from UniProt.
+
     Args:
         input_pdb_path (str): Input PDB file path. File type: input. `Sample file <https://github.com/bioexcel/biobb_model/raw/master/biobb_model/test/data/model/2ki5.pdb>`_. Accepted formats: pdb (edam:format_1476).
         output_pdb_path (str): Output PDB file path. File type: output. `Sample file <https://github.com/bioexcel/biobb_model/raw/master/biobb_model/test/reference/model/output_pdb_path.pdb>`_. Accepted formats: pdb (edam:format_1476).

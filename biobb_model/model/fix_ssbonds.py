@@ -11,6 +11,7 @@ class FixSSBonds(BiobbObject):
     """
     | biobb_model FixSSBonds
     | Fix SS bonds from residues.
+    | Fix the SS bonds in a PDB structure.
 
     Args:
         input_pdb_path (str): Input PDB file path. File type: input. `Sample file <https://github.com/bioexcel/biobb_model/raw/master/biobb_model/test/data/model/1aki.pdb>`_. Accepted formats: pdb (edam:format_1476).
