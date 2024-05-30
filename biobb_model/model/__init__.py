@@ -1,5 +1,5 @@
 import warnings
-from Bio import BiopythonDeprecationWarning
+from Bio import BiopythonDeprecationWarning  # type: ignore
 
 with warnings.catch_warnings():
     warnings.simplefilter("ignore", BiopythonDeprecationWarning)
