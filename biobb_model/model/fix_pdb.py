@@ -2,6 +2,7 @@
 
 """Module containing the FixPdb class and the command line interface."""
 import argparse
+from typing import Dict, Optional
 from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.configuration import settings
 from biobb_common.tools.file_utils import launchlogger
@@ -36,7 +37,7 @@ class FixPdb(BiobbObject):
             * schema: http://edamontology.org/EDAM.owl
     """
 
-    def __init__(self, input_pdb_path: str, output_pdb_path: str, properties: dict = None, **kwargs) -> None:
+    def __init__(self, input_pdb_path: str, output_pdb_path: str, properties: Optional[Dict] = None, **kwargs) -> None:
         properties = properties or {}
 
         # Call parent class constructor
@@ -52,7 +53,7 @@ class FixPdb(BiobbObject):
         # Properties specific for BB
         self.forced_uniprot_references = properties.get('forced_uniprot_references')
         # If input forced uniprot references is a string and not a list then convert it
-        if type(self.forced_uniprot_references) == str:
+        if isinstance(self.forced_uniprot_references, str):
             self.forced_uniprot_references = self.forced_uniprot_references.split(' ')
 
         # Check the properties
@@ -84,7 +85,8 @@ class FixPdb(BiobbObject):
             structure.raw_protein_chainer()
 
         # Run all the mapping function
-        mapping = generate_map_online(structure, forced_uniprot_references)
+        if forced_uniprot_references:
+            mapping = generate_map_online(structure, forced_uniprot_references)
 
         # In case something went wrong with the mapping stop here
         if not mapping:
@@ -105,14 +107,14 @@ class FixPdb(BiobbObject):
         print('Fixed :)')
 
         # Remove temporal files
-        self.tmp_files.extend([self.stage_io_dict.get("unique_dir")])
+        self.tmp_files.extend([self.stage_io_dict.get("unique_dir", "")])
         self.remove_tmp_files()
 
         self.check_arguments(output_files_created=True, raise_exception=False)
         return self.return_code
 
 
-def fix_pdb(input_pdb_path: str, output_pdb_path: str, properties: dict = None, **kwargs) -> int:
+def fix_pdb(input_pdb_path: str, output_pdb_path: str, properties: Optional[Dict] = None, **kwargs) -> int:
     """Create :class:`FixPdb <model.fix_pdb.FixPdb>` class and
     execute the :meth:`launch() <model.fix_pdb.FixPdb.launch>` method."""
     return FixPdb(input_pdb_path=input_pdb_path,

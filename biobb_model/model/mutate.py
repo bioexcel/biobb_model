@@ -2,6 +2,7 @@
 
 """Module containing the Mutate class and the command line interface."""
 import argparse
+from typing import Dict, Optional
 from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.configuration import settings
 from biobb_common.tools import file_utils as fu
@@ -45,7 +46,7 @@ class Mutate(BiobbObject):
             * schema: http://edamontology.org/EDAM.owl
     """
 
-    def __init__(self, input_pdb_path: str, output_pdb_path: str, properties: dict = None, **kwargs) -> None:
+    def __init__(self, input_pdb_path: str, output_pdb_path: str, properties: Optional[Dict] = None, **kwargs) -> None:
         properties = properties or {}
 
         # Call parent class constructor
@@ -107,15 +108,15 @@ class Mutate(BiobbObject):
         self.copy_to_host()
 
         # Remove temporal files
-        self.tmp_files.append(self.stage_io_dict.get("unique_dir"))
-        self.tmp_files.extend([self.stage_io_dict.get("unique_dir")])
+        self.tmp_files.append(self.stage_io_dict.get("unique_dir", ""))
+        self.tmp_files.extend([self.stage_io_dict.get("unique_dir", "")])
         self.remove_tmp_files()
 
         self.check_arguments(output_files_created=True, raise_exception=False)
         return self.return_code
 
 
-def mutate(input_pdb_path: str, output_pdb_path: str, properties: dict = None, **kwargs) -> int:
+def mutate(input_pdb_path: str, output_pdb_path: str, properties: Optional[Dict] = None, **kwargs) -> int:
     """Create :class:`Mutate <model.mutate.Mutate>` class and
     execute the :meth:`launch() <model.mutate.Mutate.launch>` method."""
     return Mutate(input_pdb_path=input_pdb_path,

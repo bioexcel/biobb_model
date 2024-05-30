@@ -3,18 +3,18 @@ import urllib.request
 import json
 import math
 from bisect import bisect
-from Bio import pairwise2
-from Bio.pairwise2 import format_alignment
-from Bio.Blast import NCBIWWW
-import xmltodict
+from Bio import pairwise2  # type: ignore
+from Bio.pairwise2 import format_alignment  # type: ignore
+from Bio.Blast import NCBIWWW  # type: ignore
+import xmltodict  # type: ignore
 from typing import List, Tuple, Optional, Union
 Coords = Tuple[float, float, float]
 
 try:
-    from Bio.SubsMat import MatrixInfo
+    from Bio.SubsMat import MatrixInfo  # type: ignore
     blosum62 = MatrixInfo.blosum62
 except ImportError:
-    from Bio.Align import substitution_matrices
+    from Bio.Align import substitution_matrices  # type: ignore
     blosum62 = substitution_matrices.load("BLOSUM62")
 
 
@@ -26,12 +26,12 @@ class Atom:
         self.coords = coords
         # Set variables to store references to other related instances
         # These variables will be set further by the structure
-        self._structure = None
-        self._index = None
-        self._residue_index = None
+        self._structure: Optional[Structure] = None
+        self._index: Optional[int] = None
+        self._residue_index: Optional[int] = None
 
     def __repr__(self):
-        return '<Atom ' + self.name + '>'
+        return '<Atom ' + str(self.name) + '>'
 
     def __eq__(self, other):
         return self._residue_index == other._residue_index and self.name == other.name
@@ -50,7 +50,7 @@ class Atom:
 
     # The atom residue index according to parent structure residues
     # If residue index is set then make changes in all the structure to make this change coherent
-    def get_residue_index(self) -> int:
+    def get_residue_index(self) -> Optional[int]:
         return self._residue_index
 
     def set_residue_index(self, new_residue_index: int):
@@ -69,7 +69,7 @@ class Atom:
 
     # The atom residue
     # If residue is set then make changes in all the structure to make this change coherent
-    def get_residue(self) -> 'Residue':
+    def get_residue(self) -> Optional['Residue']:
         # If there is not strucutre yet it means the atom is beeing set before the structure
         # In this case it is not possible to get related residues in the structure
         if not self.structure:
@@ -108,16 +108,16 @@ class Residue:
         self.icode = icode
         # Set variables to store references to other related instaces
         # These variables will be set further by the structure
-        self._structure = None
-        self._index = None
-        self._atom_indices = []
-        self._chain_index = None
+        self._structure: Optional[Structure] = None
+        self._index: Optional[int] = None
+        self._atom_indices: List[int] = []
+        self._chain_index: Optional[int] = None
 
     def __repr__(self):
-        return '<Residue ' + self.name + str(self.number) + (self.icode if self.icode else '') + '>'
+        return '<Residue ' + str(self.name) + str(self.number) + (self.icode if self.icode else '') + '>'
 
     def __eq__(self, other):
-        if type(self) != type(other):
+        if not isinstance(self, type(other)):
             return False
         return (self._chain_index == other._chain_index and self.number == other.number and self.icode == other.icode)
 
@@ -209,7 +209,7 @@ class Residue:
 
     # The residue chain index according to parent structure chains
     # If chain index is set then make changes in all the structure to make this change coherent
-    def get_chain_index(self) -> int:
+    def get_chain_index(self) -> Optional[int]:
         return self._chain_index
 
     def set_chain_index(self, new_chain_index: int):
@@ -231,7 +231,7 @@ class Residue:
 
     # The residue chain
     # If chain is set then make changes in all the structure to make this change coherent
-    def get_chain(self) -> 'Chain':
+    def get_chain(self) -> Union['Chain', List]:
         # If there is not strucutre yet it means the residue is beeing set before the structure
         # In this case it is not possible to get related chain in the structure
         if not self.structure:
@@ -241,7 +241,7 @@ class Residue:
 
     def set_chain(self, new_chain: Union['Chain', str]):
         # In case the chain is just a string we must find/create the corresponding chain
-        if type(new_chain) == str:
+        if isinstance(new_chain, str):
             letter = new_chain
             # Get the residue structure
             structure = self.structure
@@ -258,7 +258,8 @@ class Residue:
         new_chain_index = new_chain.index
         if new_chain_index is None:
             raise ValueError('Chain ' + str(new_chain) + ' is not set in the structure')
-        self.set_chain_index(new_chain_index)
+        if isinstance(new_chain_index, int):
+            self.set_chain_index(new_chain_index)
     chain = property(get_chain, set_chain, None, "The residue chain")
 
 
@@ -268,12 +269,12 @@ class Chain:
         self.name = name
         # Set variables to store references to other related instaces
         # These variables will be set further by the structure
-        self._structure = None
-        self._index = None
+        self._structure: Optional[Structure] = None
+        self._index: Optional[int] = None
         self.residue_indices = []
 
     def __repr__(self):
-        return '<Chain ' + self.name + '>'
+        return '<Chain ' + str(self.name) + '>'
 
     def __eq__(self, other):
         return self.name == other.name
@@ -382,9 +383,9 @@ class Chain:
 # A structure is a group of atoms organized in chains and residues
 class Structure:
     def __init__(self, atoms: List['Atom'] = [], residues: List['Residue'] = [], chains: List['Chain'] = []):
-        self.atoms = []
-        self.residues = []
-        self.chains = []
+        self.atoms: List[Atom] = []
+        self.residues: List[Residue] = []
+        self.chains: List[Chain] = []
         # Set references between instances
         for atom in atoms:
             self.set_new_atom(atom)
@@ -433,9 +434,9 @@ class Structure:
     def purge_chain(self, chain: 'Chain'):
         # Check the chain can be purged
         if chain not in self.chains:
-            raise ValueError('Chain ' + chain.name + ' is not in the structure already')
+            raise ValueError('Chain ' + str(chain.name) + ' is not in the structure already')
         if len(chain.residue_indices) > 0:
-            raise ValueError('Chain ' + chain.name + ' is still having residues and thus it cannot be purged')
+            raise ValueError('Chain ' + str(chain.name) + ' is still having residues and thus it cannot be purged')
         # Get the current index of the chain to be purged
         purged_index = chain.index
         # Chains and their residues below this index are not to be modified
@@ -453,8 +454,8 @@ class Structure:
             raise SystemExit('File "' + pdb_filename + '" not found')
         # Read the pdb file line by line and set the parsed atoms, residues and chains
         parsed_atoms = []
-        parsed_residues = []
-        parsed_chains = []
+        parsed_residues: List[Residue] = []
+        parsed_chains: List[Chain] = []
         atom_index = -1
         residue_index = -1
         with open(pdb_filename, 'r') as file:
@@ -509,14 +510,14 @@ class Structure:
 
     # Fix atom elements by gueesing them when missing
     # Set all elements with the first letter upper and the second(if any) lower
-    def fix_atom_elements(self):
-        for atom in self.atoms:
-            # Make sure elements have the first letter cap and the second letter not cap
-            if atom.element:
-                atom.element = first_cap_only(atom.element)
-            # If elements are missing then guess them from atom names
-            else:
-                atom.element = guess_name_element(atom.name)
+    # def fix_atom_elements(self):
+    #     for atom in self.atoms:
+    #         # Make sure elements have the first letter cap and the second letter not cap
+    #         if atom.element:
+    #             atom.element = first_cap_only(atom.element)
+    #         # If elements are missing then guess them from atom names
+    #         else:
+    #             atom.element = guess_name_element(atom.name)
 
     # Generate a pdb file with current structure
     def generate_pdb_file(self, pdb_filename: str):
@@ -525,21 +526,24 @@ class Structure:
             for a, atom in enumerate(self.atoms):
                 residue = atom.residue
                 index = str((a+1) % 100000).rjust(5)
-                name = ' ' + atom.name.ljust(3) if len(atom.name) < 4 else atom.name
+                name = ' ' + str(atom.name).ljust(3) if len(str(atom.name)) < 4 else atom.name
                 residue_name = residue.name.ljust(4)
                 chain = atom.chain.name.rjust(1)
                 residue_number = str(residue.number).rjust(4)
                 icode = residue.icode.rjust(1)
-                coords = atom.coords
-                x_coord, y_coord, z_coord = ["{:.3f}".format(coord).rjust(8) for coord in coords]
+                coords: Optional[Coords] = atom.coords
+                if not coords:
+                    raise ValueError('Atom ' + str(atom) + ' has no coordinates')
+                else:
+                    x_coord, y_coord, z_coord = ["{:.3f}".format(coord).rjust(8) for coord in coords]
                 occupancy = '1.00'  # Just a placeholder
                 temp_factor = '0.00'  # Just a placeholder
                 element = atom.element
-                atom_line = ('ATOM  ' + index + ' ' + name + ' ' + residue_name + chain + residue_number + icode + '   ' + x_coord + y_coord + z_coord + '  ' + occupancy + '  ' + temp_factor + '           ' + element).ljust(80) + '\n'
+                atom_line = ('ATOM  ' + str(index) + ' ' + str(name) + ' ' + residue_name + chain + residue_number + icode + '   ' + x_coord + y_coord + z_coord + '  ' + occupancy + '  ' + temp_factor + '           ' + element).ljust(80) + '\n'
                 file.write(atom_line)
 
     # Get a chain by its name
-    def get_chain_by_name(self, name: str) -> 'Chain':
+    def get_chain_by_name(self, name: str) -> Optional[Chain]:
         return next((c for c in self.chains if c.name == name), None)
 
     # Get a summary of the structure
@@ -548,7 +552,7 @@ class Structure:
         print('Residues: ' + str(len(self.residues)))
         print('Chains: ' + str(len(self.chains)))
         for chain in self.chains:
-            print('Chain ' + chain.name + ' (' + str(len(chain.residue_indices)) + ' residues)')
+            print('Chain ' + str(chain.name) + ' (' + str(len(chain.residue_indices)) + ' residues)')
             print(' -> ' + chain.get_sequence())
 
     # This is an alternative system to find protein chains(anything else is chained as 'X')
@@ -566,7 +570,8 @@ class Structure:
             residues_are_connected = previous_alpha_carbon and calculate_distance(previous_alpha_carbon, alpha_carbon) < 4
             if not residues_are_connected:
                 current_chain = self.get_next_available_chain_name()
-            residue.set_chain(current_chain)
+            if current_chain:
+                residue.set_chain(current_chain)
             previous_alpha_carbon = alpha_carbon
 
     # Get the next available chain name
@@ -579,9 +584,10 @@ class Structure:
 
 # Calculate the distance between two atoms
 def calculate_distance(atom_1: Atom, atom_2: Atom) -> float:
-    squared_distances_sum = 0
-    for i in {'x': 0, 'y': 1, 'z': 2}.values():
-        squared_distances_sum += (atom_1.coords[i] - atom_2.coords[i])**2
+    squared_distances_sum = 0.0
+    if atom_1.coords is not None and atom_2.coords is not None:
+        for i in {'x': 0, 'y': 1, 'z': 2}.values():
+            squared_distances_sum += (atom_1.coords[i] - atom_2.coords[i])**2
     return math.sqrt(squared_distances_sum)
 
 
@@ -712,8 +718,8 @@ def residue_name_2_letter(residue_name: str, residue_types: str = "all") -> str:
     else:
         raise ValueError('Unrecognized residue types ' + str(residue_types))
     # Now find the corresponding letter among the target residues
-    ref = target_residues.get(residue_name, False)
-    return ref if ref else "X"
+    ref = target_residues.get(residue_name, 'X')
+    return ref
 
 
 # Map the structure aminoacids sequences against the standard reference sequences
@@ -739,7 +745,7 @@ def generate_map_online(structure: 'Structure', forced_references: List[str] = [
     reference_sequences = {}
     if forced_references:
         # Check forced_references is not a string
-        if type(forced_references) == str:
+        if isinstance(forced_references, str):
             raise TypeError('Forced references should be a list and not a string a this point')
         for uniprot_id in forced_references:
             reference = get_uniprot_reference(uniprot_id)
@@ -794,7 +800,7 @@ def generate_map_online(structure: 'Structure', forced_references: List[str] = [
             continue
         # Run the blast
         sequence = structure_sequence['sequence']
-        uniprot_id = blast(sequence)
+        uniprot_id = blast(sequence)[0]
         # Build a new reference from the resulting uniprot
         reference = get_uniprot_reference(uniprot_id)
         reference_sequences[reference['uniprot']] = reference['sequence']
@@ -810,26 +816,26 @@ def generate_map_online(structure: 'Structure', forced_references: List[str] = [
 # Try to match all protein sequences with the available reference sequences
 # In case of match, objects in the 'protein_sequences' list are modified by adding the result
 # Finally, return True if all protein sequences were matched with the available reference sequences or False if not
-def match_sequences(protein_sequences: list, reference_sequences: dict) -> bool:
-    # Track each chain-reference alignment match and keep the score of successful alignments
-    # Now for each structure sequence, align all reference sequences and keep the best alignment(if it meets the minimum)
-    for structure_sequence in protein_sequences:
-        for uniprot_id, reference_sequence in reference_sequences.items():
-            # Align the structure sequence with the reference sequence
-            align_results = align(reference_sequence, structure_sequence['sequence'])
-            if not align_results:
-                continue
-            # In case we have a valid alignment, check the alignment score is better than the current reference score(if any)
-            sequence_map, align_score = align_results
-            current_reference = structure_sequence['match']
-            if current_reference['score'] > align_score:
-                continue
-            reference = references[uniprot_id]
+# def match_sequences(protein_sequences: list, reference_sequences: dict) -> bool:
+#     # Track each chain-reference alignment match and keep the score of successful alignments
+#     # Now for each structure sequence, align all reference sequences and keep the best alignment(if it meets the minimum)
+#     for structure_sequence in protein_sequences:
+#         for uniprot_id, reference_sequence in reference_sequences.items():
+#             # Align the structure sequence with the reference sequence
+#             align_results = align(reference_sequence, structure_sequence['sequence'])
+#             if not align_results:
+#                 continue
+#             # In case we have a valid alignment, check the alignment score is better than the current reference score(if any)
+#             sequence_map, align_score = align_results
+#             current_reference = structure_sequence['match']
+#             if current_reference['score'] > align_score:
+#                 continue
+#             reference = references[uniprot_id]  # type: ignore
 
-            # If the alignment is better then we impose the new reference
-            structure_sequence['match'] = {'ref': reference, 'map': sequence_map, 'score': align_score}
-    # Finally, return True if all protein sequences were matched with the available reference sequences or False if not
-    return all([structure_sequence['match']['ref'] for structure_sequence in protein_sequences])
+#             # If the alignment is better then we impose the new reference
+#             structure_sequence['match'] = {'ref': reference, 'map': sequence_map, 'score': align_score}
+#     # Finally, return True if all protein sequences were matched with the available reference sequences or False if not
+#     return all([structure_sequence['match']['ref'] for structure_sequence in protein_sequences])
 
 
 # Reformat mapping data to the topology system(introduced later)
@@ -838,7 +844,7 @@ def format_topology_data(structure: 'Structure', mapping_data: list) -> dict:
     residues_count = len(structure.residues)
     # Now format data
     reference_ids = []
-    residue_reference_indices = [None] * residues_count
+    residue_reference_indices: List = [None] * residues_count
     residue_reference_numbers = [None] * residues_count
     for data in mapping_data:
         match = data['match']
@@ -858,9 +864,9 @@ def format_topology_data(structure: 'Structure', mapping_data: list) -> dict:
             residue_reference_numbers[residue_index] = residue_number
     # If there are not references at the end then set all fields as None, in order to save space
     if len(reference_ids) == 0:
-        reference_ids = None
-        residue_reference_indices = None
-        residue_reference_numbers = None
+        reference_ids = []
+        residue_reference_indices = []
+        residue_reference_numbers = []
     # Return the 3 topology fields as they are in the database
     residues_map = {'references': reference_ids, 'residue_reference_indices': residue_reference_indices, 'residue_reference_numbers': residue_reference_numbers}
     return residues_map
@@ -870,11 +876,12 @@ def format_topology_data(structure: 'Structure', mapping_data: list) -> dict:
 # NEVER FORGET: This system relies on the fact that topology chains are not repeated
 def map_sequence(ref_sequence: str, structure: 'Structure') -> list:
     sequences = get_chain_sequences(structure)
-    mapping = []
+    mapping: List = []
     for s in sequences:
         sequence = sequences[s]
         sequence_map = align(ref_sequence, sequence)
-        mapping += sequence_map
+        if sequence_map:
+            mapping += sequence_map
     return mapping
 
 
@@ -912,7 +919,7 @@ def align(ref_sequence: str, new_sequence: str) -> Optional[Tuple[list, float]]:
         return None
 
     # Return the new sequence as best aligned as possible with the reference sequence
-    alignments = pairwise2.align.localds(ref_sequence, new_sequence, blosum62, -10, -0.5)
+    alignments = pairwise2.align.localds(ref_sequence, new_sequence, blosum62, -10, -0.5)  # type: ignore
     # DANI: Habría que hacerlo de esta otra forma según el deprecation warning (arriba hay más código)
     # DANI: El problema es que el output lo tiene todo menos la sequencia en formato alienada
     # DANI: i.e. formato '----VNLTT', que es justo el que necesito
@@ -943,7 +950,7 @@ def align(ref_sequence: str, new_sequence: str) -> Optional[Tuple[list, float]]:
         return None
 
     # Match each residue
-    aligned_mapping = []
+    aligned_mapping: List = []
     aligned_index = 0
     for l_index, letter in enumerate(aligned_sequence):
         # Guions are skipped
@@ -993,7 +1000,7 @@ def get_uniprot_reference(uniprot_accession: str) -> dict:
         with urllib.request.urlopen(request_url) as response:
             parsed_response = json.loads(response.read().decode("utf-8"))
     # If the accession is not found in UniProt then the id is not valid
-    except urllib.error.HTTPError as error:
+    except urllib.error.HTTPError as error:  # type: ignore
         if error.code == 400:
             raise ValueError('Something went wrong with the Uniprot request: ' + request_url)
     # Get the aminoacids sequence

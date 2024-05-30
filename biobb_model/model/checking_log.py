@@ -2,6 +2,7 @@
 
 """Module containing the CheckingLog class and the command line interface."""
 import argparse
+from typing import Dict, Optional
 from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.configuration import settings
 from biobb_common.tools.file_utils import launchlogger
@@ -40,7 +41,7 @@ class CheckingLog(BiobbObject):
             * schema: http://edamontology.org/EDAM.owl
     """
 
-    def __init__(self, input_pdb_path: str, output_log_path: str, properties: dict = None, **kwargs) -> None:
+    def __init__(self, input_pdb_path: str, output_log_path: str, properties: Optional[Dict] = None, **kwargs) -> None:
         properties = properties or {}
 
         # Call parent class constructor
@@ -87,14 +88,14 @@ class CheckingLog(BiobbObject):
         self.copy_to_host()
 
         # Remove temporal files
-        self.tmp_files.extend([self.stage_io_dict.get("unique_dir")])
+        self.tmp_files.extend([self.stage_io_dict.get("unique_dir", "")])
         self.remove_tmp_files()
 
         self.check_arguments(output_files_created=True, raise_exception=False)
         return self.return_code
 
 
-def checking_log(input_pdb_path: str, output_log_path: str, properties: dict = None, **kwargs) -> int:
+def checking_log(input_pdb_path: str, output_log_path: str, properties: Optional[Dict] = None, **kwargs) -> int:
     """Create :class:`CheckingLog <model.checking_log.CheckingLog>` class and
     execute the :meth:`launch() <model.checking_log.CheckingLog.launch>` method."""
     return CheckingLog(input_pdb_path=input_pdb_path,

@@ -1,3 +1,4 @@
+# type: ignore
 from biobb_common.tools import test_fixtures as fx
 from biobb_model.model.fix_side_chain import fix_side_chain
 
@@ -8,7 +9,7 @@ class TestFixSideChain:
 
     def teardown_class(self):
         fx.test_teardown(self)
-        #pass
+        # pass
 
     def test_launch(self):
         fix_side_chain(properties=self.properties, **self.paths)
