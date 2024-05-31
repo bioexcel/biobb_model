@@ -1,5 +1,21 @@
 # Biobb Model changelog
 
+## What's new in version [4.2.0](https://github.com/bioexcel/biobb_model/releases/tag/v4.2.0)?
+
+### Changes
+
+* [FIX] Fix type hints
+* [CI/CD] Adding workflow to synchronize with CASTIEL gitlab
+* [FIX] Ignoring Biopython deprecation warnings
+* [UPDATE] Updated CITATION.cff
+* [UPDATE] Updating json schemas
+* [DOCS] Adding description to fix_altlocs and fix_ssbonds modules
+* [DOCS] Add description to fix_pdb module
+* [FIX] Ignore biopython deprecation warnings
+* [DOCS] Add description to fix_altlocs module
+* [FIX] Adding module imports to package __init__ files
+* [DOCS] Adding fair software badge and GA
+
 ## What's new in version [4.0.1](https://github.com/bioexcel/biobb_model/releases/tag/v4.0.1)?
 In version 4.1.0 new biobb_structure_checking 3.13.4 and minimum Python version 3.8.0
 
