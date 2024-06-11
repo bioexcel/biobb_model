@@ -65,7 +65,7 @@
             <a id="nextFileLink" class="nav" href="z_c2a2934247a9a3e6___init___py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.5.3">coverage.py v7.5.3</a>,
-            created at 2024-05-31 13:39 +0000
+            created at 2024-06-11 09:20 +0000
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -145,7 +145,7 @@
     <p class="pln"><span class="n"><a id="t63" href="#t63">63</a></span><span class="t">        <span class="com"># Properties common in all BB</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t64" href="#t64">64</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">disable_sandbox</span><span class="op">:</span> <span class="nam">bool</span> <span class="op">=</span> <span class="nam">properties</span><span class="op">.</span><span class="nam">get</span><span class="op">(</span><span class="str">"disable_sandbox"</span><span class="op">,</span> <span class="key">False</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t65" href="#t65">65</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">chdir_sandbox</span><span class="op">:</span> <span class="nam">bool</span> <span class="op">=</span> <span class="nam">properties</span><span class="op">.</span><span class="nam">get</span><span class="op">(</span><span class="str">"chdir_sandbox"</span><span class="op">,</span> <span class="key">False</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t66" href="#t66">66</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">binary_path</span><span class="op">:</span> <span class="nam">Optional</span><span class="op">[</span><span class="nam">str</span><span class="op">]</span> <span class="op">=</span> <span class="nam">properties</span><span class="op">.</span><span class="nam">get</span><span class="op">(</span><span class="str">"binary_path"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t66" href="#t66">66</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">binary_path</span><span class="op">:</span> <span class="nam">str</span> <span class="op">=</span> <span class="nam">properties</span><span class="op">.</span><span class="nam">get</span><span class="op">(</span><span class="str">"binary_path"</span><span class="op">,</span> <span class="str">''</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t67" href="#t67">67</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">can_write_console_log</span><span class="op">:</span> <span class="nam">bool</span> <span class="op">=</span> <span class="nam">properties</span><span class="op">.</span><span class="nam">get</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t68" href="#t68">68</a></span><span class="t">            <span class="str">"can_write_console_log"</span><span class="op">,</span> <span class="key">True</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t69" href="#t69">69</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">global_log</span><span class="op">:</span> <span class="nam">Optional</span><span class="op">[</span><span class="nam">Logger</span><span class="op">]</span> <span class="op">=</span> <span class="nam">properties</span><span class="op">.</span><span class="nam">get</span><span class="op">(</span><span class="str">"global_log"</span><span class="op">,</span> <span class="key">None</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
@@ -309,7 +309,7 @@
     <p class="mis show_mis"><span class="n"><a id="t227" href="#t227">227</a></span><span class="t">                        <span class="nam">self</span><span class="op">.</span><span class="nam">stage_io_dict</span><span class="op">[</span><span class="str">"out"</span><span class="op">]</span><span class="op">[</span><span class="nam">file_ref</span><span class="op">]</span> <span class="op">=</span> <span class="nam">str</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t228" href="#t228">228</a></span><span class="t">                            <span class="nam">Path</span><span class="op">(</span><span class="nam">file_path</span><span class="op">)</span><span class="op">.</span><span class="nam">name</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t229" href="#t229">229</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t230" href="#t230">230</a></span><span class="t">    <span class="key">def</span> <span class="nam">create_cmd_line</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t230" href="#t230">230</a></span><span class="t">    <span class="key">def</span> <span class="nam">create_cmd_line</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span> <span class="op">-></span> <span class="key">None</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t231" href="#t231">231</a></span><span class="t">        <span class="com"># Not documented and not listed option, only for devs</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t232" href="#t232">232</a></span><span class="t">        <span class="key">if</span> <span class="nam">self</span><span class="op">.</span><span class="nam">dev</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t233" href="#t233">233</a></span><span class="t">            <span class="nam">fu</span><span class="op">.</span><span class="nam">log</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
@@ -533,7 +533,7 @@
             <a class="nav" href="z_c2a2934247a9a3e6___init___py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.5.3">coverage.py v7.5.3</a>,
-            created at 2024-05-31 13:39 +0000
+            created at 2024-06-11 09:20 +0000
         </p>
     </div>
 </footer>
