@@ -2,7 +2,7 @@
 
 """Module containing the FixPdb class and the command line interface."""
 import argparse
-from typing import Dict, Optional
+from typing import Dict, Optional, Any
 from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.configuration import settings
 from biobb_common.tools.file_utils import launchlogger
@@ -85,6 +85,7 @@ class FixPdb(BiobbObject):
             structure.raw_protein_chainer()
 
         # Run all the mapping function
+        mapping: Optional[Dict[Any, Any]] = {}
         if forced_uniprot_references:
             mapping = generate_map_online(structure, forced_uniprot_references)
 
