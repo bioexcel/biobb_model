@@ -1,1 +1,0 @@
-2     W504 line break after binary operator
