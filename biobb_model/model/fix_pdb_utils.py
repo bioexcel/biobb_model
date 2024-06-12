@@ -129,9 +129,7 @@ class Residue:
 
     def same_inputs_as(self, other) -> bool:
         return (
-            self.name == other.name and
-            self.number == other.number and
-            self.icode == other.icode
+            self.name == other.name and self.number == other.number and self.icode == other.icode
         )
 
     # The parent structure (read only)
