@@ -23,6 +23,7 @@ class FixPdb(BiobbObject):
             * **forced_uniprot_references** (*str*) - (None) Set the UniProt accessions for sequences to be used as reference.
             * **remove_tmp** (*bool*) - (True) [WF property] Remove temporal files.
             * **restart** (*bool*) - (False) [WF property] Do not execute if output files exist.
+            * **sandbox_path** (*str*) - ("./") [WF property] Parent path to the sandbox directory.
     Examples:
         This is a use example of how to use the building block from Python::
             from biobb_model.model.fix_pdb import fix_pdb
