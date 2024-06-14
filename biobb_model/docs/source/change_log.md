@@ -1,5 +1,11 @@
 # Biobb Model changelog
 
+## What's new in version [4.2.3](https://github.com/bioexcel/biobb_model/releases/tag/v4.2.3)?
+
+### Changes
+
+* [FIX] Minor fix in FixPdb
+
 ## What's new in version [4.2.2](https://github.com/bioexcel/biobb_model/releases/tag/v4.2.2)?
 
 ### Changes

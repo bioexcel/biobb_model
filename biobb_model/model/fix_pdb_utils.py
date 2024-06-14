@@ -798,7 +798,8 @@ def generate_map_online(structure: 'Structure', forced_references: List[str] = [
             continue
         # Run the blast
         sequence = structure_sequence['sequence']
-        uniprot_id = blast(sequence)[0]
+        # uniprot_id = blast(sequence)[0]
+        uniprot_id = blast(sequence)
         # Build a new reference from the resulting uniprot
         reference = get_uniprot_reference(uniprot_id)
         reference_sequences[reference['uniprot']] = reference['sequence']
