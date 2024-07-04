@@ -42,6 +42,7 @@ Config parameters for this building block:
 * **binary_path** (*string*): (check_structure) Path to the check_structure executable binary..
 * **remove_tmp** (*boolean*): (True) Remove temporal files..
 * **restart** (*boolean*): (False) Do not execute if output files exist..
+* **sandbox_path** (*string*): (./) Parent path to the sandbox directory..
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_model/blob/master/biobb_model/test/data/config/config_fix_altlocs.yml)
 ```python
@@ -109,6 +110,7 @@ Config parameters for this building block:
 * **binary_path** (*string*): (check_structure) Path to the check_structure executable binary..
 * **remove_tmp** (*boolean*): (True) Remove temporal files..
 * **restart** (*boolean*): (False) Do not execute if output files exist..
+* **sandbox_path** (*string*): (./) Parent path to the sandbox directory..
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_model/blob/master/biobb_model/test/data/config/config_fix_amides.yml)
 ```python
@@ -169,6 +171,7 @@ Config parameters for this building block:
 * **binary_path** (*string*): (check_structure) Path to the check_structure executable binary..
 * **remove_tmp** (*boolean*): (True) Remove temporal files..
 * **restart** (*boolean*): (False) Do not execute if output files exist..
+* **sandbox_path** (*string*): (./) Parent path to the sandbox directory..
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_model/blob/master/biobb_model/test/data/config/config_fix_chirality.yml)
 ```python
@@ -229,6 +232,7 @@ Config parameters for this building block:
 * **binary_path** (*string*): (check_structure) Path to the check_structure executable binary..
 * **remove_tmp** (*boolean*): (True) Remove temporal files..
 * **restart** (*boolean*): (False) Do not execute if output files exist..
+* **sandbox_path** (*string*): (./) Parent path to the sandbox directory..
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_model/blob/master/biobb_model/test/data/config/config_checking_log.yml)
 ```python
@@ -293,6 +297,7 @@ Config parameters for this building block:
 * **binary_path** (*string*): (check_structure) Path to the check_structure executable binary..
 * **remove_tmp** (*boolean*): (True) Remove temporal files..
 * **restart** (*boolean*): (False) Do not execute if output files exist..
+* **sandbox_path** (*string*): (./) Parent path to the sandbox directory..
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_model/blob/master/biobb_model/test/data/config/config_fix_backbone.yml)
 ```python
@@ -329,7 +334,10 @@ Command:
 ```python
 fix_pdb -h
 ```
-    /bin/sh: /Users/pau/mambaforge/envs/dev38/bin/fix_pdb: Permission denied
+    Traceback (most recent call last):
+      File "/Users/pau/mambaforge/envs/dev38/bin/fix_pdb", line 10, in <module>
+        from .fix_pdb_utils import Structure, generate_map_online
+    ImportError: attempted relative import with no known parent package
 ### I / O Arguments
 Syntax: input_argument (datatype) : Definition
 
@@ -343,6 +351,7 @@ Config parameters for this building block:
 * **forced_uniprot_references** (*string*): (None) Set the UniProt accessions for sequences to be used as reference..
 * **remove_tmp** (*boolean*): (True) Remove temporal files..
 * **restart** (*boolean*): (False) Do not execute if output files exist..
+* **sandbox_path** (*string*): (./) Parent path to the sandbox directory..
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_model/blob/master/biobb_model/test/data/config/config_fix_pdb.yml)
 ```python
@@ -410,6 +419,7 @@ Config parameters for this building block:
 * **binary_path** (*string*): (check_structure) Path to the check_structure executable binary..
 * **remove_tmp** (*boolean*): (True) Remove temporal files..
 * **restart** (*boolean*): (False) Do not execute if output files exist..
+* **sandbox_path** (*string*): (./) Parent path to the sandbox directory..
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_model/blob/master/biobb_model/test/data/config/config_fix_ssbonds.yml)
 ```python
@@ -472,6 +482,7 @@ Config parameters for this building block:
 * **binary_path** (*string*): (check_structure) Path to the check_structure executable binary..
 * **remove_tmp** (*boolean*): (True) Remove temporal files..
 * **restart** (*boolean*): (False) Do not execute if output files exist..
+* **sandbox_path** (*string*): (./) Parent path to the sandbox directory..
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_model/blob/master/biobb_model/test/data/config/config_mutate.yml)
 ```python
@@ -533,6 +544,7 @@ Config parameters for this building block:
 * **binary_path** (*string*): (check_structure) Path to the check_structure executable binary..
 * **remove_tmp** (*boolean*): (True) Remove temporal files..
 * **restart** (*boolean*): (False) Do not execute if output files exist..
+* **sandbox_path** (*string*): (./) Parent path to the sandbox directory..
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_model/blob/master/biobb_model/test/data/config/config_fix_side_chain.yml)
 ```python
