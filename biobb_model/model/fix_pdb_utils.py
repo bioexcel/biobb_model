@@ -7,8 +7,8 @@ from Bio import pairwise2  # type: ignore
 from Bio.pairwise2 import format_alignment  # type: ignore
 from Bio.Blast import NCBIWWW  # type: ignore
 import xmltodict  # type: ignore
-from typing import List, Tuple, Optional, Union
-Coords = Tuple[float, float, float]
+from typing import Optional, Union
+Coords = tuple[float, float, float]
 
 try:
     from Bio.SubsMat import MatrixInfo  # type: ignore
@@ -110,7 +110,7 @@ class Residue:
         # These variables will be set further by the structure
         self._structure: Optional[Structure] = None
         self._index: Optional[int] = None
-        self._atom_indices: List[int] = []
+        self._atom_indices: list[int] = []
         self._chain_index: Optional[int] = None
 
     def __repr__(self):
@@ -146,10 +146,10 @@ class Residue:
 
     # The atom indices according to parent structure atoms for atoms in this residue
     # If atom indices are set then make changes in all the structure to make this change coherent
-    def get_atom_indices(self) -> List[int]:
+    def get_atom_indices(self) -> list[int]:
         return self._atom_indices
 
-    def set_atom_indices(self, new_atom_indices: List[int]):
+    def set_atom_indices(self, new_atom_indices: list[int]):
         # If there is not strucutre yet it means the residue is beeing set before the structure
         # We just save atom indices and wait for the structure to be set
         if not self.structure:
@@ -168,7 +168,7 @@ class Residue:
 
     # The atoms in this residue
     # If atoms are set then make changes in all the structure to make this change coherent
-    def get_atoms(self) -> List['Atom']:
+    def get_atoms(self) -> list['Atom']:
         # If there is not strucutre yet it means the chain is beeing set before the structure
         # In this case it is not possible to get related atoms in the structure
         if not self.structure:
@@ -177,7 +177,7 @@ class Residue:
         atoms = self.structure.atoms
         return [atoms[atom_index] for atom_index in self.atom_indices]
 
-    def set_atoms(self, new_atoms: List['Atom']):
+    def set_atoms(self, new_atoms: list['Atom']):
         # Find indices for new atoms and set their indices as the new atom indices
         # Note that atoms must be set in the structure already
         new_atom_indices = []
@@ -229,7 +229,7 @@ class Residue:
 
     # The residue chain
     # If chain is set then make changes in all the structure to make this change coherent
-    def get_chain(self) -> Union['Chain', List]:
+    def get_chain(self) -> Union['Chain', list]:
         # If there is not strucutre yet it means the residue is beeing set before the structure
         # In this case it is not possible to get related chain in the structure
         if not self.structure:
@@ -297,10 +297,10 @@ class Chain:
 
     # The residue indices according to parent structure residues for residues in this chain
     # If residue indices are set then make changes in all the structure to make this change coherent
-    def get_residue_indices(self) -> List[int]:
+    def get_residue_indices(self) -> list[int]:
         return self._residue_indices
 
-    def set_residue_indices(self, new_residue_indices: List[int]):
+    def set_residue_indices(self, new_residue_indices: list[int]):
         # If there is not strucutre yet it means the chain is beeing set before the structure
         # We just save residue indices and wait for the structure to be set
         if not self.structure:
@@ -322,7 +322,7 @@ class Chain:
 
     # The residues in this chain
     # If residues are set then make changes in all the structure to make this change coherent
-    def get_residues(self) -> List['Residue']:
+    def get_residues(self) -> list['Residue']:
         # If there is not strucutre yet it means the chain is beeing set before the structure
         # In this case it is not possible to get related residues in the structure
         if not self.structure:
@@ -331,7 +331,7 @@ class Chain:
         residues = self.structure.residues
         return [residues[residue_index] for residue_index in self.residue_indices]
 
-    def set_residues(self, new_residues: List['Residue']):
+    def set_residues(self, new_residues: list['Residue']):
         # Find indices for new residues and set their indices as the new residue indices
         # Note that residues must be set in the structure already
         new_residue_indices = []
@@ -363,13 +363,13 @@ class Chain:
 
     # Atom indices for all atoms in the chain(read only)
     # In order to change atom indices they must be changed in their corresponding residues
-    def get_atom_indices(self) -> List[int]:
+    def get_atom_indices(self) -> list[int]:
         return sum([residue.atom_indices for residue in self.residues], [])
     atom_indices = property(get_atom_indices, None, None, "Atom indices for all atoms in the chain(read only)")
 
     # Atoms in the chain(read only)
     # In order to change atoms they must be changed in their corresponding residues
-    def get_atoms(self) -> List[int]:
+    def get_atoms(self) -> list[int]:
         return sum([residue.atoms for residue in self.residues], [])
     atoms = property(get_atoms, None, None, "Atoms in the chain(read only)")
 
@@ -380,10 +380,10 @@ class Chain:
 
 # A structure is a group of atoms organized in chains and residues
 class Structure:
-    def __init__(self, atoms: List['Atom'] = [], residues: List['Residue'] = [], chains: List['Chain'] = []):
-        self.atoms: List[Atom] = []
-        self.residues: List[Residue] = []
-        self.chains: List[Chain] = []
+    def __init__(self, atoms: list['Atom'] = [], residues: list['Residue'] = [], chains: list['Chain'] = []):
+        self.atoms: list[Atom] = []
+        self.residues: list[Residue] = []
+        self.chains: list[Chain] = []
         # Set references between instances
         for atom in atoms:
             self.set_new_atom(atom)
@@ -452,8 +452,8 @@ class Structure:
             raise SystemExit('File "' + pdb_filename + '" not found')
         # Read the pdb file line by line and set the parsed atoms, residues and chains
         parsed_atoms = []
-        parsed_residues: List[Residue] = []
-        parsed_chains: List[Chain] = []
+        parsed_residues: list[Residue] = []
+        parsed_chains: list[Chain] = []
         atom_index = -1
         residue_index = -1
         with open(pdb_filename, 'r') as file:
@@ -726,7 +726,7 @@ def residue_name_2_letter(residue_name: str, residue_types: str = "all") -> str:
 # Chains which do not match any reference sequence will be blasted
 # Note that an internet connection is required both to retireve the uniprot reference sequence and to do the blast
 # NEVER FORGET: This system relies on the fact that topology chains are not repeated
-def generate_map_online(structure: 'Structure', forced_references: List[str] = []) -> Optional[dict]:
+def generate_map_online(structure: 'Structure', forced_references: list[str] = []) -> Optional[dict]:
     # Store all the references which are got through this process
     # Note that not all references may be used at the end
     references = {}
@@ -799,9 +799,9 @@ def generate_map_online(structure: 'Structure', forced_references: List[str] = [
         # Run the blast
         sequence = structure_sequence['sequence']
         # uniprot_id = blast(sequence)[0]
-        uniprot_id = blast(sequence)
+        uniprot_id = blast(sequence)  # type: ignore
         # Build a new reference from the resulting uniprot
-        reference = get_uniprot_reference(uniprot_id)
+        reference = get_uniprot_reference(uniprot_id)  # type: ignore
         reference_sequences[reference['uniprot']] = reference['sequence']
         # Save the current whole reference object for later
         references[reference['uniprot']] = reference
@@ -843,7 +843,7 @@ def format_topology_data(structure: 'Structure', mapping_data: list) -> dict:
     residues_count = len(structure.residues)
     # Now format data
     reference_ids = []
-    residue_reference_indices: List = [None] * residues_count
+    residue_reference_indices: list = [None] * residues_count
     residue_reference_numbers = [None] * residues_count
     for data in mapping_data:
         match = data['match']
@@ -875,7 +875,7 @@ def format_topology_data(structure: 'Structure', mapping_data: list) -> dict:
 # NEVER FORGET: This system relies on the fact that topology chains are not repeated
 def map_sequence(ref_sequence: str, structure: 'Structure') -> list:
     sequences = get_chain_sequences(structure)
-    mapping: List = []
+    mapping: list = []
     for s in sequences:
         sequence = sequences[s]
         sequence_map = align(ref_sequence, sequence)
@@ -908,7 +908,7 @@ def get_chain_sequences(structure: 'Structure') -> list:
 # which match each new sequence residues indexes (indexes)
 # Return also the score of the alignment
 # Return None when there is not valid alignment at all
-def align(ref_sequence: str, new_sequence: str) -> Optional[Tuple[list, float]]:
+def align(ref_sequence: str, new_sequence: str) -> Optional[tuple[list, float]]:
 
     # print('- REFERENCE\n' + ref_sequence + '\n- NEW\n' + new_sequence)
 
@@ -949,7 +949,7 @@ def align(ref_sequence: str, new_sequence: str) -> Optional[Tuple[list, float]]:
         return None
 
     # Match each residue
-    aligned_mapping: List = []
+    aligned_mapping: list = []
     aligned_index = 0
     for l_index, letter in enumerate(aligned_sequence):
         # Guions are skipped
@@ -976,7 +976,7 @@ def align(ref_sequence: str, new_sequence: str) -> Optional[Tuple[list, float]]:
 # Note that we are blasting against UniProtKB / Swiss-Prot so results will always be valid UniProt accessions
 # WARNING: This always means results will correspond to curated entries only
 #   If your sequence is from an exotic organism the result may be not from it but from other more studied organism
-def blast(sequence: str) -> List[str]:
+def blast(sequence: str) -> list[str]:
     print('Throwing blast... (this may take a few minutes)')
     result = NCBIWWW.qblast(program="blastp", database="swissprot", sequence=sequence)
     parsed_result = xmltodict.parse(result.read())

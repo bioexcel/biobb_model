@@ -2,7 +2,8 @@
 
 """Module containing the FixPdb class and the command line interface."""
 import argparse
-from typing import Dict, Optional
+from typing import Optional
+from typing import Optional
 from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.configuration import settings
 from biobb_common.tools.file_utils import launchlogger
@@ -38,7 +39,7 @@ class FixPdb(BiobbObject):
             * schema: http://edamontology.org/EDAM.owl
     """
 
-    def __init__(self, input_pdb_path: str, output_pdb_path: str, properties: Optional[Dict] = None, **kwargs) -> None:
+    def __init__(self, input_pdb_path: str, output_pdb_path: str, properties: Optional[dict] = None, **kwargs) -> None:
         properties = properties or {}
 
         # Call parent class constructor
@@ -86,9 +87,9 @@ class FixPdb(BiobbObject):
             structure.raw_protein_chainer()
 
         # Run all the mapping function
-        # mapping: Optional[Dict[Any, Any]] = {}
+        # mapping: Optional[dict[Any, Any]] = {}
         # if forced_uniprot_references:
-        mapping = generate_map_online(structure, forced_uniprot_references)
+        mapping = generate_map_online(structure, forced_uniprot_references)  # type: ignore
 
         # In case something went wrong with the mapping stop here
         if not mapping:
@@ -116,7 +117,7 @@ class FixPdb(BiobbObject):
         return self.return_code
 
 
-def fix_pdb(input_pdb_path: str, output_pdb_path: str, properties: Optional[Dict] = None, **kwargs) -> int:
+def fix_pdb(input_pdb_path: str, output_pdb_path: str, properties: Optional[dict] = None, **kwargs) -> int:
     """Create :class:`FixPdb <model.fix_pdb.FixPdb>` class and
     execute the :meth:`launch() <model.fix_pdb.FixPdb.launch>` method."""
     return FixPdb(input_pdb_path=input_pdb_path,

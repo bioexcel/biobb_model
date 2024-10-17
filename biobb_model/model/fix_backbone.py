@@ -2,7 +2,8 @@
 
 """Module containing the FixBackbone class and the command line interface."""
 import argparse
-from typing import Dict, Optional
+from typing import Optional
+from typing import Optional
 from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.configuration import settings
 from biobb_common.tools import file_utils as fu
@@ -47,7 +48,7 @@ class FixBackbone(BiobbObject):
     """
 
     def __init__(self, input_pdb_path: str, input_fasta_canonical_sequence_path: str, output_pdb_path: str,
-                 properties: Optional[Dict] = None, **kwargs) -> None:
+                 properties: Optional[dict] = None, **kwargs) -> None:
         properties = properties or {}
 
         # Call parent class constructor
@@ -123,7 +124,7 @@ class FixBackbone(BiobbObject):
 
 
 def fix_backbone(input_pdb_path: str, input_fasta_canonical_sequence_path: str, output_pdb_path: str,
-                 properties: Optional[Dict] = None, **kwargs) -> int:
+                 properties: Optional[dict] = None, **kwargs) -> int:
     """Create :class:`FixBackbone <model.fix_backbone.FixBackbone>` class and
     execute the :meth:`launch() <model.fix_backbone.FixBackbone.launch>` method."""
     return FixBackbone(input_pdb_path=input_pdb_path,

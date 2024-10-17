@@ -2,7 +2,8 @@
 
 """Module containing the FixAltLocs class and the command line interface."""
 import argparse
-from typing import Dict, Optional
+from typing import Optional
+from typing import Optional
 from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.configuration import settings
 from biobb_common.tools.file_utils import launchlogger
@@ -18,7 +19,7 @@ class FixAltLocs(BiobbObject):
         input_pdb_path (str): Input PDB file path. File type: input. `Sample file <https://github.com/bioexcel/biobb_model/raw/master/biobb_model/test/data/model/3ebp.pdb>`_. Accepted formats: pdb (edam:format_1476).
         output_pdb_path (str): Output PDB file path. File type: output. `Sample file <https://raw.githubusercontent.com/bioexcel/biobb_model/master/biobb_model/test/reference/model/output_altloc.pdb>`_. Accepted formats: pdb (edam:format_1476).
         properties (dict - Python dictionary object containing the tool parameters, not input/output files):
-            * **altlocs** (*list*) - (None) List of alternate locations to fix. Format: ["A339:A", "A171:B", "A768:A"]; where for each residue the format is as follows: "<chain><residue id>:<chosen alternate location>". If empty, no action will be executed.
+            * **altlocs** (*list*) - (None) list of alternate locations to fix. Format: ["A339:A", "A171:B", "A768:A"]; where for each residue the format is as follows: "<chain><residue id>:<chosen alternate location>". If empty, no action will be executed.
             * **modeller_key** (*str*) - (None) Modeller license key.
             * **binary_path** (*str*) - ("check_structure") Path to the check_structure executable binary.
             * **remove_tmp** (*bool*) - (True) [WF property] Remove temporal files.
@@ -43,7 +44,7 @@ class FixAltLocs(BiobbObject):
             * schema: http://edamontology.org/EDAM.owl
     """
 
-    def __init__(self, input_pdb_path: str, output_pdb_path: str, properties: Optional[Dict] = None, **kwargs) -> None:
+    def __init__(self, input_pdb_path: str, output_pdb_path: str, properties: Optional[dict] = None, **kwargs) -> None:
         properties = properties or {}
 
         # Call parent class constructor
@@ -104,7 +105,7 @@ class FixAltLocs(BiobbObject):
         return self.return_code
 
 
-def fix_altlocs(input_pdb_path: str, output_pdb_path: str, properties: Optional[Dict] = None, **kwargs) -> int:
+def fix_altlocs(input_pdb_path: str, output_pdb_path: str, properties: Optional[dict] = None, **kwargs) -> int:
     """Create :class:`FixAltLocs <model.fix_altlocs.FixAltLocs>` class and
     execute the :meth:`launch() <model.fix_altlocs.FixAltLocs.launch>` method."""
     return FixAltLocs(input_pdb_path=input_pdb_path,

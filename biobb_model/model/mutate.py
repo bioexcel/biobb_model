@@ -2,7 +2,8 @@
 
 """Module containing the Mutate class and the command line interface."""
 import argparse
-from typing import Dict, Optional
+from typing import Optional
+from typing import Optional
 from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.configuration import settings
 from biobb_common.tools import file_utils as fu
@@ -47,7 +48,7 @@ class Mutate(BiobbObject):
             * schema: http://edamontology.org/EDAM.owl
     """
 
-    def __init__(self, input_pdb_path: str, output_pdb_path: str, properties: Optional[Dict] = None, **kwargs) -> None:
+    def __init__(self, input_pdb_path: str, output_pdb_path: str, properties: Optional[dict] = None, **kwargs) -> None:
         properties = properties or {}
 
         # Call parent class constructor
@@ -117,7 +118,7 @@ class Mutate(BiobbObject):
         return self.return_code
 
 
-def mutate(input_pdb_path: str, output_pdb_path: str, properties: Optional[Dict] = None, **kwargs) -> int:
+def mutate(input_pdb_path: str, output_pdb_path: str, properties: Optional[dict] = None, **kwargs) -> int:
     """Create :class:`Mutate <model.mutate.Mutate>` class and
     execute the :meth:`launch() <model.mutate.Mutate.launch>` method."""
     return Mutate(input_pdb_path=input_pdb_path,
