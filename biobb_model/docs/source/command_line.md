@@ -334,10 +334,20 @@ Command:
 ```python
 fix_pdb -h
 ```
-    Traceback (most recent call last):
-      File "/Users/pau/mambaforge/envs/dev38/bin/fix_pdb", line 10, in <module>
-        from .fix_pdb_utils import Structure, generate_map_online
-    ImportError: attempted relative import with no known parent package
+    usage: fix_pdb [-h] [-c CONFIG] -i INPUT_PDB_PATH -o OUTPUT_PDB_PATH
+    
+    Model the missing atoms in the backbone of a PDB structure.
+    
+    optional arguments:
+      -h, --help            show this help message and exit
+      -c CONFIG, --config CONFIG
+                            This file can be a YAML file, JSON file or JSON string
+    
+    required arguments:
+      -i INPUT_PDB_PATH, --input_pdb_path INPUT_PDB_PATH
+                            Input PDB file name
+      -o OUTPUT_PDB_PATH, --output_pdb_path OUTPUT_PDB_PATH
+                            Output PDB file name
 ### I / O Arguments
 Syntax: input_argument (datatype) : Definition
 

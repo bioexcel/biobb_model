@@ -3,12 +3,10 @@
 """Module containing the FixPdb class and the command line interface."""
 import argparse
 from typing import Optional
-from typing import Optional
 from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.configuration import settings
 from biobb_common.tools.file_utils import launchlogger
-
-from .fix_pdb_utils import Structure, generate_map_online
+from biobb_model.model.fix_pdb_utils import Structure, generate_map_online
 
 
 class FixPdb(BiobbObject):
