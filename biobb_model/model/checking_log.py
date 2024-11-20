@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 
 """Module containing the CheckingLog class and the command line interface."""
+
 import argparse
 from typing import Optional
-from biobb_common.generic.biobb_object import BiobbObject
+
 from biobb_common.configuration import settings
+from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.tools.file_utils import launchlogger
 
 
@@ -42,7 +44,13 @@ class CheckingLog(BiobbObject):
             * schema: http://edamontology.org/EDAM.owl
     """
 
-    def __init__(self, input_pdb_path: str, output_log_path: str, properties: Optional[dict] = None, **kwargs) -> None:
+    def __init__(
+        self,
+        input_pdb_path: str,
+        output_log_path: str,
+        properties: Optional[dict] = None,
+        **kwargs,
+    ) -> None:
         properties = properties or {}
 
         # Call parent class constructor
@@ -52,12 +60,12 @@ class CheckingLog(BiobbObject):
         # Input/Output files
         self.io_dict = {
             "in": {"input_pdb_path": input_pdb_path},
-            "out": {"output_log_path": output_log_path}
+            "out": {"output_log_path": output_log_path},
         }
 
         # Properties specific for BB
-        self.binary_path = properties.get('binary_path', 'check_structure')
-        self.modeller_key = properties.get('modeller_key')
+        self.binary_path = properties.get("binary_path", "check_structure")
+        self.modeller_key = properties.get("modeller_key")
 
         # Check the properties
         self.check_properties(properties)
@@ -73,14 +81,18 @@ class CheckingLog(BiobbObject):
         self.stage_files()
 
         # Create command line
-        self.cmd = [self.binary_path,
-                    '-i', self.stage_io_dict["in"]["input_pdb_path"],
-                    "checkall",
-                    '>', self.stage_io_dict["out"]["output_log_path"]]
+        self.cmd = [
+            self.binary_path,
+            "-i",
+            self.stage_io_dict["in"]["input_pdb_path"],
+            "checkall",
+            ">",
+            self.stage_io_dict["out"]["output_log_path"],
+        ]
 
         if self.modeller_key:
             self.cmd.insert(1, self.modeller_key)
-            self.cmd.insert(1, '--modeller_key')
+            self.cmd.insert(1, "--modeller_key")
 
         # Run Biobb block
         self.run_biobb()
@@ -96,33 +108,54 @@ class CheckingLog(BiobbObject):
         return self.return_code
 
 
-def checking_log(input_pdb_path: str, output_log_path: str, properties: Optional[dict] = None, **kwargs) -> int:
+def checking_log(
+    input_pdb_path: str,
+    output_log_path: str,
+    properties: Optional[dict] = None,
+    **kwargs,
+) -> int:
     """Create :class:`CheckingLog <model.checking_log.CheckingLog>` class and
     execute the :meth:`launch() <model.checking_log.CheckingLog.launch>` method."""
-    return CheckingLog(input_pdb_path=input_pdb_path,
-                       output_log_path=output_log_path,
-                       properties=properties, **kwargs).launch()
+    return CheckingLog(
+        input_pdb_path=input_pdb_path,
+        output_log_path=output_log_path,
+        properties=properties,
+        **kwargs,
+    ).launch()
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Check the errors of a PDB structure and create a report log file.",
-                                     formatter_class=lambda prog: argparse.RawTextHelpFormatter(prog, width=99999))
-    parser.add_argument('-c', '--config', required=False, help="This file can be a YAML file, JSON file or JSON string")
+    parser = argparse.ArgumentParser(
+        description="Check the errors of a PDB structure and create a report log file.",
+        formatter_class=lambda prog: argparse.RawTextHelpFormatter(prog, width=99999),
+    )
+    parser.add_argument(
+        "-c",
+        "--config",
+        required=False,
+        help="This file can be a YAML file, JSON file or JSON string",
+    )
 
     # Specific args of each building block
-    required_args = parser.add_argument_group('required arguments')
-    required_args.add_argument('-i', '--input_pdb_path', required=True, help="Input PDB file name")
-    required_args.add_argument('-o', '--output_log_path', required=True, help="Output log file name")
+    required_args = parser.add_argument_group("required arguments")
+    required_args.add_argument(
+        "-i", "--input_pdb_path", required=True, help="Input PDB file name"
+    )
+    required_args.add_argument(
+        "-o", "--output_log_path", required=True, help="Output log file name"
+    )
 
     args = parser.parse_args()
     config = args.config if args.config else None
     properties = settings.ConfReader(config=config).get_prop_dic()
 
     # Specific call of each building block
-    checking_log(input_pdb_path=args.input_pdb_path,
-                 output_log_path=args.output_log_path,
-                 properties=properties)
+    checking_log(
+        input_pdb_path=args.input_pdb_path,
+        output_log_path=args.output_log_path,
+        properties=properties,
+    )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

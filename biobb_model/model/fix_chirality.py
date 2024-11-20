@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 
 """Module containing the FixChirality class and the command line interface."""
+
 import argparse
 from typing import Optional
-from biobb_common.generic.biobb_object import BiobbObject
+
 from biobb_common.configuration import settings
+from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.tools.file_utils import launchlogger
 
 
@@ -42,7 +44,13 @@ class FixChirality(BiobbObject):
             * schema: http://edamontology.org/EDAM.owl
     """
 
-    def __init__(self, input_pdb_path: str, output_pdb_path: str, properties: Optional[dict] = None, **kwargs) -> None:
+    def __init__(
+        self,
+        input_pdb_path: str,
+        output_pdb_path: str,
+        properties: Optional[dict] = None,
+        **kwargs,
+    ) -> None:
         properties = properties or {}
 
         # Call parent class constructor
@@ -52,12 +60,12 @@ class FixChirality(BiobbObject):
         # Input/Output files
         self.io_dict = {
             "in": {"input_pdb_path": input_pdb_path},
-            "out": {"output_pdb_path": output_pdb_path}
+            "out": {"output_pdb_path": output_pdb_path},
         }
 
         # Properties specific for BB
-        self.binary_path = properties.get('binary_path', 'check_structure')
-        self.modeller_key = properties.get('modeller_key')
+        self.binary_path = properties.get("binary_path", "check_structure")
+        self.modeller_key = properties.get("modeller_key")
 
         # Check the properties
         self.check_properties(properties)
@@ -73,15 +81,21 @@ class FixChirality(BiobbObject):
         self.stage_files()
 
         # Create command line
-        self.cmd = [self.binary_path,
-                    '-i', self.stage_io_dict["in"]["input_pdb_path"],
-                    '-o', self.stage_io_dict["out"]["output_pdb_path"],
-                    '--force_save', 'chiral',
-                    '--fix', 'All']
+        self.cmd = [
+            self.binary_path,
+            "-i",
+            self.stage_io_dict["in"]["input_pdb_path"],
+            "-o",
+            self.stage_io_dict["out"]["output_pdb_path"],
+            "--force_save",
+            "chiral",
+            "--fix",
+            "All",
+        ]
 
         if self.modeller_key:
             self.cmd.insert(1, self.modeller_key)
-            self.cmd.insert(1, '--modeller_key')
+            self.cmd.insert(1, "--modeller_key")
 
         # Run Biobb block
         self.run_biobb()
@@ -97,33 +111,54 @@ class FixChirality(BiobbObject):
         return self.return_code
 
 
-def fix_chirality(input_pdb_path: str, output_pdb_path: str, properties: Optional[dict] = None, **kwargs) -> int:
+def fix_chirality(
+    input_pdb_path: str,
+    output_pdb_path: str,
+    properties: Optional[dict] = None,
+    **kwargs,
+) -> int:
     """Create :class:`FixChirality <model.fix_amides.FixChirality>` class and
     execute the :meth:`launch() <model.fix_amides.FixChirality.launch>` method."""
-    return FixChirality(input_pdb_path=input_pdb_path,
-                        output_pdb_path=output_pdb_path,
-                        properties=properties, **kwargs).launch()
+    return FixChirality(
+        input_pdb_path=input_pdb_path,
+        output_pdb_path=output_pdb_path,
+        properties=properties,
+        **kwargs,
+    ).launch()
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Fix stereochemical errors in residues changing It's chirality.",
-                                     formatter_class=lambda prog: argparse.RawTextHelpFormatter(prog, width=99999))
-    parser.add_argument('-c', '--config', required=False, help="This file can be a YAML file, JSON file or JSON string")
+    parser = argparse.ArgumentParser(
+        description="Fix stereochemical errors in residues changing It's chirality.",
+        formatter_class=lambda prog: argparse.RawTextHelpFormatter(prog, width=99999),
+    )
+    parser.add_argument(
+        "-c",
+        "--config",
+        required=False,
+        help="This file can be a YAML file, JSON file or JSON string",
+    )
 
     # Specific args of each building block
-    required_args = parser.add_argument_group('required arguments')
-    required_args.add_argument('-i', '--input_pdb_path', required=True, help="Input PDB file name")
-    required_args.add_argument('-o', '--output_pdb_path', required=True, help="Output PDB file name")
+    required_args = parser.add_argument_group("required arguments")
+    required_args.add_argument(
+        "-i", "--input_pdb_path", required=True, help="Input PDB file name"
+    )
+    required_args.add_argument(
+        "-o", "--output_pdb_path", required=True, help="Output PDB file name"
+    )
 
     args = parser.parse_args()
     config = args.config if args.config else None
     properties = settings.ConfReader(config=config).get_prop_dic()
 
     # Specific call of each building block
-    fix_chirality(input_pdb_path=args.input_pdb_path,
-                  output_pdb_path=args.output_pdb_path,
-                  properties=properties)
+    fix_chirality(
+        input_pdb_path=args.input_pdb_path,
+        output_pdb_path=args.output_pdb_path,
+        properties=properties,
+    )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

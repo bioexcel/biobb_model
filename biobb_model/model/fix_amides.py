@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 
 """Module containing the FixAmides class and the command line interface."""
+
 import argparse
 from typing import Optional
-from biobb_common.generic.biobb_object import BiobbObject
+
 from biobb_common.configuration import settings
+from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.tools.file_utils import launchlogger
 
 
@@ -42,7 +44,13 @@ class FixAmides(BiobbObject):
             * schema: http://edamontology.org/EDAM.owl
     """
 
-    def __init__(self, input_pdb_path: str, output_pdb_path: str, properties: Optional[dict] = None, **kwargs) -> None:
+    def __init__(
+        self,
+        input_pdb_path: str,
+        output_pdb_path: str,
+        properties: Optional[dict] = None,
+        **kwargs,
+    ) -> None:
         properties = properties or {}
 
         # Call parent class constructor
@@ -52,12 +60,12 @@ class FixAmides(BiobbObject):
         # Input/Output files
         self.io_dict = {
             "in": {"input_pdb_path": input_pdb_path},
-            "out": {"output_pdb_path": output_pdb_path}
+            "out": {"output_pdb_path": output_pdb_path},
         }
 
         # Properties specific for BB
-        self.binary_path = properties.get('binary_path', 'check_structure')
-        self.modeller_key = properties.get('modeller_key')
+        self.binary_path = properties.get("binary_path", "check_structure")
+        self.modeller_key = properties.get("modeller_key")
 
         # Check the properties
         self.check_properties(properties)
@@ -72,15 +80,21 @@ class FixAmides(BiobbObject):
             return 0
         self.stage_files()
 
-        self.cmd = [self.binary_path,
-                    '-i', self.stage_io_dict["in"]["input_pdb_path"],
-                    '-o', self.stage_io_dict["out"]["output_pdb_path"],
-                    '--force_save',
-                    'amide', '--fix', 'All']
+        self.cmd = [
+            self.binary_path,
+            "-i",
+            self.stage_io_dict["in"]["input_pdb_path"],
+            "-o",
+            self.stage_io_dict["out"]["output_pdb_path"],
+            "--force_save",
+            "amide",
+            "--fix",
+            "All",
+        ]
 
         if self.modeller_key:
             self.cmd.insert(1, self.modeller_key)
-            self.cmd.insert(1, '--modeller_key')
+            self.cmd.insert(1, "--modeller_key")
 
         # Run Biobb block
         self.run_biobb()
@@ -96,33 +110,54 @@ class FixAmides(BiobbObject):
         return self.return_code
 
 
-def fix_amides(input_pdb_path: str, output_pdb_path: str, properties: Optional[dict] = None, **kwargs) -> int:
+def fix_amides(
+    input_pdb_path: str,
+    output_pdb_path: str,
+    properties: Optional[dict] = None,
+    **kwargs,
+) -> int:
     """Create :class:`FixAmides <model.fix_amides.FixAmides>` class and
     execute the :meth:`launch() <model.fix_amides.FixAmides.launch>` method."""
-    return FixAmides(input_pdb_path=input_pdb_path,
-                     output_pdb_path=output_pdb_path,
-                     properties=properties, **kwargs).launch()
+    return FixAmides(
+        input_pdb_path=input_pdb_path,
+        output_pdb_path=output_pdb_path,
+        properties=properties,
+        **kwargs,
+    ).launch()
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Flip the clashing amide groups to avoid clashes.",
-                                     formatter_class=lambda prog: argparse.RawTextHelpFormatter(prog, width=99999))
-    parser.add_argument('-c', '--config', required=False, help="This file can be a YAML file, JSON file or JSON string")
+    parser = argparse.ArgumentParser(
+        description="Flip the clashing amide groups to avoid clashes.",
+        formatter_class=lambda prog: argparse.RawTextHelpFormatter(prog, width=99999),
+    )
+    parser.add_argument(
+        "-c",
+        "--config",
+        required=False,
+        help="This file can be a YAML file, JSON file or JSON string",
+    )
 
     # Specific args of each building block
-    required_args = parser.add_argument_group('required arguments')
-    required_args.add_argument('-i', '--input_pdb_path', required=True, help="Input PDB file name")
-    required_args.add_argument('-o', '--output_pdb_path', required=True, help="Output PDB file name")
+    required_args = parser.add_argument_group("required arguments")
+    required_args.add_argument(
+        "-i", "--input_pdb_path", required=True, help="Input PDB file name"
+    )
+    required_args.add_argument(
+        "-o", "--output_pdb_path", required=True, help="Output PDB file name"
+    )
 
     args = parser.parse_args()
     config = args.config if args.config else None
     properties = settings.ConfReader(config=config).get_prop_dic()
 
     # Specific call of each building block
-    fix_amides(input_pdb_path=args.input_pdb_path,
-               output_pdb_path=args.output_pdb_path,
-               properties=properties)
+    fix_amides(
+        input_pdb_path=args.input_pdb_path,
+        output_pdb_path=args.output_pdb_path,
+        properties=properties,
+    )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

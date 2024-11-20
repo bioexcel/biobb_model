@@ -1,11 +1,14 @@
 #!/usr/bin/env python3
 
 """Module containing the FixPdb class and the command line interface."""
+
 import argparse
 from typing import Optional
-from biobb_common.generic.biobb_object import BiobbObject
+
 from biobb_common.configuration import settings
+from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.tools.file_utils import launchlogger
+
 from biobb_model.model.fix_pdb_utils import Structure, generate_map_online
 
 
@@ -37,7 +40,13 @@ class FixPdb(BiobbObject):
             * schema: http://edamontology.org/EDAM.owl
     """
 
-    def __init__(self, input_pdb_path: str, output_pdb_path: str, properties: Optional[dict] = None, **kwargs) -> None:
+    def __init__(
+        self,
+        input_pdb_path: str,
+        output_pdb_path: str,
+        properties: Optional[dict] = None,
+        **kwargs,
+    ) -> None:
         properties = properties or {}
 
         # Call parent class constructor
@@ -47,14 +56,14 @@ class FixPdb(BiobbObject):
         # Input/Output files
         self.io_dict = {
             "in": {"input_pdb_path": input_pdb_path},
-            "out": {"output_pdb_path": output_pdb_path}
+            "out": {"output_pdb_path": output_pdb_path},
         }
 
         # Properties specific for BB
-        self.forced_uniprot_references = properties.get('forced_uniprot_references')
+        self.forced_uniprot_references = properties.get("forced_uniprot_references")
         # If input forced uniprot references is a string and not a list then convert it
         if isinstance(self.forced_uniprot_references, str):
-            self.forced_uniprot_references = self.forced_uniprot_references.split(' ')
+            self.forced_uniprot_references = self.forced_uniprot_references.split(" ")
 
         # Check the properties
         self.check_properties(properties)
@@ -81,7 +90,9 @@ class FixPdb(BiobbObject):
 
         # Add protein chains in case they are missing
         chains = structure.chains
-        if len(chains) == 0 or (len(chains) == 1 and (chains[0].name == ' ' or chains[0].name == 'X')):
+        if len(chains) == 0 or (
+            len(chains) == 1 and (chains[0].name == " " or chains[0].name == "X")
+        ):
             structure.raw_protein_chainer()
 
         # Run all the mapping function
@@ -95,7 +106,7 @@ class FixPdb(BiobbObject):
             return self.return_code
 
         # Change residue numbers in the structure according to the mapping results
-        mapped_residue_numbers = mapping['residue_reference_numbers']
+        mapped_residue_numbers = mapping["residue_reference_numbers"]
         for r, residue in enumerate(structure.residues):
             mapped_residue_number = mapped_residue_numbers[r]
             if mapped_residue_number is None:
@@ -105,7 +116,7 @@ class FixPdb(BiobbObject):
         # Write the modified structure to a new pdb file
         structure.generate_pdb_file(output_pdb_path)
 
-        print('Fixed :)')
+        print("Fixed :)")
 
         # Remove temporal files
         self.tmp_files.extend([self.stage_io_dict.get("unique_dir", "")])
@@ -115,33 +126,54 @@ class FixPdb(BiobbObject):
         return self.return_code
 
 
-def fix_pdb(input_pdb_path: str, output_pdb_path: str, properties: Optional[dict] = None, **kwargs) -> int:
+def fix_pdb(
+    input_pdb_path: str,
+    output_pdb_path: str,
+    properties: Optional[dict] = None,
+    **kwargs,
+) -> int:
     """Create :class:`FixPdb <model.fix_pdb.FixPdb>` class and
     execute the :meth:`launch() <model.fix_pdb.FixPdb.launch>` method."""
-    return FixPdb(input_pdb_path=input_pdb_path,
-                  output_pdb_path=output_pdb_path,
-                  properties=properties, **kwargs).launch()
+    return FixPdb(
+        input_pdb_path=input_pdb_path,
+        output_pdb_path=output_pdb_path,
+        properties=properties,
+        **kwargs,
+    ).launch()
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Model the missing atoms in the backbone of a PDB structure.",
-                                     formatter_class=lambda prog: argparse.RawTextHelpFormatter(prog, width=99999))
-    parser.add_argument('-c', '--config', required=False, help="This file can be a YAML file, JSON file or JSON string")
+    parser = argparse.ArgumentParser(
+        description="Model the missing atoms in the backbone of a PDB structure.",
+        formatter_class=lambda prog: argparse.RawTextHelpFormatter(prog, width=99999),
+    )
+    parser.add_argument(
+        "-c",
+        "--config",
+        required=False,
+        help="This file can be a YAML file, JSON file or JSON string",
+    )
 
     # Specific args of each building block
-    required_args = parser.add_argument_group('required arguments')
-    required_args.add_argument('-i', '--input_pdb_path', required=True, help="Input PDB file name")
-    required_args.add_argument('-o', '--output_pdb_path', required=True, help="Output PDB file name")
+    required_args = parser.add_argument_group("required arguments")
+    required_args.add_argument(
+        "-i", "--input_pdb_path", required=True, help="Input PDB file name"
+    )
+    required_args.add_argument(
+        "-o", "--output_pdb_path", required=True, help="Output PDB file name"
+    )
 
     args = parser.parse_args()
     config = args.config if args.config else None
     properties = settings.ConfReader(config=config).get_prop_dic()
 
     # Specific call of each building block
-    fix_pdb(input_pdb_path=args.input_pdb_path,
-            output_pdb_path=args.output_pdb_path,
-            properties=properties)
+    fix_pdb(
+        input_pdb_path=args.input_pdb_path,
+        output_pdb_path=args.output_pdb_path,
+        properties=properties,
+    )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

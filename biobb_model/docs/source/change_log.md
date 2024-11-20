@@ -1,6 +1,20 @@
 # Biobb Model changelog
 
-## What's new in version [4.2.3](https://github.com/bioexcel/biobb_model/releases/tag/v4.2.3)?
+## What's new in version [5.0.0](https://github.com/bioexcel/biobb_model/releases/tag/v5.0.0)?
+
+### Changes
+
+* [CI/CD](linting_and_testing.yml): Update set-up micromamba.
+* [CI/CD](linting_and_testing.yaml): Update GA test workflow to Python >3.9
+* [DOCS](.readthedocs.yaml): Updating to Python 3.9
+* [CI/CD](GITIGNORE): Update .gitignore to include the new file extensions to ignore
+* [CI/CD](tests) Updating the fixbackbone test reference PDB
+* [CI/CD](tests) Updating the test_checking_log
+* [CI/CD](conf.yml): Change test conf.yml to adapt to new settings configuration
+* [FIX] Adding execution permissions to fix_pdb
+* [FEATURE] New sandbox_path property
+
+## What's new in version [4.2.3](https://github.com/bioexcel/biobb_model/releases/tag/v5.0.0)?
 
 ### Changes
 
@@ -18,7 +32,7 @@
 
 * [FIX] Minor fix in FixPdb
 
-## What's new in version [4.2.0](https://github.com/bioexcel/biobb_model/releases/tag/v4.2.0)?
+## What's new in version [5.0.0](https://github.com/bioexcel/biobb_model/releases/tag/v5.0.0)?
 
 ### Changes
 
@@ -35,7 +49,7 @@
 * [DOCS] Adding fair software badge and GA
 
 ## What's new in version [4.0.1](https://github.com/bioexcel/biobb_model/releases/tag/v4.0.1)?
-In version 4.1.0 new biobb_structure_checking 3.13.4 and minimum Python version 3.8.0
+In version 4.1.0 new biobb_structure_checking 3.13.5 and minimum Python version 3.8.0
 
 ## What's new in version [4.0.1](https://github.com/bioexcel/biobb_model/releases/tag/v4.0.1)?
 In version 4.0.1 new biobb_structure_checking 3.13.0

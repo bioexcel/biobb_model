@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="biobb_model",
-    version="4.2.3",
+    version="5.0.0",
     author="Biobb developers",
     author_email="pau.andrio@bsc.es",
     description="Biobb_model is the Biobb module collection to check and model 3d structures, create mutations or reconstruct missing atoms.",
@@ -15,16 +15,16 @@ setuptools.setup(
     url="https://github.com/bioexcel/biobb_model",
     project_urls={
         "Documentation": "http://biobb-model.readthedocs.io/en/latest/",
-        "Bioexcel": "https://bioexcel.eu/"
+        "Bioexcel": "https://bioexcel.eu/",
     },
-    packages=setuptools.find_packages(exclude=['docs', 'test']),
-    package_data={'biobb_model': ['py.typed']},
+    packages=setuptools.find_packages(exclude=["docs", "test"]),
+    package_data={"biobb_model": ["py.typed"]},
     install_requires=[
-        'biobb_common==4.2.0',
-        'biobb_structure_checking>=3.13.4',
-        'xmltodict'
+        "biobb_common==5.0.0",
+        "biobb_structure_checking>=3.13.5",
+        "xmltodict",
     ],
-    python_requires='>=3.8',
+    python_requires=">=3.9",
     entry_points={
         "console_scripts": [
             "checking_log = biobb_model.model.checking_log:main",
@@ -40,12 +40,10 @@ setuptools.setup(
     },
     classifiers=[
         "Development Status :: 5 - Production/Stable",
-        "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
-        "Programming Language :: Python :: 3.10",
         "License :: OSI Approved :: Apache Software License",
         "Operating System :: MacOS :: MacOS X",
         "Operating System :: POSIX",
-        "Operating System :: Unix"
+        "Operating System :: Unix",
     ],
 )

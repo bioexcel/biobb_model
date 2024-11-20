@@ -3,7 +3,7 @@
   "@id": "https://github.com/bioexcel/biobb_model",
   "@type": "ItemList",
   "name": "biobb_model",
-  "itemListElement":[  
+  "itemListElement": [
     {
       "@type": "SoftwareApplication",
       "description": "MODELLER is used for homology or comparative modeling of protein three-dimensional structures.",
@@ -22,7 +22,7 @@
       "applicationCategory": "Computational Biology tool",
       "citation": null,
       "license": "https://www.apache.org/licenses/LICENSE-2.0",
-      "softwareVersion": "3.13.4"
+      "softwareVersion": "3.13.5"
     }
   ]
 }
