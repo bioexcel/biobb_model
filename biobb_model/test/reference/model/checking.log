@@ -4,8 +4,8 @@
 ================================================================================
 
 Warning: sequence features may not be available, use --sequence for  external fasta input
-Structure /private/tmp/biobb/unitests_5/checking_log/b82f2e5a-cd00-47ca-90df-ff3c671f726c/2ki5.pdb loaded
- PDB id: 2KI5
+Structure /private/tmp/biobb/unitests_5/checking_log/sandbox_5d12f935-389f-4844-91ec-8429635c62bd/2ki5.pdb loaded
+ PDB id: 2KI5 
  Title: herpes simplex type-1 thymidine kinase in complex with the drug aciclovir at 1.9a resolution
  Experimental method: x-ray diffraction
  Keywords: transferase (phosphotransferase) thymid, transferase (phosphotransferase) thymidine kinase; viridae; ds-dna enveloped viruses; herpesviridae; alphaherpesvirinae antiviral drug (aciclovir)
@@ -97,12 +97,12 @@ Found 8 Residues with missing backbone atoms
  SER B263   CA,C,O,OXT
  ALA B375   CA,C,O,OXT
 Found 6 Backbone breaks
- VAL A70    - ASP A77
- GLY A148   - PRO A154
- GLY A264   - PRO A280
- GLY B73    - ASP B77
- GLY B148   - PRO B154
- SER B263   - ALA B278
+ VAL A70    - ASP A77   
+ GLY A148   - PRO A154  
+ GLY A264   - PRO A280  
+ GLY B73    - ASP B77   
+ GLY B148   - PRO B154  
+ SER B263   - ALA B278  
 No unexpected backbone links
 Running cistransbck.
 No cis peptide bonds found
