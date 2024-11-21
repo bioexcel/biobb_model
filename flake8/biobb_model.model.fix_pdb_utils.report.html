@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <title>flake8 violations: biobb_model/model/fix_pdb_utils.py</title>
+      <meta http-equiv="Content-Type" value="text/html; charset=UTF-8">
+      <link rel="stylesheet" href="styles.css">
+<script>
+function bindHandler(link) {
+   var code = link.getAttribute('data-code');
+   var key = location.pathname + '#' + code;
+
+   var ul = link.parentNode.querySelector('.details');
+   if (sessionStorage[key] != 'open') {
+      ul.style.display = 'none';
+   }
+   link.addEventListener('click', function (event) {
+      if (!ul.style.display || ul.style.display == 'none') {
+         ul.style.display = 'block';
+         sessionStorage[key] = 'open';
+      } else {
+         ul.style.display = 'none';
+         sessionStorage[key] = 'closed';
+      }
+   });
+}
+
+window.addEventListener('DOMContentLoaded', function () {
+   var links = document.querySelectorAll('#index > li > a');
+   for (var i = 0; i < links.length; i++) {
+      bindHandler(links[i]);
+   }
+});
+</script>
+   </head>
+   <body>
+      <div id="masthead" class="sev-2"></div>
+      <div id="page">
+         <p id="srclink">
+            <a title="View full annotated source"
+               href="biobb_model.model.fix_pdb_utils.source.html">
+               <img src="file.svg" alt="&#x2261;">
+            </a></p>
+         <h1>
+            <a href="index.html">
+               <img src="back.svg" alt="&#x2B05;">
+               biobb_model/model/fix_pdb_utils.py
+            </a>
+         </h1>
+
+         <ul id="index">
+         
+         <li>
+            <a data-code="W503">
+               <span class="count sev-2">
+                  37
+               </span>
+               <strong>W503:</strong> line break before binary operator
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="biobb_model.model.fix_pdb_utils.source.html#l156">
+                  <tt><i>156</i>             <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="biobb_model.model.fix_pdb_utils.source.html#l157">
+                  <tt><i>157</i>             <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">number</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="biobb_model.model.fix_pdb_utils.source.html#l158">
+                  <tt><i>158</i>             <span class="o">+</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">icode</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">icode</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="biobb_model.model.fix_pdb_utils.source.html#l159">
+                  <tt><i>159</i>             <span class="o">+</span> <span class="s2">&quot;&gt;&quot;</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="biobb_model.model.fix_pdb_utils.source.html#l167">
+                  <tt><i>167</i>             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">number</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">number</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="biobb_model.model.fix_pdb_utils.source.html#l168">
+                  <tt><i>168</i>             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">icode</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">icode</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="biobb_model.model.fix_pdb_utils.source.html#l180">
+                  <tt><i>180</i>             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">number</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">number</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="biobb_model.model.fix_pdb_utils.source.html#l181">
+                  <tt><i>181</i>             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">icode</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">icode</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="biobb_model.model.fix_pdb_utils.source.html#l320">
+                  <tt><i>320</i>                     <span class="o">+</span> <span class="n">new_chain</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="biobb_model.model.fix_pdb_utils.source.html#l321">
+                  <tt><i>321</i>                     <span class="o">+</span> <span class="s2">&quot; chain without the structure&quot;</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="biobb_model.model.fix_pdb_utils.source.html#l547">
+                  <tt><i>547</i>                 <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">chain</span><span class="o">.</span><span class="n">name</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="biobb_model.model.fix_pdb_utils.source.html#l548">
+                  <tt><i>548</i>                 <span class="o">+</span> <span class="s2">&quot; is still having residues and thus it cannot be purged&quot;</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="biobb_model.model.fix_pdb_utils.source.html#l605">
+                  <tt><i>605</i>                     <span class="ow">and</span> <span class="n">parsed_residues</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="biobb_model.model.fix_pdb_utils.source.html#l606">
+                  <tt><i>606</i>                     <span class="ow">and</span> <span class="n">parsed_residue</span><span class="o">.</span><span class="n">same_inputs_as</span><span class="p">(</span><span class="n">parsed_residues</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="biobb_model.model.fix_pdb_utils.source.html#l668">
+                  <tt><i>668</i>                     <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">index</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="biobb_model.model.fix_pdb_utils.source.html#l669">
+                  <tt><i>669</i>                     <span class="o">+</span> <span class="s2">&quot; &quot;</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="biobb_model.model.fix_pdb_utils.source.html#l670">
+                  <tt><i>670</i>                     <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">name</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="biobb_model.model.fix_pdb_utils.source.html#l671">
+                  <tt><i>671</i>                     <span class="o">+</span> <span class="s2">&quot; &quot;</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="biobb_model.model.fix_pdb_utils.source.html#l672">
+                  <tt><i>672</i>                     <span class="o">+</span> <span class="n">residue_name</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="biobb_model.model.fix_pdb_utils.source.html#l673">
+                  <tt><i>673</i>                     <span class="o">+</span> <span class="n">chain</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="biobb_model.model.fix_pdb_utils.source.html#l674">
+                  <tt><i>674</i>                     <span class="o">+</span> <span class="n">residue_number</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="biobb_model.model.fix_pdb_utils.source.html#l675">
+                  <tt><i>675</i>                     <span class="o">+</span> <span class="n">icode</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="biobb_model.model.fix_pdb_utils.source.html#l676">
+                  <tt><i>676</i>                     <span class="o">+</span> <span class="s2">&quot;   &quot;</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="biobb_model.model.fix_pdb_utils.source.html#l677">
+                  <tt><i>677</i>                     <span class="o">+</span> <span class="n">x_coord</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="biobb_model.model.fix_pdb_utils.source.html#l678">
+                  <tt><i>678</i>                     <span class="o">+</span> <span class="n">y_coord</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="biobb_model.model.fix_pdb_utils.source.html#l679">
+                  <tt><i>679</i>                     <span class="o">+</span> <span class="n">z_coord</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="biobb_model.model.fix_pdb_utils.source.html#l680">
+                  <tt><i>680</i>                     <span class="o">+</span> <span class="s2">&quot;  &quot;</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="biobb_model.model.fix_pdb_utils.source.html#l681">
+                  <tt><i>681</i>                     <span class="o">+</span> <span class="n">occupancy</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="biobb_model.model.fix_pdb_utils.source.html#l682">
+                  <tt><i>682</i>                     <span class="o">+</span> <span class="s2">&quot;  &quot;</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="biobb_model.model.fix_pdb_utils.source.html#l683">
+                  <tt><i>683</i>                     <span class="o">+</span> <span class="n">temp_factor</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="biobb_model.model.fix_pdb_utils.source.html#l684">
+                  <tt><i>684</i>                     <span class="o">+</span> <span class="s2">&quot;           &quot;</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="biobb_model.model.fix_pdb_utils.source.html#l685">
+                  <tt><i>685</i>                     <span class="o">+</span> <span class="n">element</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="biobb_model.model.fix_pdb_utils.source.html#l701">
+                  <tt><i>701</i>                 <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">chain</span><span class="o">.</span><span class="n">name</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="biobb_model.model.fix_pdb_utils.source.html#l702">
+                  <tt><i>702</i>                 <span class="o">+</span> <span class="s2">&quot; (&quot;</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="biobb_model.model.fix_pdb_utils.source.html#l703">
+                  <tt><i>703</i>                 <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">chain</span><span class="o">.</span><span class="n">residue_indices</span><span class="p">))</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="biobb_model.model.fix_pdb_utils.source.html#l704">
+                  <tt><i>704</i>                 <span class="o">+</span> <span class="s2">&quot; residues)&quot;</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="biobb_model.model.fix_pdb_utils.source.html#l724">
+                  <tt><i>724</i>                 <span class="ow">and</span> <span class="n">calculate_distance</span><span class="p">(</span><span class="n">previous_alpha_carbon</span><span class="p">,</span> <span class="n">alpha_carbon</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">4</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="E203">
+               <span class="count sev-2">
+                  1
+               </span>
+               <strong>E203:</strong> whitespace before ':'
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="biobb_model.model.fix_pdb_utils.source.html#l554">
+                  <tt><i>554</i>         <span class="k">for</span> <span class="n">affected_chain</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">chains</span><span class="p">[</span><span class="n">purged_index</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">:]:</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         </ul>
+      </div>
+   </body>
+</html>
