@@ -1,2 +1,0 @@
-1     E203 whitespace before ':'
-37    W503 line break before binary operator
