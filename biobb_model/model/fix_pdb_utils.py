@@ -152,20 +152,14 @@ class Residue:
 
     def __repr__(self):
         return (
-            "<Residue "
-            + str(self.name)
-            + str(self.number)
-            + (self.icode if self.icode else "")
-            + ">"
+            "<Residue " + str(self.name) + str(self.number) + (self.icode if self.icode else "") + ">"
         )
 
     def __eq__(self, other):
         if not isinstance(self, type(other)):
             return False
         return (
-            self._chain_index == other._chain_index
-            and self.number == other.number
-            and self.icode == other.icode
+            self._chain_index == other._chain_index and self.number == other.number and self.icode == other.icode
         )
 
     def __hash__(self):
@@ -176,9 +170,7 @@ class Residue:
 
     def same_inputs_as(self, other) -> bool:
         return (
-            self.name == other.name
-            and self.number == other.number
-            and self.icode == other.icode
+            self.name == other.name and self.number == other.number and self.icode == other.icode
         )
 
     # The parent structure (read only)
@@ -316,9 +308,7 @@ class Residue:
             structure = self.structure
             if not structure:
                 raise ValueError(
-                    "Cannot find the corresponding "
-                    + new_chain
-                    + " chain without the structure"
+                    "Cannot find the corresponding " + new_chain + " chain without the structure"
                 )
             # Find if the letter belongs to an already existing chain
             new_chain = structure.get_chain_by_name(letter)
@@ -543,15 +533,13 @@ class Structure:
             )
         if len(chain.residue_indices) > 0:
             raise ValueError(
-                "Chain "
-                + str(chain.name)
-                + " is still having residues and thus it cannot be purged"
+                "Chain " + str(chain.name) + " is still having residues and thus it cannot be purged"
             )
         # Get the current index of the chain to be purged
         purged_index = chain.index
         # Chains and their residues below this index are not to be modified
         # Chains and their residues over this index must be renumerated
-        for affected_chain in self.chains[purged_index + 1 :]:
+        for affected_chain in self.chains[purged_index + 1:]:
             # Chaging the index automatically changes all chain residues '_chain_index' values.
             affected_chain.index -= 1
         # Finally, remove the current chain from the list of chains in the structure
@@ -601,9 +589,7 @@ class Structure:
                 # Check if we are in the same chain/residue than before
                 same_chain = parsed_chains and parsed_chains[-1] == parsed_chain
                 same_residue = (
-                    same_chain
-                    and parsed_residues
-                    and parsed_residue.same_inputs_as(parsed_residues[-1])
+                    same_chain and parsed_residues and parsed_residue.same_inputs_as(parsed_residues[-1])
                 )
                 # Update the residue atom indices
                 # If the residue equals the last parsed residue then use the previous instead
@@ -664,25 +650,7 @@ class Structure:
                 temp_factor = "0.00"  # Just a placeholder
                 element = atom.element
                 atom_line = (
-                    "ATOM  "
-                    + str(index)
-                    + " "
-                    + str(name)
-                    + " "
-                    + residue_name
-                    + chain
-                    + residue_number
-                    + icode
-                    + "   "
-                    + x_coord
-                    + y_coord
-                    + z_coord
-                    + "  "
-                    + occupancy
-                    + "  "
-                    + temp_factor
-                    + "           "
-                    + element
+                    "ATOM  " + str(index) + " " + str(name) + " " + residue_name + chain + residue_number + icode + "   " + x_coord + y_coord + z_coord + "  " + occupancy + "  " + temp_factor + "           " + element
                 ).ljust(80) + "\n"
                 file.write(atom_line)
 
@@ -697,11 +665,7 @@ class Structure:
         print("Chains: " + str(len(self.chains)))
         for chain in self.chains:
             print(
-                "Chain "
-                + str(chain.name)
-                + " ("
-                + str(len(chain.residue_indices))
-                + " residues)"
+                "Chain " + str(chain.name) + " (" + str(len(chain.residue_indices)) + " residues)"
             )
             print(" -> " + chain.get_sequence())
 
@@ -720,8 +684,7 @@ class Structure:
                 continue
             # Connected aminoacids have their alpha carbons at a distance of around 3.8 Ångstroms
             residues_are_connected = (
-                previous_alpha_carbon
-                and calculate_distance(previous_alpha_carbon, alpha_carbon) < 4
+                previous_alpha_carbon and calculate_distance(previous_alpha_carbon, alpha_carbon) < 4
             )
             if not residues_are_connected:
                 current_chain = self.get_next_available_chain_name()
