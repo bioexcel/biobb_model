@@ -119,7 +119,7 @@ class FixPdb(BiobbObject):
         print("Fixed :)")
 
         # Remove temporal files
-        self.tmp_files.extend([self.stage_io_dict.get("unique_dir", "")])
+        # self.tmp_files.extend([self.stage_io_dict.get("unique_dir", "")])
         self.remove_tmp_files()
 
         self.check_arguments(output_files_created=True, raise_exception=False)
@@ -140,6 +140,8 @@ def fix_pdb(
         properties=properties,
         **kwargs,
     ).launch()
+
+    fix_pdb.__doc__ = FixPdb.__doc__
 
 
 def main():
