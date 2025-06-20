@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="biobb_model",
-    version="5.0.0",
+    version="5.1.0",
     author="Biobb developers",
     author_email="pau.andrio@bsc.es",
     description="Biobb_model is the Biobb module collection to check and model 3d structures, create mutations or reconstruct missing atoms.",
@@ -20,8 +20,8 @@ setuptools.setup(
     packages=setuptools.find_packages(exclude=["docs", "test"]),
     package_data={"biobb_model": ["py.typed"]},
     install_requires=[
-        "biobb_common==5.0.0",
-        "biobb_structure_checking>=3.13.5",
+        "biobb_common==5.1.0",
+        "biobb_structure_checking>=3.15.6",
         "xmltodict",
     ],
     python_requires=">=3.9",
