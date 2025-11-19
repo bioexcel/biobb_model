@@ -23,7 +23,7 @@
             "desc": "Reconstructs the missing backbone atoms of the given PDB file.",
             "exec": "fix_backbone",
             "docs": "https://biobb-model.readthedocs.io/en/latest/model.html#module-model.fix_backbone",
-            "rest": true
+            "rest": false
         },
         {
             "block": "FixPdb",
