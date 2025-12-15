@@ -84,9 +84,7 @@ class FixBackbone(BiobbObject):
     def launch(self) -> int:
         """Execute the :class:`FixBackbone <model.fix_backbone.FixBackbone>` object."""
 
-        self.io_dict["in"]["stdin_file_path"] = fu.create_stdin_file(
-            f'{self.io_dict["in"]["input_fasta_canonical_sequence_path"]}'
-        )
+        self.io_dict["in"]["stdin_file_path"] = fu.create_stdin_file(f'{self.io_dict["in"]["input_fasta_canonical_sequence_path"]}')
 
         # Setup Biobb
         if self.check_restart():
@@ -134,7 +132,6 @@ class FixBackbone(BiobbObject):
 
         # Remove temporal files
         self.tmp_files.extend([self.io_dict["in"].get("stdin_file_path", "")])
-        # self.tmp_files.extend([self.stage_io_dict.get("unique_dir", "")])
         self.remove_tmp_files()
 
         self.check_arguments(output_files_created=True, raise_exception=False)
