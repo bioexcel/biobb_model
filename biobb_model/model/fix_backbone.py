@@ -2,10 +2,8 @@
 
 """Module containing the FixBackbone class and the command line interface."""
 
-import argparse
 from typing import Optional
 
-from biobb_common.configuration import settings
 from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.tools import file_utils as fu
 from biobb_common.tools.file_utils import launchlogger
@@ -147,56 +145,11 @@ def fix_backbone(
 ) -> int:
     """Create :class:`FixBackbone <model.fix_backbone.FixBackbone>` class and
     execute the :meth:`launch() <model.fix_backbone.FixBackbone.launch>` method."""
-    return FixBackbone(
-        input_pdb_path=input_pdb_path,
-        input_fasta_canonical_sequence_path=input_fasta_canonical_sequence_path,
-        output_pdb_path=output_pdb_path,
-        properties=properties,
-        **kwargs,
-    ).launch()
-
-    fix_backbone.__doc__ = FixBackbone.__doc__
+    return FixBackbone(**dict(locals())).launch()
 
 
-def main():
-    parser = argparse.ArgumentParser(
-        description="Model the missing atoms in the backbone of a PDB structure.",
-        formatter_class=lambda prog: argparse.RawTextHelpFormatter(prog, width=99999),
-    )
-    parser.add_argument(
-        "-c",
-        "--config",
-        required=False,
-        help="This file can be a YAML file, JSON file or JSON string",
-    )
-
-    # Specific args of each building block
-    required_args = parser.add_argument_group("required arguments")
-    required_args.add_argument(
-        "-i", "--input_pdb_path", required=True, help="Input PDB file name"
-    )
-    required_args.add_argument(
-        "-f",
-        "--input_fasta_canonical_sequence_path",
-        required=True,
-        help="Input FASTA file name",
-    )
-    required_args.add_argument(
-        "-o", "--output_pdb_path", required=True, help="Output PDB file name"
-    )
-
-    args = parser.parse_args()
-    config = args.config if args.config else None
-    properties = settings.ConfReader(config=config).get_prop_dic()
-
-    # Specific call of each building block
-    fix_backbone(
-        input_pdb_path=args.input_pdb_path,
-        input_fasta_canonical_sequence_path=args.input_fasta_canonical_sequence_path,
-        output_pdb_path=args.output_pdb_path,
-        properties=properties,
-    )
-
+fix_backbone.__doc__ = FixBackbone.__doc__
+main = FixBackbone.get_main(fix_backbone, "Model the missing atoms in the backbone of a PDB structure.")
 
 if __name__ == "__main__":
     main()

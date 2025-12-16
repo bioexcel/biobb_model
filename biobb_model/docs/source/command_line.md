@@ -24,9 +24,9 @@ checking_log -h
     
     required arguments:
       -i INPUT_PDB_PATH, --input_pdb_path INPUT_PDB_PATH
-                            Input PDB file name
+                            Input PDB file path. Accepted formats: pdb.
       -o OUTPUT_LOG_PATH, --output_log_path OUTPUT_LOG_PATH
-                            Output log file name
+                            Output report log file path. Accepted formats: log.
 ### I / O Arguments
 Syntax: input_argument (datatype) : Definition
 
@@ -85,9 +85,9 @@ fix_altlocs -h
     
     required arguments:
       -i INPUT_PDB_PATH, --input_pdb_path INPUT_PDB_PATH
-                            Input PDB file name
+                            Input PDB file path. Accepted formats: pdb.
       -o OUTPUT_PDB_PATH, --output_pdb_path OUTPUT_PDB_PATH
-                            Output PDB file name
+                            Output PDB file path. Accepted formats: pdb.
 ### I / O Arguments
 Syntax: input_argument (datatype) : Definition
 
@@ -154,9 +154,9 @@ fix_amides -h
     
     required arguments:
       -i INPUT_PDB_PATH, --input_pdb_path INPUT_PDB_PATH
-                            Input PDB file name
+                            Input PDB file path. Accepted formats: pdb.
       -o OUTPUT_PDB_PATH, --output_pdb_path OUTPUT_PDB_PATH
-                            Output PDB file name
+                            Output PDB file path. Accepted formats: pdb.
 ### I / O Arguments
 Syntax: input_argument (datatype) : Definition
 
@@ -204,7 +204,7 @@ Command:
 ```python
 fix_backbone -h
 ```
-    usage: fix_backbone [-h] [-c CONFIG] -i INPUT_PDB_PATH -f INPUT_FASTA_CANONICAL_SEQUENCE_PATH -o OUTPUT_PDB_PATH
+    usage: fix_backbone [-h] [-c CONFIG] --input_pdb_path INPUT_PDB_PATH --input_fasta_canonical_sequence_path INPUT_FASTA_CANONICAL_SEQUENCE_PATH -o OUTPUT_PDB_PATH
     
     Model the missing atoms in the backbone of a PDB structure.
     
@@ -214,12 +214,12 @@ fix_backbone -h
                             This file can be a YAML file, JSON file or JSON string
     
     required arguments:
-      -i INPUT_PDB_PATH, --input_pdb_path INPUT_PDB_PATH
-                            Input PDB file name
-      -f INPUT_FASTA_CANONICAL_SEQUENCE_PATH, --input_fasta_canonical_sequence_path INPUT_FASTA_CANONICAL_SEQUENCE_PATH
-                            Input FASTA file name
+      --input_pdb_path INPUT_PDB_PATH
+                            Input PDB file path. Accepted formats: pdb.
+      --input_fasta_canonical_sequence_path INPUT_FASTA_CANONICAL_SEQUENCE_PATH
+                            Input FASTA file path. Accepted formats: fasta.
       -o OUTPUT_PDB_PATH, --output_pdb_path OUTPUT_PDB_PATH
-                            Output PDB file name
+                            Output PDB file path. Accepted formats: pdb.
 ### I / O Arguments
 Syntax: input_argument (datatype) : Definition
 
@@ -284,9 +284,9 @@ fix_chirality -h
     
     required arguments:
       -i INPUT_PDB_PATH, --input_pdb_path INPUT_PDB_PATH
-                            Input PDB file name
+                            Input PDB file path. Accepted formats: pdb.
       -o OUTPUT_PDB_PATH, --output_pdb_path OUTPUT_PDB_PATH
-                            Output PDB file name
+                            Output PDB file path. Accepted formats: pdb.
 ### I / O Arguments
 Syntax: input_argument (datatype) : Definition
 
@@ -345,9 +345,9 @@ fix_pdb -h
     
     required arguments:
       -i INPUT_PDB_PATH, --input_pdb_path INPUT_PDB_PATH
-                            Input PDB file name
+                            Input PDB file path. Accepted formats: pdb.
       -o OUTPUT_PDB_PATH, --output_pdb_path OUTPUT_PDB_PATH
-                            Output PDB file name
+                            Output PDB file path. Accepted formats: pdb.
 ### I / O Arguments
 Syntax: input_argument (datatype) : Definition
 
@@ -412,9 +412,9 @@ fix_side_chain -h
     
     required arguments:
       -i INPUT_PDB_PATH, --input_pdb_path INPUT_PDB_PATH
-                            Input PDB file name
+                            Input PDB file path. Accepted formats: pdb.
       -o OUTPUT_PDB_PATH, --output_pdb_path OUTPUT_PDB_PATH
-                            Output PDB file name
+                            Output PDB file path. Accepted formats: pdb.
 ### I / O Arguments
 Syntax: input_argument (datatype) : Definition
 
@@ -474,9 +474,9 @@ fix_ssbonds -h
     
     required arguments:
       -i INPUT_PDB_PATH, --input_pdb_path INPUT_PDB_PATH
-                            Input PDB file name
+                            Input PDB file path. Accepted formats: pdb.
       -o OUTPUT_PDB_PATH, --output_pdb_path OUTPUT_PDB_PATH
-                            Output PDB file name
+                            Output PDB file path. Accepted formats: pdb.
 ### I / O Arguments
 Syntax: input_argument (datatype) : Definition
 
@@ -535,9 +535,9 @@ mutate -h
     
     required arguments:
       -i INPUT_PDB_PATH, --input_pdb_path INPUT_PDB_PATH
-                            Input PDB file name
+                            Input PDB file path. Accepted formats: pdb.
       -o OUTPUT_PDB_PATH, --output_pdb_path OUTPUT_PDB_PATH
-                            Output PDB file name
+                            Output PDB file path. Accepted formats: pdb.
 ### I / O Arguments
 Syntax: input_argument (datatype) : Definition
 

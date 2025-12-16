@@ -2,10 +2,8 @@
 
 """Module containing the CheckingLog class and the command line interface."""
 
-import argparse
 from typing import Optional
 
-from biobb_common.configuration import settings
 from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.tools.file_utils import launchlogger
 
@@ -115,48 +113,11 @@ def checking_log(
 ) -> int:
     """Create :class:`CheckingLog <model.checking_log.CheckingLog>` class and
     execute the :meth:`launch() <model.checking_log.CheckingLog.launch>` method."""
-    return CheckingLog(
-        input_pdb_path=input_pdb_path,
-        output_log_path=output_log_path,
-        properties=properties,
-        **kwargs,
-    ).launch()
-
-    checking_log.__doc__ = CheckingLog.__doc__
+    return CheckingLog(**dict(locals())).launch()
 
 
-def main():
-    parser = argparse.ArgumentParser(
-        description="Check the errors of a PDB structure and create a report log file.",
-        formatter_class=lambda prog: argparse.RawTextHelpFormatter(prog, width=99999),
-    )
-    parser.add_argument(
-        "-c",
-        "--config",
-        required=False,
-        help="This file can be a YAML file, JSON file or JSON string",
-    )
-
-    # Specific args of each building block
-    required_args = parser.add_argument_group("required arguments")
-    required_args.add_argument(
-        "-i", "--input_pdb_path", required=True, help="Input PDB file name"
-    )
-    required_args.add_argument(
-        "-o", "--output_log_path", required=True, help="Output log file name"
-    )
-
-    args = parser.parse_args()
-    config = args.config if args.config else None
-    properties = settings.ConfReader(config=config).get_prop_dic()
-
-    # Specific call of each building block
-    checking_log(
-        input_pdb_path=args.input_pdb_path,
-        output_log_path=args.output_log_path,
-        properties=properties,
-    )
-
+checking_log.__doc__ = CheckingLog.__doc__
+main = CheckingLog.get_main(checking_log, "Check the errors of a PDB structure and create a report log file.")
 
 if __name__ == "__main__":
     main()

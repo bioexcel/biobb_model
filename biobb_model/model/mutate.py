@@ -2,10 +2,8 @@
 
 """Module containing the Mutate class and the command line interface."""
 
-import argparse
 from typing import Optional
 
-from biobb_common.configuration import settings
 from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.tools import file_utils as fu
 from biobb_common.tools.file_utils import launchlogger
@@ -139,48 +137,11 @@ def mutate(
 ) -> int:
     """Create :class:`Mutate <model.mutate.Mutate>` class and
     execute the :meth:`launch() <model.mutate.Mutate.launch>` method."""
-    return Mutate(
-        input_pdb_path=input_pdb_path,
-        output_pdb_path=output_pdb_path,
-        properties=properties,
-        **kwargs,
-    ).launch()
-
-    mutate.__doc__ = Mutate.__doc__
+    return Mutate(**dict(locals())).launch()
 
 
-def main():
-    parser = argparse.ArgumentParser(
-        description="Model the missing atoms in aminoacid side chains of a PDB.",
-        formatter_class=lambda prog: argparse.RawTextHelpFormatter(prog, width=99999),
-    )
-    parser.add_argument(
-        "-c",
-        "--config",
-        required=False,
-        help="This file can be a YAML file, JSON file or JSON string",
-    )
-
-    # Specific args of each building block
-    required_args = parser.add_argument_group("required arguments")
-    required_args.add_argument(
-        "-i", "--input_pdb_path", required=True, help="Input PDB file name"
-    )
-    required_args.add_argument(
-        "-o", "--output_pdb_path", required=True, help="Output PDB file name"
-    )
-
-    args = parser.parse_args()
-    config = args.config if args.config else None
-    properties = settings.ConfReader(config=config).get_prop_dic()
-
-    # Specific call of each building block
-    mutate(
-        input_pdb_path=args.input_pdb_path,
-        output_pdb_path=args.output_pdb_path,
-        properties=properties,
-    )
-
+mutate.__doc__ = Mutate.__doc__
+main = Mutate.get_main(mutate, "Model the missing atoms in aminoacid side chains of a PDB.")
 
 if __name__ == "__main__":
     main()

@@ -2,10 +2,8 @@
 
 """Module containing the FixChirality class and the command line interface."""
 
-import argparse
 from typing import Optional
 
-from biobb_common.configuration import settings
 from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.tools.file_utils import launchlogger
 
@@ -118,48 +116,11 @@ def fix_chirality(
 ) -> int:
     """Create :class:`FixChirality <model.fix_amides.FixChirality>` class and
     execute the :meth:`launch() <model.fix_amides.FixChirality.launch>` method."""
-    return FixChirality(
-        input_pdb_path=input_pdb_path,
-        output_pdb_path=output_pdb_path,
-        properties=properties,
-        **kwargs,
-    ).launch()
-
-    fix_chirality.__doc__ = FixChirality.__doc__
+    return FixChirality(**dict(locals())).launch()
 
 
-def main():
-    parser = argparse.ArgumentParser(
-        description="Fix stereochemical errors in residues changing It's chirality.",
-        formatter_class=lambda prog: argparse.RawTextHelpFormatter(prog, width=99999),
-    )
-    parser.add_argument(
-        "-c",
-        "--config",
-        required=False,
-        help="This file can be a YAML file, JSON file or JSON string",
-    )
-
-    # Specific args of each building block
-    required_args = parser.add_argument_group("required arguments")
-    required_args.add_argument(
-        "-i", "--input_pdb_path", required=True, help="Input PDB file name"
-    )
-    required_args.add_argument(
-        "-o", "--output_pdb_path", required=True, help="Output PDB file name"
-    )
-
-    args = parser.parse_args()
-    config = args.config if args.config else None
-    properties = settings.ConfReader(config=config).get_prop_dic()
-
-    # Specific call of each building block
-    fix_chirality(
-        input_pdb_path=args.input_pdb_path,
-        output_pdb_path=args.output_pdb_path,
-        properties=properties,
-    )
-
+fix_chirality.__doc__ = FixChirality.__doc__
+main = FixChirality.get_main(fix_chirality, "Fix stereochemical errors in residues changing It's chirality.")
 
 if __name__ == "__main__":
     main()

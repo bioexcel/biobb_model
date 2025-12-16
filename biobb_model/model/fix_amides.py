@@ -2,10 +2,8 @@
 
 """Module containing the FixAmides class and the command line interface."""
 
-import argparse
 from typing import Optional
 
-from biobb_common.configuration import settings
 from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.tools.file_utils import launchlogger
 
@@ -117,48 +115,11 @@ def fix_amides(
 ) -> int:
     """Create :class:`FixAmides <model.fix_amides.FixAmides>` class and
     execute the :meth:`launch() <model.fix_amides.FixAmides.launch>` method."""
-    return FixAmides(
-        input_pdb_path=input_pdb_path,
-        output_pdb_path=output_pdb_path,
-        properties=properties,
-        **kwargs,
-    ).launch()
-
-    fix_amides.__doc__ = FixAmides.__doc__
+    return FixAmides(**dict(locals())).launch()
 
 
-def main():
-    parser = argparse.ArgumentParser(
-        description="Flip the clashing amide groups to avoid clashes.",
-        formatter_class=lambda prog: argparse.RawTextHelpFormatter(prog, width=99999),
-    )
-    parser.add_argument(
-        "-c",
-        "--config",
-        required=False,
-        help="This file can be a YAML file, JSON file or JSON string",
-    )
-
-    # Specific args of each building block
-    required_args = parser.add_argument_group("required arguments")
-    required_args.add_argument(
-        "-i", "--input_pdb_path", required=True, help="Input PDB file name"
-    )
-    required_args.add_argument(
-        "-o", "--output_pdb_path", required=True, help="Output PDB file name"
-    )
-
-    args = parser.parse_args()
-    config = args.config if args.config else None
-    properties = settings.ConfReader(config=config).get_prop_dic()
-
-    # Specific call of each building block
-    fix_amides(
-        input_pdb_path=args.input_pdb_path,
-        output_pdb_path=args.output_pdb_path,
-        properties=properties,
-    )
-
+fix_amides.__doc__ = FixAmides.__doc__
+main = FixAmides.get_main(fix_amides, "Flip the clashing amide groups to avoid clashes.")
 
 if __name__ == "__main__":
     main()

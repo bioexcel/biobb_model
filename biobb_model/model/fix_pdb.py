@@ -2,10 +2,8 @@
 
 """Module containing the FixPdb class and the command line interface."""
 
-import argparse
 from typing import Optional
 
-from biobb_common.configuration import settings
 from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.tools.file_utils import launchlogger
 
@@ -133,48 +131,11 @@ def fix_pdb(
 ) -> int:
     """Create :class:`FixPdb <model.fix_pdb.FixPdb>` class and
     execute the :meth:`launch() <model.fix_pdb.FixPdb.launch>` method."""
-    return FixPdb(
-        input_pdb_path=input_pdb_path,
-        output_pdb_path=output_pdb_path,
-        properties=properties,
-        **kwargs,
-    ).launch()
-
-    fix_pdb.__doc__ = FixPdb.__doc__
+    return FixPdb(**dict(locals())).launch()
 
 
-def main():
-    parser = argparse.ArgumentParser(
-        description="Model the missing atoms in the backbone of a PDB structure.",
-        formatter_class=lambda prog: argparse.RawTextHelpFormatter(prog, width=99999),
-    )
-    parser.add_argument(
-        "-c",
-        "--config",
-        required=False,
-        help="This file can be a YAML file, JSON file or JSON string",
-    )
-
-    # Specific args of each building block
-    required_args = parser.add_argument_group("required arguments")
-    required_args.add_argument(
-        "-i", "--input_pdb_path", required=True, help="Input PDB file name"
-    )
-    required_args.add_argument(
-        "-o", "--output_pdb_path", required=True, help="Output PDB file name"
-    )
-
-    args = parser.parse_args()
-    config = args.config if args.config else None
-    properties = settings.ConfReader(config=config).get_prop_dic()
-
-    # Specific call of each building block
-    fix_pdb(
-        input_pdb_path=args.input_pdb_path,
-        output_pdb_path=args.output_pdb_path,
-        properties=properties,
-    )
-
+fix_pdb.__doc__ = FixPdb.__doc__
+main = FixPdb.get_main(fix_pdb, "Model the missing atoms in the backbone of a PDB structure.")
 
 if __name__ == "__main__":
     main()

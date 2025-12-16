@@ -20,7 +20,7 @@ setuptools.setup(
     packages=setuptools.find_packages(exclude=["docs", "test"]),
     package_data={"biobb_model": ["py.typed"]},
     install_requires=[
-        "biobb_common==5.1.0",
+        "biobb_common==5.1.1",
         "biobb_structure_checking>=3.15.6",
         "xmltodict",
     ],
