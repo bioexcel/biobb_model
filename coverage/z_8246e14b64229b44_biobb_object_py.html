@@ -3,9 +3,9 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Coverage for biobb_common/biobb_common/generic/biobb_object.py: 49%</title>
-    <link rel="icon" sizes="32x32" href="favicon_32_cb_58284776.png">
-    <link rel="stylesheet" href="style_cb_a5a05ca4.css" type="text/css">
-    <script src="coverage_html_cb_bcae5fc4.js" defer></script>
+    <link rel="icon" sizes="32x32" href="favicon_32_cb_c827f16f.png">
+    <link rel="stylesheet" href="style_cb_9ff733b0.css" type="text/css">
+    <script src="coverage_html_cb_dd2e7eb5.js" defer></script>
 </head>
 <body class="pyfile">
 <header>
@@ -17,7 +17,7 @@
         <aside id="help_panel_wrapper">
             <input id="help_panel_state" type="checkbox">
             <label for="help_panel_state">
-                <img id="keyboard_icon" src="keybd_closed_cb_ce680311.png" alt="Show/hide keyboard shortcuts">
+                <img id="keyboard_icon" src="keybd_closed_cb_900cfef5.png" alt="Show/hide keyboard shortcuts">
             </label>
             <div id="help_panel">
                 <p class="legend">Shortcuts on this page</p>
@@ -64,8 +64,8 @@
             <a id="indexLink" class="nav" href="index.html">&Hat; index</a> &nbsp; &nbsp;
             <a id="nextFileLink" class="nav" href="z_c2a2934247a9a3e6___init___py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
-            <a class="nav" href="https://coverage.readthedocs.io/en/7.13.0">coverage.py v7.13.0</a>,
-            created at 2025-12-22 13:18 +0000
+            <a class="nav" href="https://coverage.readthedocs.io/en/7.13.4">coverage.py v7.13.4</a>,
+            created at 2026-03-05 08:09 +0000
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -522,7 +522,7 @@
     <p class="run"><span class="n"><a id="t440" href="#t440">440</a></span><span class="t">            <span class="nam">dest_path</span> <span class="op">=</span> <span class="nam">Path</span><span class="op">(</span><span class="nam">self</span><span class="op">.</span><span class="nam">io_dict</span><span class="op">[</span><span class="str">"out"</span><span class="op">]</span><span class="op">[</span><span class="nam">file_ref</span><span class="op">]</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t441" href="#t441">441</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t442" href="#t442">442</a></span><span class="t">            <span class="com"># For directories, we need to ensure the directory exists in the sandbox</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t443" href="#t443">443</a></span><span class="t">            <span class="key">if</span> <span class="nam">self</span><span class="op">.</span><span class="nam">doc_arguments_dict</span><span class="op">[</span><span class="nam">file_ref</span><span class="op">]</span><span class="op">[</span><span class="str">'type'</span><span class="op">]</span> <span class="op">==</span> <span class="str">'dir'</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t443" href="#t443">443</a></span><span class="t">            <span class="key">if</span> <span class="nam">self</span><span class="op">.</span><span class="nam">doc_arguments_dict</span><span class="op">.</span><span class="nam">get</span><span class="op">(</span><span class="nam">file_ref</span><span class="op">,</span> <span class="op">{</span><span class="op">}</span><span class="op">)</span><span class="op">.</span><span class="nam">get</span><span class="op">(</span><span class="str">'type'</span><span class="op">)</span> <span class="op">==</span> <span class="str">'dir'</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t444" href="#t444">444</a></span><span class="t">                <span class="com"># If the output is a directory, ensure it exists in the sandbox</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t445" href="#t445">445</a></span><span class="t">                <span class="nam">sandbox_dir_path</span> <span class="op">=</span> <span class="nam">Path</span><span class="op">(</span><span class="nam">self</span><span class="op">.</span><span class="nam">stage_io_dict</span><span class="op">[</span><span class="str">"unique_dir"</span><span class="op">]</span><span class="op">)</span><span class="op">.</span><span class="nam">joinpath</span><span class="op">(</span><span class="nam">file_path</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t446" href="#t446">446</a></span><span class="t">                <span class="nam">fu</span><span class="op">.</span><span class="nam">log</span><span class="op">(</span><span class="fst">f"</span><span class="fst">Copy directory to host: </span><span class="op">{</span><span class="nam">sandbox_dir_path</span><span class="op">}</span><span class="fst"> --> </span><span class="op">{</span><span class="nam">dest_path</span><span class="op">}</span><span class="fst">"</span><span class="op">,</span> <span class="nam">self</span><span class="op">.</span><span class="nam">out_log</span><span class="op">,</span> <span class="nam">self</span><span class="op">.</span><span class="nam">global_log</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
@@ -616,8 +616,8 @@
             <a class="nav" href="index.html">&Hat; index</a> &nbsp; &nbsp;
             <a class="nav" href="z_c2a2934247a9a3e6___init___py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
-            <a class="nav" href="https://coverage.readthedocs.io/en/7.13.0">coverage.py v7.13.0</a>,
-            created at 2025-12-22 13:18 +0000
+            <a class="nav" href="https://coverage.readthedocs.io/en/7.13.4">coverage.py v7.13.4</a>,
+            created at 2026-03-05 08:09 +0000
         </p>
     </div>
 </footer>
