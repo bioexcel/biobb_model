@@ -37,11 +37,11 @@ Config input / output arguments for this building block:
 Syntax: input_parameter (datatype) - (default_value) Definition
 
 Config parameters for this building block:
-* **modeller_key** (*string*): (None) Modeller license key..
-* **binary_path** (*string*): (check_structure) Path to the check_structure executable binary..
-* **remove_tmp** (*boolean*): (True) Remove temporal files..
-* **restart** (*boolean*): (False) Do not execute if output files exist..
-* **sandbox_path** (*string*): (./) Parent path to the sandbox directory..
+* **modeller_key** (*string*): (None) Modeller license key.
+* **binary_path** (*string*): (check_structure) Path to the check_structure executable binary.
+* **remove_tmp** (*boolean*): (True) Remove temporal files.
+* **restart** (*boolean*): (False) Do not execute if output files exist.
+* **sandbox_path** (*string*): (./) Parent path to the sandbox directory.
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_model/blob/master/biobb_model/test/data/config/config_checking_log.yml)
 ```python
@@ -98,12 +98,12 @@ Config input / output arguments for this building block:
 Syntax: input_parameter (datatype) - (default_value) Definition
 
 Config parameters for this building block:
-* **altlocs** (*array*): (None) List of alternate locations to fix. Format: ["A339:A", "A171:B", "A768:A"]; where for each residue the format is as follows: "<chain><residue id>:<chosen alternate location>". If empty, no action will be executed..
-* **modeller_key** (*string*): (None) Modeller license key..
-* **binary_path** (*string*): (check_structure) Path to the check_structure executable binary..
-* **remove_tmp** (*boolean*): (True) Remove temporal files..
-* **restart** (*boolean*): (False) Do not execute if output files exist..
-* **sandbox_path** (*string*): (./) Parent path to the sandbox directory..
+* **altlocs** (*array*): (None) List of alternate locations to fix. Format: ["A339:A", "A171:B", "A768:A"]; where for each residue the format is as follows: "<chain><residue id>:<chosen alternate location>". If empty, no action will be executed.
+* **modeller_key** (*string*): (None) Modeller license key.
+* **binary_path** (*string*): (check_structure) Path to the check_structure executable binary.
+* **remove_tmp** (*boolean*): (True) Remove temporal files.
+* **restart** (*boolean*): (False) Do not execute if output files exist.
+* **sandbox_path** (*string*): (./) Parent path to the sandbox directory.
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_model/blob/master/biobb_model/test/data/config/config_fix_altlocs.yml)
 ```python
@@ -167,11 +167,11 @@ Config input / output arguments for this building block:
 Syntax: input_parameter (datatype) - (default_value) Definition
 
 Config parameters for this building block:
-* **modeller_key** (*string*): (None) Modeller license key..
-* **binary_path** (*string*): (check_structure) Path to the check_structure executable binary..
-* **remove_tmp** (*boolean*): (True) Remove temporal files..
-* **restart** (*boolean*): (False) Do not execute if output files exist..
-* **sandbox_path** (*string*): (./) Parent path to the sandbox directory..
+* **modeller_key** (*string*): (None) Modeller license key.
+* **binary_path** (*string*): (check_structure) Path to the check_structure executable binary.
+* **remove_tmp** (*boolean*): (True) Remove temporal files.
+* **restart** (*boolean*): (False) Do not execute if output files exist.
+* **sandbox_path** (*string*): (./) Parent path to the sandbox directory.
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_model/blob/master/biobb_model/test/data/config/config_fix_amides.yml)
 ```python
@@ -231,12 +231,12 @@ Config input / output arguments for this building block:
 Syntax: input_parameter (datatype) - (default_value) Definition
 
 Config parameters for this building block:
-* **add_caps** (*boolean*): (False) Add caps to terminal residues..
-* **modeller_key** (*string*): (None) Modeller license key..
-* **binary_path** (*string*): (check_structure) Path to the check_structure executable binary..
-* **remove_tmp** (*boolean*): (True) Remove temporal files..
-* **restart** (*boolean*): (False) Do not execute if output files exist..
-* **sandbox_path** (*string*): (./) Parent path to the sandbox directory..
+* **add_caps** (*boolean*): (False) Add caps to terminal residues.
+* **modeller_key** (*string*): (None) Modeller license key.
+* **binary_path** (*string*): (check_structure) Path to the check_structure executable binary.
+* **remove_tmp** (*boolean*): (True) Remove temporal files.
+* **restart** (*boolean*): (False) Do not execute if output files exist.
+* **sandbox_path** (*string*): (./) Parent path to the sandbox directory.
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_model/blob/master/biobb_model/test/data/config/config_fix_backbone.yml)
 ```python
@@ -297,11 +297,11 @@ Config input / output arguments for this building block:
 Syntax: input_parameter (datatype) - (default_value) Definition
 
 Config parameters for this building block:
-* **modeller_key** (*string*): (None) Modeller license key..
-* **binary_path** (*string*): (check_structure) Path to the check_structure executable binary..
-* **remove_tmp** (*boolean*): (True) Remove temporal files..
-* **restart** (*boolean*): (False) Do not execute if output files exist..
-* **sandbox_path** (*string*): (./) Parent path to the sandbox directory..
+* **modeller_key** (*string*): (None) Modeller license key.
+* **binary_path** (*string*): (check_structure) Path to the check_structure executable binary.
+* **remove_tmp** (*boolean*): (True) Remove temporal files.
+* **restart** (*boolean*): (False) Do not execute if output files exist.
+* **sandbox_path** (*string*): (./) Parent path to the sandbox directory.
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_model/blob/master/biobb_model/test/data/config/config_fix_chirality.yml)
 ```python
@@ -358,10 +358,10 @@ Config input / output arguments for this building block:
 Syntax: input_parameter (datatype) - (default_value) Definition
 
 Config parameters for this building block:
-* **forced_uniprot_references** (*string*): (None) Set the UniProt accessions for sequences to be used as reference..
-* **remove_tmp** (*boolean*): (True) Remove temporal files..
-* **restart** (*boolean*): (False) Do not execute if output files exist..
-* **sandbox_path** (*string*): (./) Parent path to the sandbox directory..
+* **forced_uniprot_references** (*string*): (None) Set the UniProt accessions for sequences to be used as reference.
+* **remove_tmp** (*boolean*): (True) Remove temporal files.
+* **restart** (*boolean*): (False) Do not execute if output files exist.
+* **sandbox_path** (*string*): (./) Parent path to the sandbox directory.
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_model/blob/master/biobb_model/test/data/config/config_fix_pdb.yml)
 ```python
@@ -425,12 +425,12 @@ Config input / output arguments for this building block:
 Syntax: input_parameter (datatype) - (default_value) Definition
 
 Config parameters for this building block:
-* **use_modeller** (*boolean*): (False) Use Modeller suite to rebuild the missing side chain atoms..
-* **modeller_key** (*string*): (None) Modeller license key..
-* **binary_path** (*string*): (check_structure) Path to the check_structure executable binary..
-* **remove_tmp** (*boolean*): (True) Remove temporal files..
-* **restart** (*boolean*): (False) Do not execute if output files exist..
-* **sandbox_path** (*string*): (./) Parent path to the sandbox directory..
+* **use_modeller** (*boolean*): (False) Use Modeller suite to rebuild the missing side chain atoms.
+* **modeller_key** (*string*): (None) Modeller license key.
+* **binary_path** (*string*): (check_structure) Path to the check_structure executable binary.
+* **remove_tmp** (*boolean*): (True) Remove temporal files.
+* **restart** (*boolean*): (False) Do not execute if output files exist.
+* **sandbox_path** (*string*): (./) Parent path to the sandbox directory.
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_model/blob/master/biobb_model/test/data/config/config_fix_side_chain.yml)
 ```python
@@ -487,11 +487,11 @@ Config input / output arguments for this building block:
 Syntax: input_parameter (datatype) - (default_value) Definition
 
 Config parameters for this building block:
-* **modeller_key** (*string*): (None) Modeller license key..
-* **binary_path** (*string*): (check_structure) Path to the check_structure executable binary..
-* **remove_tmp** (*boolean*): (True) Remove temporal files..
-* **restart** (*boolean*): (False) Do not execute if output files exist..
-* **sandbox_path** (*string*): (./) Parent path to the sandbox directory..
+* **modeller_key** (*string*): (None) Modeller license key.
+* **binary_path** (*string*): (check_structure) Path to the check_structure executable binary.
+* **remove_tmp** (*boolean*): (True) Remove temporal files.
+* **restart** (*boolean*): (False) Do not execute if output files exist.
+* **sandbox_path** (*string*): (./) Parent path to the sandbox directory.
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_model/blob/master/biobb_model/test/data/config/config_fix_ssbonds.yml)
 ```python
@@ -548,13 +548,13 @@ Config input / output arguments for this building block:
 Syntax: input_parameter (datatype) - (default_value) Definition
 
 Config parameters for this building block:
-* **mutation_list** (*string*): (None) Mutation list in the format "Chain:WT_AA_ThreeLeterCode Resnum MUT_AA_ThreeLeterCode" (no spaces between the elements) separated by commas. If no chain is provided as chain code all the chains in the pdb file will be mutated. ie: "A:ALA15CYS".
-* **use_modeller** (*boolean*): (False) Use Modeller suite to optimize the side chains..
-* **modeller_key** (*string*): (None) Modeller license key..
-* **binary_path** (*string*): (check_structure) Path to the check_structure executable binary..
-* **remove_tmp** (*boolean*): (True) Remove temporal files..
-* **restart** (*boolean*): (False) Do not execute if output files exist..
-* **sandbox_path** (*string*): (./) Parent path to the sandbox directory..
+* **mutation_list** (*string*): (None) Mutation list in the format "Chain:WT_AA_ThreeLeterCode Resnum MUT_AA_ThreeLeterCode" (no spaces between the elements) separated by commas. If no chain is provided as chain code all the chains in the pdb file will be mutated. ie: "A:ALA15CYS"
+* **use_modeller** (*boolean*): (False) Use Modeller suite to optimize the side chains.
+* **modeller_key** (*string*): (None) Modeller license key.
+* **binary_path** (*string*): (check_structure) Path to the check_structure executable binary.
+* **remove_tmp** (*boolean*): (True) Remove temporal files.
+* **restart** (*boolean*): (False) Do not execute if output files exist.
+* **sandbox_path** (*string*): (./) Parent path to the sandbox directory.
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_model/blob/master/biobb_model/test/data/config/config_mutate.yml)
 ```python
