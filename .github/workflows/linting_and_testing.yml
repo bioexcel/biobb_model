@@ -113,6 +113,17 @@ jobs:
             flake8
             pip
 
+      - name: Provide conda compatibility shim
+        shell: bash -l {0}
+        run: |
+          mkdir -p "$HOME/bin"
+          cat > "$HOME/bin/conda" <<'EOF'
+          #!/usr/bin/env bash
+          exec micromamba "$@"
+          EOF
+          chmod +x "$HOME/bin/conda"
+          echo "$HOME/bin" >> "$GITHUB_PATH"
+
       - name: Install genbadge from pip
         shell: bash -l {0}
         run: pip install genbadge[all]
