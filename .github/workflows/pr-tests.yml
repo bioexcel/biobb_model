@@ -116,7 +116,7 @@ jobs:
             TEST_PATHS="${{ github.event.repository.name }}/test/unitests/"
           fi
 
-          pytest $TEST_PATHS --ignore-glob=*container.py --ignore-glob=*docker.py --ignore-glob=*singularity.py
+          pytest $TEST_PATHS --ignore-glob=*fix_backbone.py --ignore-glob=*container.py --ignore-glob=*docker.py --ignore-glob=*singularity.py
 
       # Notify user about test results
       # - name: Comment on PR

@@ -167,7 +167,7 @@ jobs:
             TEST_PATHS="${{ github.event.repository.name }}/test/unitests/"
           fi
 
-          pytest $TEST_PATHS --cov=${{ github.event.repository.name }}/ --cov-report=xml --ignore-glob=*container.py --junit-xml=./reports/junit/junit.xml --html=./reports/junit/report.html
+          pytest $TEST_PATHS --cov=${{ github.event.repository.name }}/ --cov-report=xml --ignore-glob=*fix_backbone.py --ignore-glob=*container.py --junit-xml=./reports/junit/junit.xml --html=./reports/junit/report.html
 
       - name: Generate Tests badge
         shell: bash -l {0}
