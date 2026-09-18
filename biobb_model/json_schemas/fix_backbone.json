@@ -78,6 +78,12 @@
                     "wf_prop": false,
                     "description": "Add caps to terminal residues."
                 },
+                "extra_gap": {
+                    "type": "integer",
+                    "default": 0,
+                    "wf_prop": false,
+                    "description": "Recover additional residues from the model on either side of the break to help fix loop connections."
+                },
                 "modeller_key": {
                     "type": "string",
                     "default": null,

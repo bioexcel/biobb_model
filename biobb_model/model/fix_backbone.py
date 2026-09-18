@@ -21,6 +21,7 @@ class FixBackbone(BiobbObject):
         output_pdb_path (str): Output PDB file path. File type: output. `Sample file <https://github.com/bioexcel/biobb_model/raw/master/biobb_model/test/reference/model/output_pdb_path.pdb>`_. Accepted formats: pdb (edam:format_1476).
         properties (dict - Python dictionary object containing the tool parameters, not input/output files):
             * **add_caps** (*bool*) - (False) Add caps to terminal residues.
+            * **extra_gap** (*int*) - (0) Recover additional residues from the model on either side of the break to help fix loop connections.
             * **modeller_key** (*str*) - (None) Modeller license key.
             * **binary_path** (*str*) - ("check_structure") Path to the check_structure executable binary.
             * **remove_tmp** (*bool*) - (True) [WF property] Remove temporal files.
@@ -72,6 +73,7 @@ class FixBackbone(BiobbObject):
         # Properties specific for BB
         self.binary_path = properties.get("binary_path", "check_structure")
         self.add_caps = properties.get("add_caps", False)
+        self.extra_gap = properties.get("extra_gap", 0)
         self.modeller_key = properties.get("modeller_key")
 
         # Check the properties
@@ -113,6 +115,8 @@ class FixBackbone(BiobbObject):
             self.cmd.append("All")
         else:
             self.cmd.append("None")
+        if self.extra_gap:
+            self.cmd.extend(["--extra_gap", str(self.extra_gap)])
 
         # Add stdin input file
         self.cmd.append("<")

@@ -1,5 +1,11 @@
 # Biobb Model changelog
 
+## Unreleased
+
+### Changes
+
+* [FEATURE] Add the `extra_gap` integer property to `FixBackbone` to recover additional residues from the model on either side of a break and help fix loop connections.
+
 ## What's new in version [5.3.0](https://github.com/bioexcel/biobb_amber/releases/tag/v5.3.0)?
 
 ### Changes
