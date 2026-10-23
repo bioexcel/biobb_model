@@ -1,6 +1,12 @@
 # Biobb Model changelog
 
-## Unreleased
+## [Unreleased]
+
+### Changes
+
+* [FEATURE] Add the `fix_known` boolean property to `FixBackbone` to optimize only the missing residues with Modeller, keeping the coordinates of the ones in the structure.
+
+## What's new in version [5.3.1](https://github.com/bioexcel/biobb_model/releases/tag/v5.3.1)?
 
 ### Changes
 

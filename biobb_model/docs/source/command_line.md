@@ -232,6 +232,8 @@ Syntax: input_parameter (datatype) - (default_value) Definition
 
 Config parameters for this building block:
 * **add_caps** (*boolean*): (False) Add caps to terminal residues.
+* **extra_gap** (*integer*): (0) Recover additional residues from the model on either side of the break to help fix loop connections.
+* **fix_known** (*boolean*): (False) Optimize only the missing residues with Modeller, the residues in the structure keep their coordinates.
 * **modeller_key** (*string*): (None) Modeller license key.
 * **binary_path** (*string*): (check_structure) Path to the check_structure executable binary.
 * **remove_tmp** (*boolean*): (True) Remove temporal files.

@@ -84,6 +84,12 @@
                     "wf_prop": false,
                     "description": "Recover additional residues from the model on either side of the break to help fix loop connections."
                 },
+                "fix_known": {
+                    "type": "boolean",
+                    "default": false,
+                    "wf_prop": false,
+                    "description": "Optimize only the missing residues with Modeller, the residues in the structure keep their coordinates."
+                },
                 "modeller_key": {
                     "type": "string",
                     "default": null,

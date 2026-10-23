@@ -22,6 +22,7 @@ class FixBackbone(BiobbObject):
         properties (dict - Python dictionary object containing the tool parameters, not input/output files):
             * **add_caps** (*bool*) - (False) Add caps to terminal residues.
             * **extra_gap** (*int*) - (0) Recover additional residues from the model on either side of the break to help fix loop connections.
+            * **fix_known** (*bool*) - (False) Optimize only the missing residues with Modeller, the residues in the structure keep their coordinates.
             * **modeller_key** (*str*) - (None) Modeller license key.
             * **binary_path** (*str*) - ("check_structure") Path to the check_structure executable binary.
             * **remove_tmp** (*bool*) - (True) [WF property] Remove temporal files.
@@ -74,6 +75,7 @@ class FixBackbone(BiobbObject):
         self.binary_path = properties.get("binary_path", "check_structure")
         self.add_caps = properties.get("add_caps", False)
         self.extra_gap = properties.get("extra_gap", 0)
+        self.fix_known = properties.get("fix_known", False)
         self.modeller_key = properties.get("modeller_key")
 
         # Check the properties
@@ -117,6 +119,9 @@ class FixBackbone(BiobbObject):
             self.cmd.append("None")
         if self.extra_gap:
             self.cmd.extend(["--extra_gap", str(self.extra_gap)])
+
+        if self.fix_known:
+            self.cmd.append("--fix_known")
 
         # Add stdin input file
         self.cmd.append("<")
