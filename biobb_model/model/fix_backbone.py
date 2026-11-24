@@ -6,7 +6,6 @@ from typing import Optional
 
 from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.tools import file_utils as fu
-from biobb_common.tools.file_utils import launchlogger
 
 
 class FixBackbone(BiobbObject):
@@ -78,20 +77,12 @@ class FixBackbone(BiobbObject):
         self.fix_known = properties.get("fix_known", False)
         self.modeller_key = properties.get("modeller_key")
 
-        # Check the properties
-        self.check_properties(properties)
-        self.check_arguments()
-
-    @launchlogger
-    def launch(self) -> int:
-        """Execute the :class:`FixBackbone <model.fix_backbone.FixBackbone>` object."""
-
+    def prepare(self) -> None:
+        """Create the stdin file with the path of the canonical sequence."""
         self.io_dict["in"]["stdin_file_path"] = fu.create_stdin_file(f'{self.io_dict["in"]["input_fasta_canonical_sequence_path"]}')
 
-        # Setup Biobb
-        if self.check_restart():
-            return 0
-        self.stage_files()
+    def run(self) -> int:
+        """Execute the :class:`FixBackbone <model.fix_backbone.FixBackbone>` object."""
 
         # Create command line
         self.cmd = [

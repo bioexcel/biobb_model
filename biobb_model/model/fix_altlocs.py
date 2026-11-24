@@ -5,7 +5,6 @@
 from typing import Optional
 
 from biobb_common.generic.biobb_object import BiobbObject
-from biobb_common.tools.file_utils import launchlogger
 
 from biobb_model.model.common import _from_string_to_list
 
@@ -69,18 +68,8 @@ class FixAltLocs(BiobbObject):
         self.altlocs = _from_string_to_list(properties.get("altlocs", None))
         self.modeller_key = properties.get("modeller_key")
 
-        # Check the properties
-        self.check_properties(properties)
-        self.check_arguments()
-
-    @launchlogger
-    def launch(self) -> int:
+    def run(self) -> int:
         """Execute the :class:`FixAltLocs <model.fix_altlocs.FixAltLocs>` object."""
-
-        # Setup Biobb
-        if self.check_restart():
-            return 0
-        self.stage_files()
 
         self.cmd = [
             self.binary_path,

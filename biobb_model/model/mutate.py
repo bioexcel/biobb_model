@@ -6,7 +6,6 @@ from typing import Optional
 
 from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.tools import file_utils as fu
-from biobb_common.tools.file_utils import launchlogger
 
 from biobb_model.model.common import modeller_installed
 
@@ -73,18 +72,8 @@ class Mutate(BiobbObject):
         self.use_modeller = properties.get("use_modeller", False)
         self.modeller_key = properties.get("modeller_key")
 
-        # Check the properties
-        self.check_properties(properties)
-        self.check_arguments()
-
-    @launchlogger
-    def launch(self) -> int:
+    def run(self) -> int:
         """Execute the :class:`Mutate <model.mutate.Mutate>` object."""
-
-        # Setup Biobb
-        if self.check_restart():
-            return 0
-        self.stage_files()
 
         # Create command line
         self.cmd = [

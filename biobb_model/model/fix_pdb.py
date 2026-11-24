@@ -5,7 +5,6 @@
 from typing import Optional
 
 from biobb_common.generic.biobb_object import BiobbObject
-from biobb_common.tools.file_utils import launchlogger
 
 from biobb_model.model.fix_pdb_utils import Structure, generate_map_online
 
@@ -63,17 +62,11 @@ class FixPdb(BiobbObject):
         if isinstance(self.forced_uniprot_references, str):
             self.forced_uniprot_references = self.forced_uniprot_references.split(" ")
 
-        # Check the properties
-        self.check_properties(properties)
-        self.check_arguments()
+    def stage_files(self) -> None:
+        """The block does not use the sandbox: there are no files to stage."""
 
-    @launchlogger
-    def launch(self) -> int:
+    def run(self) -> int:
         """Execute the :class:`FixPdb <model.fix_pdb.FixPdb>` object."""
-
-        # Setup Biobb
-        if self.check_restart():
-            return 0
 
         # Run code
         self.return_code = 0

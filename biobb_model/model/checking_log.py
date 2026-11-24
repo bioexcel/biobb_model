@@ -5,7 +5,6 @@
 from typing import Optional
 
 from biobb_common.generic.biobb_object import BiobbObject
-from biobb_common.tools.file_utils import launchlogger
 
 
 class CheckingLog(BiobbObject):
@@ -65,18 +64,8 @@ class CheckingLog(BiobbObject):
         self.binary_path = properties.get("binary_path", "check_structure")
         self.modeller_key = properties.get("modeller_key")
 
-        # Check the properties
-        self.check_properties(properties)
-        self.check_arguments()
-
-    @launchlogger
-    def launch(self) -> int:
+    def run(self) -> int:
         """Execute the :class:`CheckingLog <model.checking_log.CheckingLog>` object."""
-
-        # Setup Biobb
-        if self.check_restart():
-            return 0
-        self.stage_files()
 
         # Create command line
         self.cmd = [
