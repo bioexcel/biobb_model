@@ -65,7 +65,7 @@ class FixChirality(BiobbObject):
         self.modeller_key = properties.get("modeller_key")
 
     def run(self) -> int:
-        """Execute the :class:`FixChirality <model.fix_amides.FixChirality>` object."""
+        """Execute the :class:`FixChirality <model.fix_chirality.FixChirality>` object."""
 
         # Create command line
         self.cmd = [
@@ -103,8 +103,8 @@ def fix_chirality(
     properties: Optional[dict] = None,
     **kwargs,
 ) -> int:
-    """Create :class:`FixChirality <model.fix_amides.FixChirality>` class and
-    execute the :meth:`launch() <model.fix_amides.FixChirality.launch>` method."""
+    """Create :class:`FixChirality <model.fix_chirality.FixChirality>` class and
+    execute the :meth:`launch() <model.fix_chirality.FixChirality.launch>` method."""
     return FixChirality(**dict(locals())).launch()
 
 
