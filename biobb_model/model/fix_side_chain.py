@@ -52,22 +52,7 @@ class FixSideChain(BiobbObject):
         properties: Optional[dict] = None,
         **kwargs,
     ) -> None:
-        properties = properties or {}
-
-        # Call parent class constructor
-        super().__init__(properties)
-        self.locals_var_dict = locals().copy()
-
-        # Input/Output files
-        self.io_dict = {
-            "in": {"input_pdb_path": input_pdb_path},
-            "out": {"output_pdb_path": output_pdb_path},
-        }
-
-        # Properties specific for BB
-        self.binary_path = properties.get("binary_path", "check_structure")
-        self.use_modeller = properties.get("use_modeller", False)
-        self.modeller_key = properties.get("modeller_key")
+        super().__init__(**locals())
 
     def run(self) -> None:
         """Execute the :class:`FixSideChain <model.fix_side_chain.FixSideChain>` object."""

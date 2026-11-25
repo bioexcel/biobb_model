@@ -54,23 +54,10 @@ class Mutate(BiobbObject):
         properties: Optional[dict] = None,
         **kwargs,
     ) -> None:
-        properties = properties or {}
-
-        # Call parent class constructor
-        super().__init__(properties)
-        self.locals_var_dict = locals().copy()
-
-        # Input/Output files
-        self.io_dict = {
-            "in": {"input_pdb_path": input_pdb_path},
-            "out": {"output_pdb_path": output_pdb_path},
-        }
+        super().__init__(**locals())
 
         # Properties specific for BB
-        self.binary_path = properties.get("binary_path", "check_structure")
-        self.mutation_list = (properties.get("mutation_list") or "").replace(" ", "")
-        self.use_modeller = properties.get("use_modeller", False)
-        self.modeller_key = properties.get("modeller_key")
+        self.mutation_list = (self.mutation_list or "").replace(" ", "")
 
     def run(self) -> None:
         """Execute the :class:`Mutate <model.mutate.Mutate>` object."""

@@ -44,20 +44,8 @@ class FixPdb(BiobbObject):
         properties: Optional[dict] = None,
         **kwargs,
     ) -> None:
-        properties = properties or {}
+        super().__init__(**locals())
 
-        # Call parent class constructor
-        super().__init__(properties)
-        self.locals_var_dict = locals().copy()
-
-        # Input/Output files
-        self.io_dict = {
-            "in": {"input_pdb_path": input_pdb_path},
-            "out": {"output_pdb_path": output_pdb_path},
-        }
-
-        # Properties specific for BB
-        self.forced_uniprot_references = properties.get("forced_uniprot_references")
         # If input forced uniprot references is a string and not a list then convert it
         if isinstance(self.forced_uniprot_references, str):
             self.forced_uniprot_references = self.forced_uniprot_references.split(" ")

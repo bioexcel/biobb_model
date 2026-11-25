@@ -55,27 +55,7 @@ class FixBackbone(BiobbObject):
         properties: Optional[dict] = None,
         **kwargs,
     ) -> None:
-        properties = properties or {}
-
-        # Call parent class constructor
-        super().__init__(properties)
-        self.locals_var_dict = locals().copy()
-
-        # Input/Output files
-        self.io_dict = {
-            "in": {
-                "input_pdb_path": input_pdb_path,
-                "input_fasta_canonical_sequence_path": input_fasta_canonical_sequence_path,
-            },
-            "out": {"output_pdb_path": output_pdb_path},
-        }
-
-        # Properties specific for BB
-        self.binary_path = properties.get("binary_path", "check_structure")
-        self.add_caps = properties.get("add_caps", False)
-        self.extra_gap = properties.get("extra_gap", 0)
-        self.fix_known = properties.get("fix_known", False)
-        self.modeller_key = properties.get("modeller_key")
+        super().__init__(**locals())
 
     def prepare(self) -> None:
         """Create the stdin file with the path of the canonical sequence."""

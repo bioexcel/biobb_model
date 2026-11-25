@@ -51,22 +51,10 @@ class FixAltLocs(BiobbObject):
         properties: Optional[dict] = None,
         **kwargs,
     ) -> None:
-        properties = properties or {}
-
-        # Call parent class constructor
-        super().__init__(properties)
-        self.locals_var_dict = locals().copy()
-
-        # Input/Output files
-        self.io_dict = {
-            "in": {"input_pdb_path": input_pdb_path},
-            "out": {"output_pdb_path": output_pdb_path},
-        }
+        super().__init__(**locals())
 
         # Properties specific for BB
-        self.binary_path = properties.get("binary_path", "check_structure")
-        self.altlocs = _from_string_to_list(properties.get("altlocs", None))
-        self.modeller_key = properties.get("modeller_key")
+        self.altlocs = _from_string_to_list(self.altlocs)
 
     def run(self) -> None:
         """Execute the :class:`FixAltLocs <model.fix_altlocs.FixAltLocs>` object."""
