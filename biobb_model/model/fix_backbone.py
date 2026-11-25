@@ -81,7 +81,7 @@ class FixBackbone(BiobbObject):
         """Create the stdin file with the path of the canonical sequence."""
         self.io_dict["in"]["stdin_file_path"] = fu.create_stdin_file(f'{self.io_dict["in"]["input_fasta_canonical_sequence_path"]}')
 
-    def run(self) -> int:
+    def run(self) -> None:
         """Execute the :class:`FixBackbone <model.fix_backbone.FixBackbone>` object."""
 
         # Create command line
@@ -125,15 +125,8 @@ class FixBackbone(BiobbObject):
         # Run Biobb block
         self.run_biobb()
 
-        # Copy files to host
-        self.copy_to_host()
-
         # Remove temporal files
         self.tmp_files.append(self.io_dict["in"].get("stdin_file_path", ""))
-        self.remove_tmp_files()
-
-        self.check_arguments(output_files_created=True, raise_exception=False)
-        return self.return_code
 
 
 def fix_backbone(

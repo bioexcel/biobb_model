@@ -68,7 +68,7 @@ class FixAltLocs(BiobbObject):
         self.altlocs = _from_string_to_list(properties.get("altlocs", None))
         self.modeller_key = properties.get("modeller_key")
 
-    def run(self) -> int:
+    def run(self) -> None:
         """Execute the :class:`FixAltLocs <model.fix_altlocs.FixAltLocs>` object."""
 
         self.cmd = [
@@ -94,15 +94,6 @@ class FixAltLocs(BiobbObject):
 
         # Run Biobb block
         self.run_biobb()
-
-        # Copy files to host
-        self.copy_to_host()
-
-        # Remove temporal files
-        self.remove_tmp_files()
-
-        self.check_arguments(output_files_created=True, raise_exception=False)
-        return self.return_code
 
 
 def fix_altlocs(

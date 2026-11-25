@@ -65,7 +65,7 @@ class FixPdb(BiobbObject):
     def stage_files(self) -> None:
         """The block does not use the sandbox: there are no files to stage."""
 
-    def run(self) -> int:
+    def run(self) -> None:
         """Execute the :class:`FixPdb <model.fix_pdb.FixPdb>` object."""
 
         # Run code
@@ -94,7 +94,7 @@ class FixPdb(BiobbObject):
         # In case something went wrong with the mapping stop here
         if not mapping:
             self.return_code = -1
-            return self.return_code
+            return
 
         # Change residue numbers in the structure according to the mapping results
         mapped_residue_numbers = mapping["residue_reference_numbers"]
@@ -108,12 +108,6 @@ class FixPdb(BiobbObject):
         structure.generate_pdb_file(output_pdb_path)
 
         print("Fixed :)")
-
-        # Remove temporal files
-        self.remove_tmp_files()
-
-        self.check_arguments(output_files_created=True, raise_exception=False)
-        return self.return_code
 
 
 def fix_pdb(
