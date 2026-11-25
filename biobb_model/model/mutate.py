@@ -130,7 +130,7 @@ def mutate(
 
 
 mutate.__doc__ = Mutate.__doc__
-main = Mutate.get_main(mutate, "Model the missing atoms in aminoacid side chains of a PDB.")
+main = Mutate.get_main(mutate, "Mutate one amino acid by another in a 3d structure.")
 
 if __name__ == "__main__":
     main()

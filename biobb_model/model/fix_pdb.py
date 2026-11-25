@@ -128,7 +128,7 @@ def fix_pdb(
 
 
 fix_pdb.__doc__ = FixPdb.__doc__
-main = FixPdb.get_main(fix_pdb, "Model the missing atoms in the backbone of a PDB structure.")
+main = FixPdb.get_main(fix_pdb, "Renumerate residues in a PDB structure according to a reference sequence from UniProt.")
 
 if __name__ == "__main__":
     main()
