@@ -88,9 +88,9 @@ class FixBackbone(BiobbObject):
         self.cmd = [
             self.binary_path,
             "-i",
-            self.io_dict["in"]["input_pdb_path"],
+            self.stage_io_dict["in"]["input_pdb_path"],
             "-o",
-            self.io_dict["out"]["output_pdb_path"],
+            self.stage_io_dict["out"]["output_pdb_path"],
             "--force_save",
             "backbone",
             "--fix_atoms",
