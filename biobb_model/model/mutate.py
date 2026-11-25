@@ -68,7 +68,7 @@ class Mutate(BiobbObject):
 
         # Properties specific for BB
         self.binary_path = properties.get("binary_path", "check_structure")
-        self.mutation_list = properties.get("mutation_list", "").replace(" ", "")
+        self.mutation_list = (properties.get("mutation_list") or "").replace(" ", "")
         self.use_modeller = properties.get("use_modeller", False)
         self.modeller_key = properties.get("modeller_key")
 
