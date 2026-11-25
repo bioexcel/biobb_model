@@ -1181,6 +1181,7 @@ def get_uniprot_reference(uniprot_accession: str) -> dict:
             raise ValueError(
                 "Something went wrong with the Uniprot request: " + request_url
             )
+        raise
     # Get the aminoacids sequence
     sequence = parsed_response["sequence"]["sequence"]
     return {"uniprot": uniprot_accession, "sequence": sequence}
