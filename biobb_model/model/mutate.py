@@ -4,9 +4,8 @@
 
 from typing import Optional
 
-from biobb_common.generic.biobb_object import BiobbObject
+from biobb_common.generic.biobb_object import BiobbObject, launcher
 from biobb_common.tools import file_utils as fu
-from biobb_common.tools.file_utils import launchlogger
 
 from biobb_model.model.common import modeller_installed
 
@@ -55,36 +54,13 @@ class Mutate(BiobbObject):
         properties: Optional[dict] = None,
         **kwargs,
     ) -> None:
-        properties = properties or {}
-
-        # Call parent class constructor
-        super().__init__(properties)
-        self.locals_var_dict = locals().copy()
-
-        # Input/Output files
-        self.io_dict = {
-            "in": {"input_pdb_path": input_pdb_path},
-            "out": {"output_pdb_path": output_pdb_path},
-        }
+        super().__init__(**locals())
 
         # Properties specific for BB
-        self.binary_path = properties.get("binary_path", "check_structure")
-        self.mutation_list = properties.get("mutation_list", "").replace(" ", "")
-        self.use_modeller = properties.get("use_modeller", False)
-        self.modeller_key = properties.get("modeller_key")
+        self.mutation_list = (self.mutation_list or "").replace(" ", "")
 
-        # Check the properties
-        self.check_properties(properties)
-        self.check_arguments()
-
-    @launchlogger
-    def launch(self) -> int:
+    def run(self) -> None:
         """Execute the :class:`Mutate <model.mutate.Mutate>` object."""
-
-        # Setup Biobb
-        if self.check_restart():
-            return 0
-        self.stage_files()
 
         # Create command line
         self.cmd = [
@@ -119,29 +95,8 @@ class Mutate(BiobbObject):
         # Run Biobb block
         self.run_biobb()
 
-        # Copy files to host
-        self.copy_to_host()
 
-        # Remove temporal files
-        self.remove_tmp_files()
-
-        self.check_arguments(output_files_created=True, raise_exception=False)
-        return self.return_code
-
-
-def mutate(
-    input_pdb_path: str,
-    output_pdb_path: str,
-    properties: Optional[dict] = None,
-    **kwargs,
-) -> int:
-    """Create :class:`Mutate <model.mutate.Mutate>` class and
-    execute the :meth:`launch() <model.mutate.Mutate.launch>` method."""
-    return Mutate(**dict(locals())).launch()
-
-
-mutate.__doc__ = Mutate.__doc__
-main = Mutate.get_main(mutate, "Model the missing atoms in aminoacid side chains of a PDB.")
+mutate = launcher(Mutate)
 
 if __name__ == "__main__":
-    main()
+    Mutate.main()

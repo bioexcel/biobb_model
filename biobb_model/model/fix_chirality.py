@@ -4,8 +4,7 @@
 
 from typing import Optional
 
-from biobb_common.generic.biobb_object import BiobbObject
-from biobb_common.tools.file_utils import launchlogger
+from biobb_common.generic.biobb_object import BiobbObject, launcher
 
 
 class FixChirality(BiobbObject):
@@ -49,34 +48,10 @@ class FixChirality(BiobbObject):
         properties: Optional[dict] = None,
         **kwargs,
     ) -> None:
-        properties = properties or {}
+        super().__init__(**locals())
 
-        # Call parent class constructor
-        super().__init__(properties)
-        self.locals_var_dict = locals().copy()
-
-        # Input/Output files
-        self.io_dict = {
-            "in": {"input_pdb_path": input_pdb_path},
-            "out": {"output_pdb_path": output_pdb_path},
-        }
-
-        # Properties specific for BB
-        self.binary_path = properties.get("binary_path", "check_structure")
-        self.modeller_key = properties.get("modeller_key")
-
-        # Check the properties
-        self.check_properties(properties)
-        self.check_arguments()
-
-    @launchlogger
-    def launch(self) -> int:
-        """Execute the :class:`FixChirality <model.fix_amides.FixChirality>` object."""
-
-        # Setup Biobb
-        if self.check_restart():
-            return 0
-        self.stage_files()
+    def run(self) -> None:
+        """Execute the :class:`FixChirality <model.fix_chirality.FixChirality>` object."""
 
         # Create command line
         self.cmd = [
@@ -98,29 +73,8 @@ class FixChirality(BiobbObject):
         # Run Biobb block
         self.run_biobb()
 
-        # Copy files to host
-        self.copy_to_host()
 
-        # Remove temporal files
-        self.remove_tmp_files()
-
-        self.check_arguments(output_files_created=True, raise_exception=False)
-        return self.return_code
-
-
-def fix_chirality(
-    input_pdb_path: str,
-    output_pdb_path: str,
-    properties: Optional[dict] = None,
-    **kwargs,
-) -> int:
-    """Create :class:`FixChirality <model.fix_amides.FixChirality>` class and
-    execute the :meth:`launch() <model.fix_amides.FixChirality.launch>` method."""
-    return FixChirality(**dict(locals())).launch()
-
-
-fix_chirality.__doc__ = FixChirality.__doc__
-main = FixChirality.get_main(fix_chirality, "Fix stereochemical errors in residues changing It's chirality.")
+fix_chirality = launcher(FixChirality)
 
 if __name__ == "__main__":
-    main()
+    FixChirality.main()

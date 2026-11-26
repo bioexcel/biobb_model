@@ -27,15 +27,15 @@ setuptools.setup(
     python_requires=">=3.10",
     entry_points={
         "console_scripts": [
-            "checking_log = biobb_model.model.checking_log:main",
-            "fix_chirality = biobb_model.model.fix_chirality:main",
-            "fix_amides = biobb_model.model.fix_amides:main",
-            "fix_altlocs = biobb_model.model.fix_altlocs:main",
-            "fix_ssbonds = biobb_model.model.fix_ssbonds:main",
-            "fix_backbone = biobb_model.model.fix_backbone:main",
-            "fix_side_chain = biobb_model.model.fix_side_chain:main",
-            "mutate = biobb_model.model.mutate:main",
-            "fix_pdb = biobb_model.model.fix_pdb:main",
+            "checking_log = biobb_model.model.checking_log:CheckingLog.main",
+            "fix_chirality = biobb_model.model.fix_chirality:FixChirality.main",
+            "fix_amides = biobb_model.model.fix_amides:FixAmides.main",
+            "fix_altlocs = biobb_model.model.fix_altlocs:FixAltLocs.main",
+            "fix_ssbonds = biobb_model.model.fix_ssbonds:FixSSBonds.main",
+            "fix_backbone = biobb_model.model.fix_backbone:FixBackbone.main",
+            "fix_side_chain = biobb_model.model.fix_side_chain:FixSideChain.main",
+            "mutate = biobb_model.model.mutate:Mutate.main",
+            "fix_pdb = biobb_model.model.fix_pdb:FixPdb.main",
         ]
     },
     classifiers=[

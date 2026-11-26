@@ -4,8 +4,7 @@
 
 from typing import Optional
 
-from biobb_common.generic.biobb_object import BiobbObject
-from biobb_common.tools.file_utils import launchlogger
+from biobb_common.generic.biobb_object import BiobbObject, launcher
 
 from biobb_model.model.fix_pdb_utils import Structure, generate_map_online
 
@@ -45,35 +44,17 @@ class FixPdb(BiobbObject):
         properties: Optional[dict] = None,
         **kwargs,
     ) -> None:
-        properties = properties or {}
+        super().__init__(**locals())
 
-        # Call parent class constructor
-        super().__init__(properties)
-        self.locals_var_dict = locals().copy()
-
-        # Input/Output files
-        self.io_dict = {
-            "in": {"input_pdb_path": input_pdb_path},
-            "out": {"output_pdb_path": output_pdb_path},
-        }
-
-        # Properties specific for BB
-        self.forced_uniprot_references = properties.get("forced_uniprot_references")
         # If input forced uniprot references is a string and not a list then convert it
         if isinstance(self.forced_uniprot_references, str):
             self.forced_uniprot_references = self.forced_uniprot_references.split(" ")
 
-        # Check the properties
-        self.check_properties(properties)
-        self.check_arguments()
+    def stage_files(self) -> None:
+        """The block does not use the sandbox: there are no files to stage."""
 
-    @launchlogger
-    def launch(self) -> int:
+    def run(self) -> None:
         """Execute the :class:`FixPdb <model.fix_pdb.FixPdb>` object."""
-
-        # Setup Biobb
-        if self.check_restart():
-            return 0
 
         # Run code
         self.return_code = 0
@@ -101,7 +82,7 @@ class FixPdb(BiobbObject):
         # In case something went wrong with the mapping stop here
         if not mapping:
             self.return_code = -1
-            return self.return_code
+            return
 
         # Change residue numbers in the structure according to the mapping results
         mapped_residue_numbers = mapping["residue_reference_numbers"]
@@ -116,26 +97,8 @@ class FixPdb(BiobbObject):
 
         print("Fixed :)")
 
-        # Remove temporal files
-        self.remove_tmp_files()
 
-        self.check_arguments(output_files_created=True, raise_exception=False)
-        return self.return_code
-
-
-def fix_pdb(
-    input_pdb_path: str,
-    output_pdb_path: str,
-    properties: Optional[dict] = None,
-    **kwargs,
-) -> int:
-    """Create :class:`FixPdb <model.fix_pdb.FixPdb>` class and
-    execute the :meth:`launch() <model.fix_pdb.FixPdb.launch>` method."""
-    return FixPdb(**dict(locals())).launch()
-
-
-fix_pdb.__doc__ = FixPdb.__doc__
-main = FixPdb.get_main(fix_pdb, "Model the missing atoms in the backbone of a PDB structure.")
+fix_pdb = launcher(FixPdb)
 
 if __name__ == "__main__":
-    main()
+    FixPdb.main()

@@ -4,9 +4,8 @@
 
 from typing import Optional
 
-from biobb_common.generic.biobb_object import BiobbObject
+from biobb_common.generic.biobb_object import BiobbObject, launcher
 from biobb_common.tools import file_utils as fu
-from biobb_common.tools.file_utils import launchlogger
 
 from biobb_model.model.common import modeller_installed
 
@@ -53,35 +52,10 @@ class FixSideChain(BiobbObject):
         properties: Optional[dict] = None,
         **kwargs,
     ) -> None:
-        properties = properties or {}
+        super().__init__(**locals())
 
-        # Call parent class constructor
-        super().__init__(properties)
-        self.locals_var_dict = locals().copy()
-
-        # Input/Output files
-        self.io_dict = {
-            "in": {"input_pdb_path": input_pdb_path},
-            "out": {"output_pdb_path": output_pdb_path},
-        }
-
-        # Properties specific for BB
-        self.binary_path = properties.get("binary_path", "check_structure")
-        self.use_modeller = properties.get("use_modeller", False)
-        self.modeller_key = properties.get("modeller_key")
-
-        # Check the properties
-        self.check_properties(properties)
-        self.check_arguments()
-
-    @launchlogger
-    def launch(self) -> int:
+    def run(self) -> None:
         """Execute the :class:`FixSideChain <model.fix_side_chain.FixSideChain>` object."""
-
-        # Setup Biobb
-        if self.check_restart():
-            return 0
-        self.stage_files()
 
         # Create command line
         self.cmd = [
@@ -113,29 +87,8 @@ class FixSideChain(BiobbObject):
         # Run Biobb block
         self.run_biobb()
 
-        # Copy files to host
-        self.copy_to_host()
 
-        # Remove temporal files
-        self.remove_tmp_files()
-
-        self.check_arguments(output_files_created=True, raise_exception=False)
-        return self.return_code
-
-
-def fix_side_chain(
-    input_pdb_path: str,
-    output_pdb_path: str,
-    properties: Optional[dict] = None,
-    **kwargs,
-) -> int:
-    """Create :class:`FixSideChain <model.fix_side_chain.FixSideChain>` class and
-    execute the :meth:`launch() <model.fix_side_chain.FixSideChain.launch>` method."""
-    return FixSideChain(**dict(locals())).launch()
-
-
-fix_side_chain.__doc__ = FixSideChain.__doc__
-main = FixSideChain.get_main(fix_side_chain, "Model the missing atoms in amino acid side chains of a PDB.")
+fix_side_chain = launcher(FixSideChain)
 
 if __name__ == "__main__":
-    main()
+    FixSideChain.main()

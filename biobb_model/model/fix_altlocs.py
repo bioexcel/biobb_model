@@ -4,8 +4,7 @@
 
 from typing import Optional
 
-from biobb_common.generic.biobb_object import BiobbObject
-from biobb_common.tools.file_utils import launchlogger
+from biobb_common.generic.biobb_object import BiobbObject, launcher
 
 from biobb_model.model.common import _from_string_to_list
 
@@ -52,35 +51,13 @@ class FixAltLocs(BiobbObject):
         properties: Optional[dict] = None,
         **kwargs,
     ) -> None:
-        properties = properties or {}
-
-        # Call parent class constructor
-        super().__init__(properties)
-        self.locals_var_dict = locals().copy()
-
-        # Input/Output files
-        self.io_dict = {
-            "in": {"input_pdb_path": input_pdb_path},
-            "out": {"output_pdb_path": output_pdb_path},
-        }
+        super().__init__(**locals())
 
         # Properties specific for BB
-        self.binary_path = properties.get("binary_path", "check_structure")
-        self.altlocs = _from_string_to_list(properties.get("altlocs", None))
-        self.modeller_key = properties.get("modeller_key")
+        self.altlocs = _from_string_to_list(self.altlocs)
 
-        # Check the properties
-        self.check_properties(properties)
-        self.check_arguments()
-
-    @launchlogger
-    def launch(self) -> int:
+    def run(self) -> None:
         """Execute the :class:`FixAltLocs <model.fix_altlocs.FixAltLocs>` object."""
-
-        # Setup Biobb
-        if self.check_restart():
-            return 0
-        self.stage_files()
 
         self.cmd = [
             self.binary_path,
@@ -106,29 +83,8 @@ class FixAltLocs(BiobbObject):
         # Run Biobb block
         self.run_biobb()
 
-        # Copy files to host
-        self.copy_to_host()
 
-        # Remove temporal files
-        self.remove_tmp_files()
-
-        self.check_arguments(output_files_created=True, raise_exception=False)
-        return self.return_code
-
-
-def fix_altlocs(
-    input_pdb_path: str,
-    output_pdb_path: str,
-    properties: Optional[dict] = None,
-    **kwargs,
-) -> int:
-    """Create :class:`FixAltLocs <model.fix_altlocs.FixAltLocs>` class and
-    execute the :meth:`launch() <model.fix_altlocs.FixAltLocs.launch>` method."""
-    return FixAltLocs(**dict(locals())).launch()
-
-
-fix_altlocs.__doc__ = FixAltLocs.__doc__
-main = FixAltLocs.get_main(fix_altlocs, "Fix alternate locations from residues")
+fix_altlocs = launcher(FixAltLocs)
 
 if __name__ == "__main__":
-    main()
+    FixAltLocs.main()

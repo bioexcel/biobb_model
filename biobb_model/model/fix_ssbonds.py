@@ -4,8 +4,7 @@
 
 from typing import Optional
 
-from biobb_common.generic.biobb_object import BiobbObject
-from biobb_common.tools.file_utils import launchlogger
+from biobb_common.generic.biobb_object import BiobbObject, launcher
 
 
 class FixSSBonds(BiobbObject):
@@ -49,34 +48,10 @@ class FixSSBonds(BiobbObject):
         properties: Optional[dict] = None,
         **kwargs,
     ) -> None:
-        properties = properties or {}
+        super().__init__(**locals())
 
-        # Call parent class constructor
-        super().__init__(properties)
-        self.locals_var_dict = locals().copy()
-
-        # Input/Output files
-        self.io_dict = {
-            "in": {"input_pdb_path": input_pdb_path},
-            "out": {"output_pdb_path": output_pdb_path},
-        }
-
-        # Properties specific for BB
-        self.binary_path = properties.get("binary_path", "check_structure")
-        self.modeller_key = properties.get("modeller_key")
-
-        # Check the properties
-        self.check_properties(properties)
-        self.check_arguments()
-
-    @launchlogger
-    def launch(self) -> int:
+    def run(self) -> None:
         """Execute the :class:`FixSSBonds <model.fix_ssbonds.FixSSBonds>` object."""
-
-        # Setup Biobb
-        if self.check_restart():
-            return 0
-        self.stage_files()
 
         self.cmd = [
             self.binary_path,
@@ -98,29 +73,8 @@ class FixSSBonds(BiobbObject):
         # Run Biobb block
         self.run_biobb()
 
-        # Copy files to host
-        self.copy_to_host()
 
-        # Remove temporal files
-        self.remove_tmp_files()
-
-        self.check_arguments(output_files_created=True, raise_exception=False)
-        return self.return_code
-
-
-def fix_ssbonds(
-    input_pdb_path: str,
-    output_pdb_path: str,
-    properties: Optional[dict] = None,
-    **kwargs,
-) -> int:
-    """Create :class:`FixSSBonds <model.fix_ssbonds.FixSSBonds>` class and
-    execute the :meth:`launch() <model.fix_ssbonds.FixSSBonds.launch>` method."""
-    return FixSSBonds(**dict(locals())).launch()
-
-
-fix_ssbonds.__doc__ = FixSSBonds.__doc__
-main = FixSSBonds.get_main(fix_ssbonds, "Fix SS bonds from residues")
+fix_ssbonds = launcher(FixSSBonds)
 
 if __name__ == "__main__":
-    main()
+    FixSSBonds.main()

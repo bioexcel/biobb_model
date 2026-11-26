@@ -9,7 +9,7 @@ jobs:
   pr_test:
     strategy:
       matrix:
-        os: [mmbswarm]
+        os: [ubuntu-latest]
         python-version: ["3.10"]
     runs-on: ${{ matrix.os }}
     steps:
@@ -100,6 +100,11 @@ jobs:
         with:
           repository: bioexcel/biobb_common
           path: './biobb_common'
+
+      - name: Install biobb_common master
+        shell: bash -l {0}
+        # With its dependencies: biobb_common master can need packages that the version of .github/env.yaml lacks
+        run: python -m pip install ./biobb_common
 
       - name: Run tests
         shell: bash -l {0}

@@ -338,7 +338,7 @@ fix_pdb -h
 ```
     usage: fix_pdb [-h] [-c CONFIG] -i INPUT_PDB_PATH -o OUTPUT_PDB_PATH
     
-    Model the missing atoms in the backbone of a PDB structure.
+    Renumerate residues in a PDB structure according to a reference sequence from UniProt.
     
     options:
       -h, --help            show this help message and exit
@@ -528,7 +528,7 @@ mutate -h
 ```
     usage: mutate [-h] [-c CONFIG] -i INPUT_PDB_PATH -o OUTPUT_PDB_PATH
     
-    Model the missing atoms in aminoacid side chains of a PDB.
+    Mutate one amino acid by another in a 3d structure.
     
     options:
       -h, --help            show this help message and exit

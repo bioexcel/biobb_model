@@ -4,9 +4,8 @@
 
 from typing import Optional
 
-from biobb_common.generic.biobb_object import BiobbObject
+from biobb_common.generic.biobb_object import BiobbObject, launcher
 from biobb_common.tools import file_utils as fu
-from biobb_common.tools.file_utils import launchlogger
 
 
 class FixBackbone(BiobbObject):
@@ -56,50 +55,22 @@ class FixBackbone(BiobbObject):
         properties: Optional[dict] = None,
         **kwargs,
     ) -> None:
-        properties = properties or {}
+        super().__init__(**locals())
 
-        # Call parent class constructor
-        super().__init__(properties)
-        self.locals_var_dict = locals().copy()
-
-        # Input/Output files
-        self.io_dict = {
-            "in": {
-                "input_pdb_path": input_pdb_path,
-                "input_fasta_canonical_sequence_path": input_fasta_canonical_sequence_path,
-            },
-            "out": {"output_pdb_path": output_pdb_path},
-        }
-
-        # Properties specific for BB
-        self.binary_path = properties.get("binary_path", "check_structure")
-        self.add_caps = properties.get("add_caps", False)
-        self.extra_gap = properties.get("extra_gap", 0)
-        self.fix_known = properties.get("fix_known", False)
-        self.modeller_key = properties.get("modeller_key")
-
-        # Check the properties
-        self.check_properties(properties)
-        self.check_arguments()
-
-    @launchlogger
-    def launch(self) -> int:
-        """Execute the :class:`FixBackbone <model.fix_backbone.FixBackbone>` object."""
-
+    def prepare(self) -> None:
+        """Create the stdin file with the path of the canonical sequence."""
         self.io_dict["in"]["stdin_file_path"] = fu.create_stdin_file(f'{self.io_dict["in"]["input_fasta_canonical_sequence_path"]}')
 
-        # Setup Biobb
-        if self.check_restart():
-            return 0
-        self.stage_files()
+    def run(self) -> None:
+        """Execute the :class:`FixBackbone <model.fix_backbone.FixBackbone>` object."""
 
         # Create command line
         self.cmd = [
             self.binary_path,
             "-i",
-            self.io_dict["in"]["input_pdb_path"],
+            self.stage_io_dict["in"]["input_pdb_path"],
             "-o",
-            self.io_dict["out"]["output_pdb_path"],
+            self.stage_io_dict["out"]["output_pdb_path"],
             "--force_save",
             "backbone",
             "--fix_atoms",
@@ -134,31 +105,11 @@ class FixBackbone(BiobbObject):
         # Run Biobb block
         self.run_biobb()
 
-        # Copy files to host
-        self.copy_to_host()
-
         # Remove temporal files
         self.tmp_files.append(self.io_dict["in"].get("stdin_file_path", ""))
-        self.remove_tmp_files()
-
-        self.check_arguments(output_files_created=True, raise_exception=False)
-        return self.return_code
 
 
-def fix_backbone(
-    input_pdb_path: str,
-    input_fasta_canonical_sequence_path: str,
-    output_pdb_path: str,
-    properties: Optional[dict] = None,
-    **kwargs,
-) -> int:
-    """Create :class:`FixBackbone <model.fix_backbone.FixBackbone>` class and
-    execute the :meth:`launch() <model.fix_backbone.FixBackbone.launch>` method."""
-    return FixBackbone(**dict(locals())).launch()
-
-
-fix_backbone.__doc__ = FixBackbone.__doc__
-main = FixBackbone.get_main(fix_backbone, "Model the missing atoms in the backbone of a PDB structure.")
+fix_backbone = launcher(FixBackbone)
 
 if __name__ == "__main__":
-    main()
+    FixBackbone.main()

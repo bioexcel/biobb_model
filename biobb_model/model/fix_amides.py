@@ -4,8 +4,7 @@
 
 from typing import Optional
 
-from biobb_common.generic.biobb_object import BiobbObject
-from biobb_common.tools.file_utils import launchlogger
+from biobb_common.generic.biobb_object import BiobbObject, launcher
 
 
 class FixAmides(BiobbObject):
@@ -49,34 +48,10 @@ class FixAmides(BiobbObject):
         properties: Optional[dict] = None,
         **kwargs,
     ) -> None:
-        properties = properties or {}
+        super().__init__(**locals())
 
-        # Call parent class constructor
-        super().__init__(properties)
-        self.locals_var_dict = locals().copy()
-
-        # Input/Output files
-        self.io_dict = {
-            "in": {"input_pdb_path": input_pdb_path},
-            "out": {"output_pdb_path": output_pdb_path},
-        }
-
-        # Properties specific for BB
-        self.binary_path = properties.get("binary_path", "check_structure")
-        self.modeller_key = properties.get("modeller_key")
-
-        # Check the properties
-        self.check_properties(properties)
-        self.check_arguments()
-
-    @launchlogger
-    def launch(self) -> int:
+    def run(self) -> None:
         """Execute the :class:`FixAmides <model.fix_amides.FixAmides>` object."""
-
-        # Setup Biobb
-        if self.check_restart():
-            return 0
-        self.stage_files()
 
         self.cmd = [
             self.binary_path,
@@ -97,29 +72,8 @@ class FixAmides(BiobbObject):
         # Run Biobb block
         self.run_biobb()
 
-        # Copy files to host
-        self.copy_to_host()
 
-        # Remove temporal files
-        self.remove_tmp_files()
-
-        self.check_arguments(output_files_created=True, raise_exception=False)
-        return self.return_code
-
-
-def fix_amides(
-    input_pdb_path: str,
-    output_pdb_path: str,
-    properties: Optional[dict] = None,
-    **kwargs,
-) -> int:
-    """Create :class:`FixAmides <model.fix_amides.FixAmides>` class and
-    execute the :meth:`launch() <model.fix_amides.FixAmides.launch>` method."""
-    return FixAmides(**dict(locals())).launch()
-
-
-fix_amides.__doc__ = FixAmides.__doc__
-main = FixAmides.get_main(fix_amides, "Flip the clashing amide groups to avoid clashes.")
+fix_amides = launcher(FixAmides)
 
 if __name__ == "__main__":
-    main()
+    FixAmides.main()
