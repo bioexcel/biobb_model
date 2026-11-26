@@ -4,7 +4,7 @@
 
 from typing import Optional
 
-from biobb_common.generic.biobb_object import BiobbObject
+from biobb_common.generic.biobb_object import BiobbObject, launcher
 
 
 class CheckingLog(BiobbObject):
@@ -71,19 +71,7 @@ class CheckingLog(BiobbObject):
         self.run_biobb()
 
 
-def checking_log(
-    input_pdb_path: str,
-    output_log_path: str,
-    properties: Optional[dict] = None,
-    **kwargs,
-) -> int:
-    """Create :class:`CheckingLog <model.checking_log.CheckingLog>` class and
-    execute the :meth:`launch() <model.checking_log.CheckingLog.launch>` method."""
-    return CheckingLog(**dict(locals())).launch()
-
-
-checking_log.__doc__ = CheckingLog.__doc__
-main = CheckingLog.get_main(checking_log, "Check the errors of a PDB structure and create a report log file.")
+checking_log = launcher(CheckingLog)
 
 if __name__ == "__main__":
-    main()
+    CheckingLog.main()

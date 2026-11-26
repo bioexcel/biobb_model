@@ -4,7 +4,7 @@
 
 from typing import Optional
 
-from biobb_common.generic.biobb_object import BiobbObject
+from biobb_common.generic.biobb_object import BiobbObject, launcher
 from biobb_common.tools import file_utils as fu
 
 from biobb_model.model.common import modeller_installed
@@ -88,19 +88,7 @@ class FixSideChain(BiobbObject):
         self.run_biobb()
 
 
-def fix_side_chain(
-    input_pdb_path: str,
-    output_pdb_path: str,
-    properties: Optional[dict] = None,
-    **kwargs,
-) -> int:
-    """Create :class:`FixSideChain <model.fix_side_chain.FixSideChain>` class and
-    execute the :meth:`launch() <model.fix_side_chain.FixSideChain.launch>` method."""
-    return FixSideChain(**dict(locals())).launch()
-
-
-fix_side_chain.__doc__ = FixSideChain.__doc__
-main = FixSideChain.get_main(fix_side_chain, "Model the missing atoms in amino acid side chains of a PDB.")
+fix_side_chain = launcher(FixSideChain)
 
 if __name__ == "__main__":
-    main()
+    FixSideChain.main()

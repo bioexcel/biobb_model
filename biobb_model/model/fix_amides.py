@@ -4,7 +4,7 @@
 
 from typing import Optional
 
-from biobb_common.generic.biobb_object import BiobbObject
+from biobb_common.generic.biobb_object import BiobbObject, launcher
 
 
 class FixAmides(BiobbObject):
@@ -73,19 +73,7 @@ class FixAmides(BiobbObject):
         self.run_biobb()
 
 
-def fix_amides(
-    input_pdb_path: str,
-    output_pdb_path: str,
-    properties: Optional[dict] = None,
-    **kwargs,
-) -> int:
-    """Create :class:`FixAmides <model.fix_amides.FixAmides>` class and
-    execute the :meth:`launch() <model.fix_amides.FixAmides.launch>` method."""
-    return FixAmides(**dict(locals())).launch()
-
-
-fix_amides.__doc__ = FixAmides.__doc__
-main = FixAmides.get_main(fix_amides, "Flip the clashing amide groups to avoid clashes.")
+fix_amides = launcher(FixAmides)
 
 if __name__ == "__main__":
-    main()
+    FixAmides.main()

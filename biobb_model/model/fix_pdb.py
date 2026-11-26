@@ -4,7 +4,7 @@
 
 from typing import Optional
 
-from biobb_common.generic.biobb_object import BiobbObject
+from biobb_common.generic.biobb_object import BiobbObject, launcher
 
 from biobb_model.model.fix_pdb_utils import Structure, generate_map_online
 
@@ -98,19 +98,7 @@ class FixPdb(BiobbObject):
         print("Fixed :)")
 
 
-def fix_pdb(
-    input_pdb_path: str,
-    output_pdb_path: str,
-    properties: Optional[dict] = None,
-    **kwargs,
-) -> int:
-    """Create :class:`FixPdb <model.fix_pdb.FixPdb>` class and
-    execute the :meth:`launch() <model.fix_pdb.FixPdb.launch>` method."""
-    return FixPdb(**dict(locals())).launch()
-
-
-fix_pdb.__doc__ = FixPdb.__doc__
-main = FixPdb.get_main(fix_pdb, "Renumerate residues in a PDB structure according to a reference sequence from UniProt.")
+fix_pdb = launcher(FixPdb)
 
 if __name__ == "__main__":
-    main()
+    FixPdb.main()

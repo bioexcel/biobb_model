@@ -4,7 +4,7 @@
 
 from typing import Optional
 
-from biobb_common.generic.biobb_object import BiobbObject
+from biobb_common.generic.biobb_object import BiobbObject, launcher
 from biobb_common.tools import file_utils as fu
 
 
@@ -109,20 +109,7 @@ class FixBackbone(BiobbObject):
         self.tmp_files.append(self.io_dict["in"].get("stdin_file_path", ""))
 
 
-def fix_backbone(
-    input_pdb_path: str,
-    input_fasta_canonical_sequence_path: str,
-    output_pdb_path: str,
-    properties: Optional[dict] = None,
-    **kwargs,
-) -> int:
-    """Create :class:`FixBackbone <model.fix_backbone.FixBackbone>` class and
-    execute the :meth:`launch() <model.fix_backbone.FixBackbone.launch>` method."""
-    return FixBackbone(**dict(locals())).launch()
-
-
-fix_backbone.__doc__ = FixBackbone.__doc__
-main = FixBackbone.get_main(fix_backbone, "Model the missing atoms in the backbone of a PDB structure.")
+fix_backbone = launcher(FixBackbone)
 
 if __name__ == "__main__":
-    main()
+    FixBackbone.main()

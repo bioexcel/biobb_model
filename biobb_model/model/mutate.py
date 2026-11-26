@@ -4,7 +4,7 @@
 
 from typing import Optional
 
-from biobb_common.generic.biobb_object import BiobbObject
+from biobb_common.generic.biobb_object import BiobbObject, launcher
 from biobb_common.tools import file_utils as fu
 
 from biobb_model.model.common import modeller_installed
@@ -96,19 +96,7 @@ class Mutate(BiobbObject):
         self.run_biobb()
 
 
-def mutate(
-    input_pdb_path: str,
-    output_pdb_path: str,
-    properties: Optional[dict] = None,
-    **kwargs,
-) -> int:
-    """Create :class:`Mutate <model.mutate.Mutate>` class and
-    execute the :meth:`launch() <model.mutate.Mutate.launch>` method."""
-    return Mutate(**dict(locals())).launch()
-
-
-mutate.__doc__ = Mutate.__doc__
-main = Mutate.get_main(mutate, "Mutate one amino acid by another in a 3d structure.")
+mutate = launcher(Mutate)
 
 if __name__ == "__main__":
-    main()
+    Mutate.main()

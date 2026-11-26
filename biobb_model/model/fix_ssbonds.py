@@ -4,7 +4,7 @@
 
 from typing import Optional
 
-from biobb_common.generic.biobb_object import BiobbObject
+from biobb_common.generic.biobb_object import BiobbObject, launcher
 
 
 class FixSSBonds(BiobbObject):
@@ -74,19 +74,7 @@ class FixSSBonds(BiobbObject):
         self.run_biobb()
 
 
-def fix_ssbonds(
-    input_pdb_path: str,
-    output_pdb_path: str,
-    properties: Optional[dict] = None,
-    **kwargs,
-) -> int:
-    """Create :class:`FixSSBonds <model.fix_ssbonds.FixSSBonds>` class and
-    execute the :meth:`launch() <model.fix_ssbonds.FixSSBonds.launch>` method."""
-    return FixSSBonds(**dict(locals())).launch()
-
-
-fix_ssbonds.__doc__ = FixSSBonds.__doc__
-main = FixSSBonds.get_main(fix_ssbonds, "Fix SS bonds from residues")
+fix_ssbonds = launcher(FixSSBonds)
 
 if __name__ == "__main__":
-    main()
+    FixSSBonds.main()

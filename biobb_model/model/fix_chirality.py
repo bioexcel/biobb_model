@@ -4,7 +4,7 @@
 
 from typing import Optional
 
-from biobb_common.generic.biobb_object import BiobbObject
+from biobb_common.generic.biobb_object import BiobbObject, launcher
 
 
 class FixChirality(BiobbObject):
@@ -74,19 +74,7 @@ class FixChirality(BiobbObject):
         self.run_biobb()
 
 
-def fix_chirality(
-    input_pdb_path: str,
-    output_pdb_path: str,
-    properties: Optional[dict] = None,
-    **kwargs,
-) -> int:
-    """Create :class:`FixChirality <model.fix_chirality.FixChirality>` class and
-    execute the :meth:`launch() <model.fix_chirality.FixChirality.launch>` method."""
-    return FixChirality(**dict(locals())).launch()
-
-
-fix_chirality.__doc__ = FixChirality.__doc__
-main = FixChirality.get_main(fix_chirality, "Fix stereochemical errors in residues changing It's chirality.")
+fix_chirality = launcher(FixChirality)
 
 if __name__ == "__main__":
-    main()
+    FixChirality.main()

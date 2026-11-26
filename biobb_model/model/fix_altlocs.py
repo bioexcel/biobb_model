@@ -4,7 +4,7 @@
 
 from typing import Optional
 
-from biobb_common.generic.biobb_object import BiobbObject
+from biobb_common.generic.biobb_object import BiobbObject, launcher
 
 from biobb_model.model.common import _from_string_to_list
 
@@ -84,19 +84,7 @@ class FixAltLocs(BiobbObject):
         self.run_biobb()
 
 
-def fix_altlocs(
-    input_pdb_path: str,
-    output_pdb_path: str,
-    properties: Optional[dict] = None,
-    **kwargs,
-) -> int:
-    """Create :class:`FixAltLocs <model.fix_altlocs.FixAltLocs>` class and
-    execute the :meth:`launch() <model.fix_altlocs.FixAltLocs.launch>` method."""
-    return FixAltLocs(**dict(locals())).launch()
-
-
-fix_altlocs.__doc__ = FixAltLocs.__doc__
-main = FixAltLocs.get_main(fix_altlocs, "Fix alternate locations from residues")
+fix_altlocs = launcher(FixAltLocs)
 
 if __name__ == "__main__":
-    main()
+    FixAltLocs.main()
