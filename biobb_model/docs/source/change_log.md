@@ -6,6 +6,7 @@
 
 * [FEATURE] Add the `fix_known` boolean property to `FixBackbone` to optimize only the missing residues with Modeller, keeping the coordinates of the ones in the structure.
 * [FIX] `Mutate` and `FixSideChain` with `use_modeller` in a container: the side chains are rebuilt with the Modeller of the container. Before, the blocks looked for Modeller in the environment that launches the container and left the rebuild out when it was not installed there.
+* [FIX] `FixBackbone` in a container: the canonical sequence reaches check_structure with its `--sequence` option. Before, the block wrote the path of the FASTA file on the host to the standard input of check_structure, a path the container does not have.
 * [UPDATE] `FixPdb` writes its messages (reference summary, alignments, BLAST search and its failure) to the log of the block instead of printing them to the standard output.
 
 ## What's new in version [5.3.1](https://github.com/bioexcel/biobb_model/releases/tag/v5.3.1)?

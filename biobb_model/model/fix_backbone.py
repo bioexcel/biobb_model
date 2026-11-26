@@ -5,7 +5,6 @@
 from typing import Optional
 
 from biobb_common.generic.biobb_object import launcher
-from biobb_common.tools import file_utils as fu
 
 from biobb_model.model.common import CheckStructureBase
 
@@ -59,10 +58,6 @@ class FixBackbone(CheckStructureBase):
     ) -> None:
         super().__init__(**locals())
 
-    def prepare(self) -> None:
-        """Create the stdin file with the path of the canonical sequence."""
-        self.io_dict["in"]["stdin_file_path"] = fu.create_stdin_file(f'{self.io_dict["in"]["input_fasta_canonical_sequence_path"]}')
-
     def run(self) -> None:
         """Execute the :class:`FixBackbone <model.fix_backbone.FixBackbone>` object."""
         options = ["--add_caps", "All" if self.add_caps else "None"]
@@ -71,12 +66,9 @@ class FixBackbone(CheckStructureBase):
         if self.fix_known:
             options.append("--fix_known")
         self.run_check_structure(
+            "--sequence", self.stage_io_dict["in"]["input_fasta_canonical_sequence_path"], "--non_interactive",
             "backbone", "--fix_atoms", "All", "--fix_chain", "All", *options,
-            "<", self.stage_io_dict["in"]["stdin_file_path"],
         )
-
-        # Remove temporal files
-        self.tmp_files.append(self.io_dict["in"].get("stdin_file_path", ""))
 
 
 fix_backbone = launcher(FixBackbone)
