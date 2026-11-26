@@ -4,13 +4,12 @@
 
 from typing import Optional
 
-from biobb_common.generic.biobb_object import BiobbObject, launcher
-from biobb_common.tools import file_utils as fu
+from biobb_common.generic.biobb_object import launcher
 
-from biobb_model.model.common import modeller_installed
+from biobb_model.model.common import CheckStructureBase
 
 
-class FixSideChain(BiobbObject):
+class FixSideChain(CheckStructureBase):
     """
     | biobb_model FixSideChain
     | Class to model the missing atoms in amino acid side chains of a PDB.
@@ -56,36 +55,7 @@ class FixSideChain(BiobbObject):
 
     def run(self) -> None:
         """Execute the :class:`FixSideChain <model.fix_side_chain.FixSideChain>` object."""
-
-        # Create command line
-        self.cmd = [
-            self.binary_path,
-            "-i",
-            self.stage_io_dict["in"]["input_pdb_path"],
-            "-o",
-            self.stage_io_dict["out"]["output_pdb_path"],
-            "--force_save",
-            "fixside",
-            "--fix",
-            "ALL",
-        ]
-
-        if self.modeller_key:
-            self.cmd.insert(1, self.modeller_key)
-            self.cmd.insert(1, "--modeller_key")
-
-        if self.use_modeller:
-            if modeller_installed(self.out_log, self.global_log):
-                self.cmd.append("--rebuild")
-            else:
-                fu.log(
-                    "Modeller is not installed --rebuild option can not be used proceeding without using it",
-                    self.out_log,
-                    self.global_log,
-                )
-
-        # Run Biobb block
-        self.run_biobb()
+        self.run_check_structure("fixside", "--fix", "ALL", *self.modeller_rebuild())
 
 
 fix_side_chain = launcher(FixSideChain)

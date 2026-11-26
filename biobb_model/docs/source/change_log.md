@@ -5,6 +5,7 @@
 ### Changes
 
 * [FEATURE] Add the `fix_known` boolean property to `FixBackbone` to optimize only the missing residues with Modeller, keeping the coordinates of the ones in the structure.
+* [FIX] `Mutate` and `FixSideChain` with `use_modeller` in a container: the side chains are rebuilt with the Modeller of the container. Before, the blocks looked for Modeller in the environment that launches the container and left the rebuild out when it was not installed there.
 
 ## What's new in version [5.3.1](https://github.com/bioexcel/biobb_model/releases/tag/v5.3.1)?
 

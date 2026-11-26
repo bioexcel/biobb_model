@@ -4,11 +4,13 @@
 
 from typing import Optional
 
-from biobb_common.generic.biobb_object import BiobbObject, launcher
+from biobb_common.generic.biobb_object import launcher
 from biobb_common.tools import file_utils as fu
 
+from biobb_model.model.common import CheckStructureBase
 
-class FixBackbone(BiobbObject):
+
+class FixBackbone(CheckStructureBase):
     """
     | biobb_model FixBackbone
     | Class to model the missing atoms in the backbone of a PDB structure.
@@ -63,47 +65,15 @@ class FixBackbone(BiobbObject):
 
     def run(self) -> None:
         """Execute the :class:`FixBackbone <model.fix_backbone.FixBackbone>` object."""
-
-        # Create command line
-        self.cmd = [
-            self.binary_path,
-            "-i",
-            self.stage_io_dict["in"]["input_pdb_path"],
-            "-o",
-            self.stage_io_dict["out"]["output_pdb_path"],
-            "--force_save",
-            "backbone",
-            "--fix_atoms",
-            "All",
-            "--fix_chain",
-            "All",
-            "--add_caps",
-        ]
-
-        if self.modeller_key:
-            self.cmd.insert(5, self.modeller_key)
-            self.cmd.insert(5, "--modeller_key")
-
-        if self.add_caps:
-            self.cmd.append("All")
-        else:
-            self.cmd.append("None")
+        options = ["--add_caps", "All" if self.add_caps else "None"]
         if self.extra_gap:
-            self.cmd.extend(["--extra_gap", str(self.extra_gap)])
-
+            options += ["--extra_gap", str(self.extra_gap)]
         if self.fix_known:
-            self.cmd.append("--fix_known")
-
-        # Add stdin input file
-        self.cmd.append("<")
-        self.cmd.append(self.stage_io_dict["in"]["stdin_file_path"])
-
-        # if not modeller_installed(self.out_log, self.global_log):
-        #     fu.log(f"Modeller is not installed, the execution of this block will be interrupted", self.out_log, self.global_log)
-        #     return 1
-
-        # Run Biobb block
-        self.run_biobb()
+            options.append("--fix_known")
+        self.run_check_structure(
+            "backbone", "--fix_atoms", "All", "--fix_chain", "All", *options,
+            "<", self.stage_io_dict["in"]["stdin_file_path"],
+        )
 
         # Remove temporal files
         self.tmp_files.append(self.io_dict["in"].get("stdin_file_path", ""))

@@ -4,10 +4,12 @@
 
 from typing import Optional
 
-from biobb_common.generic.biobb_object import BiobbObject, launcher
+from biobb_common.generic.biobb_object import launcher
+
+from biobb_model.model.common import CheckStructureBase
 
 
-class CheckingLog(BiobbObject):
+class CheckingLog(CheckStructureBase):
     """
     | biobb_model CheckingLog
     | Class to check the errors of a PDB structure.
@@ -52,23 +54,7 @@ class CheckingLog(BiobbObject):
 
     def run(self) -> None:
         """Execute the :class:`CheckingLog <model.checking_log.CheckingLog>` object."""
-
-        # Create command line
-        self.cmd = [
-            self.binary_path,
-            "-i",
-            self.stage_io_dict["in"]["input_pdb_path"],
-            "checkall",
-            ">",
-            self.stage_io_dict["out"]["output_log_path"],
-        ]
-
-        if self.modeller_key:
-            self.cmd.insert(1, self.modeller_key)
-            self.cmd.insert(1, "--modeller_key")
-
-        # Run Biobb block
-        self.run_biobb()
+        self.run_check_structure("checkall", ">", self.stage_io_dict["out"]["output_log_path"])
 
 
 checking_log = launcher(CheckingLog)

@@ -4,10 +4,12 @@
 
 from typing import Optional
 
-from biobb_common.generic.biobb_object import BiobbObject, launcher
+from biobb_common.generic.biobb_object import launcher
+
+from biobb_model.model.common import CheckStructureBase
 
 
-class FixAmides(BiobbObject):
+class FixAmides(CheckStructureBase):
     """
     | biobb_model FixAmides
     | Fix amide groups from residues.
@@ -52,25 +54,7 @@ class FixAmides(BiobbObject):
 
     def run(self) -> None:
         """Execute the :class:`FixAmides <model.fix_amides.FixAmides>` object."""
-
-        self.cmd = [
-            self.binary_path,
-            "-i",
-            self.stage_io_dict["in"]["input_pdb_path"],
-            "-o",
-            self.stage_io_dict["out"]["output_pdb_path"],
-            "--force_save",
-            "amide",
-            "--fix",
-            "All",
-        ]
-
-        if self.modeller_key:
-            self.cmd.insert(1, self.modeller_key)
-            self.cmd.insert(1, "--modeller_key")
-
-        # Run Biobb block
-        self.run_biobb()
+        self.run_check_structure("amide", "--fix", "All")
 
 
 fix_amides = launcher(FixAmides)
