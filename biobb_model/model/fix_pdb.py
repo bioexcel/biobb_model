@@ -75,7 +75,7 @@ class FixPdb(BiobbObject):
             structure.raw_protein_chainer()
 
         # Run all the mapping function
-        mapping = generate_map_online(structure, forced_uniprot_references)  # type: ignore
+        mapping = generate_map_online(structure, forced_uniprot_references, self.out_log, self.global_log)  # type: ignore
 
         # In case something went wrong with the mapping stop here
         if not mapping:
@@ -92,8 +92,6 @@ class FixPdb(BiobbObject):
 
         # Write the modified structure to a new pdb file
         structure.generate_pdb_file(output_pdb_path)
-
-        print("Fixed :)")
 
 
 fix_pdb = launcher(FixPdb)
