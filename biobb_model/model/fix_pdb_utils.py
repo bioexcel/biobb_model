@@ -658,17 +658,6 @@ class Structure:
     def get_chain_by_name(self, name: str) -> Optional[Chain]:
         return next((c for c in self.chains if c.name == name), None)
 
-    # Get a summary of the structure
-    def display_summary(self):
-        print("Atoms: " + str(len(self.atoms)))
-        print("Residues: " + str(len(self.residues)))
-        print("Chains: " + str(len(self.chains)))
-        for chain in self.chains:
-            print(
-                "Chain " + str(chain.name) + " (" + str(len(chain.residue_indices)) + " residues)"
-            )
-            print(" -> " + chain.get_sequence())
-
     # This is an alternative system to find protein chains(anything else is chained as 'X')
     # This system does not depend on VMD
     # It totally overrides previous chains since it is expected to be used only when chains are missing
@@ -962,7 +951,6 @@ def generate_map_online(
             continue
         # Run the blast
         sequence = structure_sequence["sequence"]
-        # uniprot_id = blast(sequence)[0]
         uniprot_id = blast(sequence)  # type: ignore
         # Build a new reference from the resulting uniprot
         reference = get_uniprot_reference(uniprot_id)  # type: ignore
@@ -976,31 +964,6 @@ def generate_map_online(
         "The BLAST failed to find a matching reference sequence for at least one protein sequence"
     )
     return None
-
-
-# Try to match all protein sequences with the available reference sequences
-# In case of match, objects in the 'protein_sequences' list are modified by adding the result
-# Finally, return True if all protein sequences were matched with the available reference sequences or False if not
-# def match_sequences(protein_sequences: list, reference_sequences: dict) -> bool:
-#     # Track each chain-reference alignment match and keep the score of successful alignments
-#     # Now for each structure sequence, align all reference sequences and keep the best alignment(if it meets the minimum)
-#     for structure_sequence in protein_sequences:
-#         for uniprot_id, reference_sequence in reference_sequences.items():
-#             # Align the structure sequence with the reference sequence
-#             align_results = align(reference_sequence, structure_sequence['sequence'])
-#             if not align_results:
-#                 continue
-#             # In case we have a valid alignment, check the alignment score is better than the current reference score(if any)
-#             sequence_map, align_score = align_results
-#             current_reference = structure_sequence['match']
-#             if current_reference['score'] > align_score:
-#                 continue
-#             reference = references[uniprot_id]  # type: ignore
-
-#             # If the alignment is better then we impose the new reference
-#             structure_sequence['match'] = {'ref': reference, 'map': sequence_map, 'score': align_score}
-#     # Finally, return True if all protein sequences were matched with the available reference sequences or False if not
-#     return all([structure_sequence['match']['ref'] for structure_sequence in protein_sequences])
 
 
 # Reformat mapping data to the topology system(introduced later)
@@ -1041,19 +1004,6 @@ def format_topology_data(structure: "Structure", mapping_data: list) -> dict:
     return residues_map
 
 
-# Align a reference aminoacid sequence with each chain sequence in a topology
-# NEVER FORGET: This system relies on the fact that topology chains are not repeated
-def map_sequence(ref_sequence: str, structure: "Structure") -> list:
-    sequences = get_chain_sequences(structure)
-    mapping: list = []
-    for s in sequences:
-        sequence = sequences[s]
-        sequence_map = align(ref_sequence, sequence)
-        if sequence_map:
-            mapping += sequence_map
-    return mapping
-
-
 # Get each chain name and aminoacids sequence in a topology
 # Output format example: [{'sequence': 'VNLTT', 'indices': [1, 2, 3, 4, 5]}, ...]
 def get_chain_sequences(structure: "Structure") -> list:
@@ -1083,8 +1033,6 @@ def get_chain_sequences(structure: "Structure") -> list:
 # Return also the score of the alignment
 # Return None when there is not valid alignment at all
 def align(ref_sequence: str, new_sequence: str) -> Optional[tuple[list, float]]:
-    # print('- REFERENCE\n' + ref_sequence + '\n- NEW\n' + new_sequence)
-
     # If the new sequence is all 'X' stop here, since this would make the alignment infinite
     # Then an array filled with None is returned
     if all([letter == "X" for letter in new_sequence]):

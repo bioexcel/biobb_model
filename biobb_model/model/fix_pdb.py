@@ -75,8 +75,6 @@ class FixPdb(BiobbObject):
             structure.raw_protein_chainer()
 
         # Run all the mapping function
-        # mapping: Optional[dict[Any, Any]] = {}
-        # if forced_uniprot_references:
         mapping = generate_map_online(structure, forced_uniprot_references)  # type: ignore
 
         # In case something went wrong with the mapping stop here
