@@ -5,8 +5,7 @@
 from typing import Optional
 
 from biobb_common.generic.biobb_object import BiobbObject, launcher
-
-from biobb_model.model.common import _from_string_to_list
+from biobb_common.tools import file_utils as fu
 
 
 class FixAltLocs(BiobbObject):
@@ -54,7 +53,7 @@ class FixAltLocs(BiobbObject):
         super().__init__(**locals())
 
         # Properties specific for BB
-        self.altlocs = _from_string_to_list(self.altlocs)
+        self.altlocs = fu.str_to_list(self.altlocs)
 
     def run(self) -> None:
         """Execute the :class:`FixAltLocs <model.fix_altlocs.FixAltLocs>` object."""
