@@ -4,12 +4,13 @@
 
 from typing import Optional
 
-from biobb_common.generic.biobb_object import BiobbObject, launcher
+from biobb_common.generic.biobb_object import launcher
+from biobb_common.tools import file_utils as fu
 
-from biobb_model.model.common import _from_string_to_list
+from biobb_model.model.common import CheckStructureBase
 
 
-class FixAltLocs(BiobbObject):
+class FixAltLocs(CheckStructureBase):
     """
     | biobb_model FixAltLocs
     | Fix alternate locations from residues.
@@ -54,34 +55,11 @@ class FixAltLocs(BiobbObject):
         super().__init__(**locals())
 
         # Properties specific for BB
-        self.altlocs = _from_string_to_list(self.altlocs)
+        self.altlocs = fu.str_to_list(self.altlocs)
 
     def run(self) -> None:
         """Execute the :class:`FixAltLocs <model.fix_altlocs.FixAltLocs>` object."""
-
-        self.cmd = [
-            self.binary_path,
-            "-i",
-            self.stage_io_dict["in"]["input_pdb_path"],
-            "-o",
-            self.stage_io_dict["out"]["output_pdb_path"],
-            "--force_save",
-            "--non_interactive",
-            "altloc",
-            "--select",
-        ]
-
-        if self.altlocs:
-            self.cmd.append(",".join(self.altlocs))
-        else:
-            self.cmd.append("occupancy")
-
-        if self.modeller_key:
-            self.cmd.insert(1, self.modeller_key)
-            self.cmd.insert(1, "--modeller_key")
-
-        # Run Biobb block
-        self.run_biobb()
+        self.run_check_structure("--non_interactive", "altloc", "--select", ",".join(self.altlocs) or "occupancy")
 
 
 fix_altlocs = launcher(FixAltLocs)

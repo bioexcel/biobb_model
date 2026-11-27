@@ -1,8 +1,9 @@
 """Common functions for package biobb_model.model"""
 
 import logging
-from typing import Optional, Union
+from typing import Optional
 
+from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.tools import file_utils as fu
 
 
@@ -31,30 +32,31 @@ def modeller_installed(
     return True
 
 
-# TODO: Move this function to biobb_common.tools.file_utils
-def _from_string_to_list(input_data: Optional[Union[str, list[str]]]) -> list[str]:
-    """
-    Converts a string to a list, splitting by commas or spaces. If the input is already a list, returns it as is.
-    Returns an empty list if input_data is None.
+class CheckStructureBase(BiobbObject):
+    """Base of the blocks that run check_structure (biobb_structure_checking) on their input_pdb_path."""
 
-    Parameters:
-        input_data (str, list, or None): The string, list, or None value to convert.
+    def run_check_structure(self, *command: str) -> None:
+        """Go from a check_structure command (ie: ``"amide", "--fix", "All"``) to its execution on the staged
+        input_pdb_path, with the modeller_key and, if the block has an output_pdb_path, -o and --force_save."""
+        self.cmd = [self.binary_path]
+        if self.modeller_key:
+            self.cmd += ["--modeller_key", self.modeller_key]
+        self.cmd += ["-i", self.stage_io_dict["in"]["input_pdb_path"]]
+        if "output_pdb_path" in self.stage_io_dict["out"]:
+            self.cmd += ["-o", self.stage_io_dict["out"]["output_pdb_path"], "--force_save"]
+        self.cmd += command
+        self.run_biobb()
 
-    Returns:
-        list: A list of string elements or an empty list if input_data is None.
-    """
-    if input_data is None:
+    def modeller_rebuild(self) -> list[str]:
+        """Go from the use_modeller property to the --rebuild option of check_structure. Outside a container it
+        needs Modeller in the environment: without it the option is left out (logged)."""
+        if not self.use_modeller:
+            return []
+        if self.container_path or modeller_installed(self.out_log, self.global_log):
+            return ["--rebuild"]
+        fu.log(
+            "Modeller is not installed --rebuild option can not be used proceeding without using it",
+            self.out_log,
+            self.global_log,
+        )
         return []
-
-    if isinstance(input_data, list):
-        # If input is already a list, return it
-        return input_data
-
-    # If input is a string, determine the delimiter based on presence of commas
-    delimiter = "," if "," in input_data else " "
-    items = input_data.split(delimiter)
-
-    # Remove whitespace from each item and ignore empty strings
-    processed_items = [item.strip() for item in items if item.strip()]
-
-    return processed_items

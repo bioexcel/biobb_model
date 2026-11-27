@@ -4,10 +4,12 @@
 
 from typing import Optional
 
-from biobb_common.generic.biobb_object import BiobbObject, launcher
+from biobb_common.generic.biobb_object import launcher
+
+from biobb_model.model.common import CheckStructureBase
 
 
-class FixChirality(BiobbObject):
+class FixChirality(CheckStructureBase):
     """
     | biobb_model FixChirality
     | Fix chirality errors of residues.
@@ -52,26 +54,7 @@ class FixChirality(BiobbObject):
 
     def run(self) -> None:
         """Execute the :class:`FixChirality <model.fix_chirality.FixChirality>` object."""
-
-        # Create command line
-        self.cmd = [
-            self.binary_path,
-            "-i",
-            self.stage_io_dict["in"]["input_pdb_path"],
-            "-o",
-            self.stage_io_dict["out"]["output_pdb_path"],
-            "--force_save",
-            "chiral",
-            "--fix",
-            "All",
-        ]
-
-        if self.modeller_key:
-            self.cmd.insert(1, self.modeller_key)
-            self.cmd.insert(1, "--modeller_key")
-
-        # Run Biobb block
-        self.run_biobb()
+        self.run_check_structure("chiral", "--fix", "All")
 
 
 fix_chirality = launcher(FixChirality)

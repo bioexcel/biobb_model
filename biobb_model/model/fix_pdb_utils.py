@@ -1,4 +1,5 @@
 import json
+import logging
 import math
 import os
 import urllib.request
@@ -6,6 +7,7 @@ from bisect import bisect
 from typing import Optional, Union
 
 import xmltodict  # type: ignore
+from biobb_common.tools import file_utils as fu
 from Bio import pairwise2  # type: ignore
 from Bio.Blast import NCBIWWW  # type: ignore
 from Bio.pairwise2 import format_alignment  # type: ignore
@@ -658,17 +660,6 @@ class Structure:
     def get_chain_by_name(self, name: str) -> Optional[Chain]:
         return next((c for c in self.chains if c.name == name), None)
 
-    # Get a summary of the structure
-    def display_summary(self):
-        print("Atoms: " + str(len(self.atoms)))
-        print("Residues: " + str(len(self.residues)))
-        print("Chains: " + str(len(self.chains)))
-        for chain in self.chains:
-            print(
-                "Chain " + str(chain.name) + " (" + str(len(chain.residue_indices)) + " residues)"
-            )
-            print(" -> " + chain.get_sequence())
-
     # This is an alternative system to find protein chains(anything else is chained as 'X')
     # This system does not depend on VMD
     # It totally overrides previous chains since it is expected to be used only when chains are missing
@@ -875,7 +866,10 @@ def residue_name_2_letter(residue_name: str, residue_types: str = "all") -> str:
 # Note that an internet connection is required both to retireve the uniprot reference sequence and to do the blast
 # NEVER FORGET: This system relies on the fact that topology chains are not repeated
 def generate_map_online(
-    structure: "Structure", forced_references: list[str] = []
+    structure: "Structure",
+    forced_references: list[str] = [],
+    out_log: Optional[logging.Logger] = None,
+    global_log: Optional[logging.Logger] = None,
 ) -> Optional[dict]:
     # Store all the references which are got through this process
     # Note that not all references may be used at the end
@@ -913,7 +907,7 @@ def generate_map_online(
             for uniprot_id, reference_sequence in reference_sequences.items():
                 # Align the structure sequence with the reference sequence
                 align_results = align(
-                    reference_sequence, structure_sequence["sequence"]
+                    reference_sequence, structure_sequence["sequence"], out_log
                 )
                 if not align_results:
                     continue
@@ -930,19 +924,19 @@ def generate_map_online(
                     "score": align_score,
                 }
         # Sum up the current matching
-        print("Reference summary:")
+        fu.log("Reference summary:", out_log, global_log)
         for structure_sequence in structure_sequences:
             name = structure_sequence["name"]
             match = structure_sequence.get("match", None)
             if not match:
-                print("   " + name + " -> Not protein")
+                fu.log("   " + name + " -> Not protein", out_log, global_log)
                 continue
             reference = structure_sequence["match"].get("ref", None)
             if not reference:
-                print("   " + name + " -> ¿?")
+                fu.log("   " + name + " -> No reference", out_log, global_log)
                 continue
             uniprot_id = reference["uniprot"]
-            print("   " + name + " -> " + uniprot_id)
+            fu.log("   " + name + " -> " + uniprot_id, out_log, global_log)
         # Finally, return True if all protein sequences were matched with the available reference sequences or False if not
         return all(
             [
@@ -962,45 +956,21 @@ def generate_map_online(
             continue
         # Run the blast
         sequence = structure_sequence["sequence"]
-        # uniprot_id = blast(sequence)[0]
-        uniprot_id = blast(sequence)  # type: ignore
+        uniprot_id = blast(sequence, out_log, global_log)
         # Build a new reference from the resulting uniprot
-        reference = get_uniprot_reference(uniprot_id)  # type: ignore
+        reference = get_uniprot_reference(uniprot_id)
         reference_sequences[reference["uniprot"]] = reference["sequence"]
         # Save the current whole reference object for later
         references[reference["uniprot"]] = reference
         # If we have every protein chain matched with a reference already then we stop here
         if match_sequences():
             return format_topology_data(structure, protein_sequences)
-    print(
-        "The BLAST failed to find a matching reference sequence for at least one protein sequence"
+    fu.log(
+        "The BLAST failed to find a matching reference sequence for at least one protein sequence",
+        out_log,
+        global_log,
     )
     return None
-
-
-# Try to match all protein sequences with the available reference sequences
-# In case of match, objects in the 'protein_sequences' list are modified by adding the result
-# Finally, return True if all protein sequences were matched with the available reference sequences or False if not
-# def match_sequences(protein_sequences: list, reference_sequences: dict) -> bool:
-#     # Track each chain-reference alignment match and keep the score of successful alignments
-#     # Now for each structure sequence, align all reference sequences and keep the best alignment(if it meets the minimum)
-#     for structure_sequence in protein_sequences:
-#         for uniprot_id, reference_sequence in reference_sequences.items():
-#             # Align the structure sequence with the reference sequence
-#             align_results = align(reference_sequence, structure_sequence['sequence'])
-#             if not align_results:
-#                 continue
-#             # In case we have a valid alignment, check the alignment score is better than the current reference score(if any)
-#             sequence_map, align_score = align_results
-#             current_reference = structure_sequence['match']
-#             if current_reference['score'] > align_score:
-#                 continue
-#             reference = references[uniprot_id]  # type: ignore
-
-#             # If the alignment is better then we impose the new reference
-#             structure_sequence['match'] = {'ref': reference, 'map': sequence_map, 'score': align_score}
-#     # Finally, return True if all protein sequences were matched with the available reference sequences or False if not
-#     return all([structure_sequence['match']['ref'] for structure_sequence in protein_sequences])
 
 
 # Reformat mapping data to the topology system(introduced later)
@@ -1041,19 +1011,6 @@ def format_topology_data(structure: "Structure", mapping_data: list) -> dict:
     return residues_map
 
 
-# Align a reference aminoacid sequence with each chain sequence in a topology
-# NEVER FORGET: This system relies on the fact that topology chains are not repeated
-def map_sequence(ref_sequence: str, structure: "Structure") -> list:
-    sequences = get_chain_sequences(structure)
-    mapping: list = []
-    for s in sequences:
-        sequence = sequences[s]
-        sequence_map = align(ref_sequence, sequence)
-        if sequence_map:
-            mapping += sequence_map
-    return mapping
-
-
 # Get each chain name and aminoacids sequence in a topology
 # Output format example: [{'sequence': 'VNLTT', 'indices': [1, 2, 3, 4, 5]}, ...]
 def get_chain_sequences(structure: "Structure") -> list:
@@ -1082,9 +1039,9 @@ def get_chain_sequences(structure: "Structure") -> list:
 # which match each new sequence residues indexes (indexes)
 # Return also the score of the alignment
 # Return None when there is not valid alignment at all
-def align(ref_sequence: str, new_sequence: str) -> Optional[tuple[list, float]]:
-    # print('- REFERENCE\n' + ref_sequence + '\n- NEW\n' + new_sequence)
-
+def align(
+    ref_sequence: str, new_sequence: str, out_log: Optional[logging.Logger] = None
+) -> Optional[tuple[list, float]]:
     # If the new sequence is all 'X' stop here, since this would make the alignment infinite
     # Then an array filled with None is returned
     if all([letter == "X" for letter in new_sequence]):
@@ -1108,11 +1065,11 @@ def align(ref_sequence: str, new_sequence: str) -> Optional[tuple[list, float]]:
     # Output format example: '----VNLTT'
     best_alignment = alignments[0]
     aligned_sequence = best_alignment[1]
-    print(format_alignment(*alignments[0]))
+    fu.log(format_alignment(*alignments[0]), out_log)
     score = alignments[0][2]
     # WARNING: Do not use 'aligned_sequence' length here since it has the total sequence length
     normalized_score = score / len(new_sequence)
-    print("Normalized score: " + str(normalized_score))
+    fu.log("Normalized score: " + str(normalized_score), out_log)
 
     # If the normalized score does not reaches the minimum we consider the alignment is not valid
     # It may happen when the reference goes for a specific chain but we must map all chains
@@ -1120,7 +1077,7 @@ def align(ref_sequence: str, new_sequence: str) -> Optional[tuple[list, float]]:
     # Non maching sequence may return a 0.1-0.3 normalized score
     # Matching sequence may return >4 normalized score
     if normalized_score < 1:
-        print("Not valid alignment")
+        fu.log("Not valid alignment", out_log)
         return None
 
     # Match each residue
@@ -1147,12 +1104,16 @@ def align(ref_sequence: str, new_sequence: str) -> Optional[tuple[list, float]]:
     return aligned_mapping, normalized_score
 
 
-# Given an aminoacids sequence, return a list of uniprot ids
+# Given an aminoacids sequence, return the uniprot id of the first hit
 # Note that we are blasting against UniProtKB / Swiss-Prot so results will always be valid UniProt accessions
 # WARNING: This always means results will correspond to curated entries only
 #   If your sequence is from an exotic organism the result may be not from it but from other more studied organism
-def blast(sequence: str) -> list[str]:
-    print("Throwing blast... (this may take a few minutes)")
+def blast(
+    sequence: str,
+    out_log: Optional[logging.Logger] = None,
+    global_log: Optional[logging.Logger] = None,
+) -> str:
+    fu.log("Throwing blast... (this may take a few minutes)", out_log, global_log)
     result = NCBIWWW.qblast(program="blastp", database="swissprot", sequence=sequence)
     parsed_result = xmltodict.parse(result.read())
     hits = parsed_result["BlastOutput"]["BlastOutput_iterations"]["Iteration"][
@@ -1163,8 +1124,7 @@ def blast(sequence: str) -> list[str]:
     # Return the accession
     # DANI: Si algun día tienes problemas porque te falta el '.1' al final del accession puedes sacarlo de Hit_id
     accession = result["Hit_accession"]
-    print("Result: " + accession)
-    print(result["Hit_def"])
+    fu.log("Result: " + accession + " " + result["Hit_def"], out_log, global_log)
     return accession
 
 

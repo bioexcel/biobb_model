@@ -4,13 +4,12 @@
 
 from typing import Optional
 
-from biobb_common.generic.biobb_object import BiobbObject, launcher
-from biobb_common.tools import file_utils as fu
+from biobb_common.generic.biobb_object import launcher
 
-from biobb_model.model.common import modeller_installed
+from biobb_model.model.common import CheckStructureBase
 
 
-class Mutate(BiobbObject):
+class Mutate(CheckStructureBase):
     """
     | biobb_model Mutate
     | Class to mutate one amino acid by another in a 3d structure.
@@ -61,39 +60,8 @@ class Mutate(BiobbObject):
 
     def run(self) -> None:
         """Execute the :class:`Mutate <model.mutate.Mutate>` object."""
-
-        # Create command line
-        self.cmd = [
-            self.binary_path,
-            "-i",
-            self.stage_io_dict["in"]["input_pdb_path"],
-            "-o",
-            self.stage_io_dict["out"]["output_pdb_path"],
-            "--force_save",
-            "--non_interactive",
-            "mutateside",
-        ]
-
-        if self.mutation_list:
-            self.cmd.append("--mut")
-            self.cmd.append(self.mutation_list)
-
-        if self.modeller_key:
-            self.cmd.insert(1, self.modeller_key)
-            self.cmd.insert(1, "--modeller_key")
-
-        if self.use_modeller:
-            if modeller_installed(self.out_log, self.global_log):
-                self.cmd.append("--rebuild")
-            else:
-                fu.log(
-                    "Modeller is not installed --rebuild option can not be used proceeding without using it",
-                    self.out_log,
-                    self.global_log,
-                )
-
-        # Run Biobb block
-        self.run_biobb()
+        mutations = ["--mut", self.mutation_list] if self.mutation_list else []
+        self.run_check_structure("--non_interactive", "mutateside", *mutations, *self.modeller_rebuild())
 
 
 mutate = launcher(Mutate)

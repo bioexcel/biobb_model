@@ -4,10 +4,12 @@
 
 from typing import Optional
 
-from biobb_common.generic.biobb_object import BiobbObject, launcher
+from biobb_common.generic.biobb_object import launcher
+
+from biobb_model.model.common import CheckStructureBase
 
 
-class FixSSBonds(BiobbObject):
+class FixSSBonds(CheckStructureBase):
     """
     | biobb_model FixSSBonds
     | Fix SS bonds from residues.
@@ -52,26 +54,7 @@ class FixSSBonds(BiobbObject):
 
     def run(self) -> None:
         """Execute the :class:`FixSSBonds <model.fix_ssbonds.FixSSBonds>` object."""
-
-        self.cmd = [
-            self.binary_path,
-            "-i",
-            self.stage_io_dict["in"]["input_pdb_path"],
-            "-o",
-            self.stage_io_dict["out"]["output_pdb_path"],
-            "--force_save",
-            "--non_interactive",
-            "getss",
-            "--mark",
-            "All",
-        ]
-
-        if self.modeller_key:
-            self.cmd.insert(1, self.modeller_key)
-            self.cmd.insert(1, "--modeller_key")
-
-        # Run Biobb block
-        self.run_biobb()
+        self.run_check_structure("--non_interactive", "getss", "--mark", "All")
 
 
 fix_ssbonds = launcher(FixSSBonds)
